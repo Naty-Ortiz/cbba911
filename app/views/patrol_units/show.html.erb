@@ -1,0 +1,20 @@
+<%= render :partial => 'static_pages/notice_panel' %>
+
+<h1>Ver unidad de patrulla</h1>
+  <br>
+<%= link_to 'Editar', edit_patrol_unit_path(@patrol_unit), :class=>'btn btn-primary' %>
+
+<br/><br/>
+
+<div class='jumbotron'>
+  <h3>Informacion de unidad de patrulla</h3><br/>
+  <table class='table'>
+    <tr>
+      <td> <strong>CODIGO</strong> </td>
+      <td> <%= @patrol_unit.code %> </td>
+      <td> <strong>Nombre</strong> </td>
+      <td> <%= @patrol_unit.name %> </td>
+    </tr>
+  </table>
+  <br/>
+</div>

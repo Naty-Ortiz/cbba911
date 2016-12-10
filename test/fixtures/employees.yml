@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  position: MyString
+  profession: MyString
+  agent_id: MyString
+  person_id: 
+
+two:
+  position: MyString
+  profession: MyString
+  agent_id: MyString
+  person_id: 

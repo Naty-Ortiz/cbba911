@@ -1,0 +1,71 @@
+<%= form_for(@announcement) do |f| %>
+
+    <% if @announcement.errors.any? %>
+     <div class="col-md-3"></div>
+        <div class="col-md-6">
+
+          <div class="panel panel-danger">
+            <div class="panel-heading">Errores al registrar anuncio</div>
+              <ul class="list-group">
+                    <% @announcement.errors.full_messages.each do |message| %>
+                  <li class='list-group-item'><%= message %></li>
+                <% end %>
+              </ul>
+          </div>
+        </div>
+      <% end %>
+    <br>
+  <div class="row">
+    <div class="col-md-6">
+
+      <div class="field">
+        <label>Titulo <span class="glyphicon glyphicon-asterisk"></span></label><br>
+        <%= f.text_field :title, :class => 'form-control input-small'%>
+      </div><br>  <br>
+
+      <div class="field">
+        <label>Contenido <span class="glyphicon glyphicon-asterisk"></span></label><br>
+        <%= f.text_area :content, :class => 'form-control small-text-area' %>
+      </div><br>
+       <!--<div class="field">
+       <%= f.label :visto %><br>
+        <%= f.check_box :accepted %>
+      </div><br>-->
+
+      <div class="">
+        <label>Global:</label>
+        <%= f.check_box :global , :id => 'global-checkbox', :checked => false  %>
+        <label for="global-checkbox"><span></span></label><sup>(marcar si quiere mandar a todo el personal)</sup>
+      </div><br>
+
+      <div class="field" id="employee-div">
+          <label>Empleado <span class="glyphicon glyphicon-asterisk"></span></label><br>
+          <%= f.select :employee_id ,  @employees, {}, {:class => 'form-control form-inline'} %>
+      </div>
+
+       <div class="field">
+         <br><br>
+        <div class="panel panel-info">
+            <div class="panel-heading"><span class="glyphicon glyphicon-asterisk"></span> Indica campo obligatorio</div>
+        </div>
+         <br><br>
+       </div>
+
+        <div class="row center actions">
+          <%= f.submit 'Registrar Anuncio',:class  => 'btn btn-default '%>
+        </div>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  var globalCheckbox = document.getElementById('global-checkbox');
+  var employeesDiv = document.getElementById('employee-div');
+  globalCheckbox.onchange = function() {
+     if(this.checked) {
+       employeesDiv.style['display'] = 'none';
+     } else {
+       employeesDiv.style['display'] = 'block';
+     }
+  };
+</script>

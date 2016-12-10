@@ -1,0 +1,10 @@
+<h1>Editar Denuncia</h1>
+
+<%= render 'form' %>
+
+
+<script>
+    $(document).ready(function(){
+        gmap_form(<%== @complain.to_json %>);
+    });
+</script>

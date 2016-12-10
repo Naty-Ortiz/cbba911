@@ -1,0 +1,12 @@
+
+<%if   @probCN !=nil%>
+    
+          
+      <%end%>
+      <script>
+          $(document).ready(function(){
+              /*gmap_show_polygons(@norte.to_i+1,@oeste.to_i+3,@sud.to_i+20);*/
+              gmap_show_polygons(2,4,5,<%==@probNE.round(2)%>,<%==@probNO.round(2)%>,<%==@probCN.round(2)%>,<%==@probCS.round(2)%>,<%==@probSE.round(2)%>,<%==@probSO.round(2)%>);
+          });
+      </script>
+ <div id="map" style="width: 100%; height: 550px;"></div>

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  verification_field_id: 
+  verification_list_id: 
+  answer: false
+
+two:
+  verification_field_id: 
+  verification_list_id: 
+  answer: false

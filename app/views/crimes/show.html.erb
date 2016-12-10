@@ -1,0 +1,20 @@
+<%= render :partial => 'static_pages/notice_panel' %>
+
+<h1>Ver Crimen</h1>
+  <br>
+<%= link_to 'Editar', edit_crime_path(@crime), :class=>'btn btn-primary' %>
+
+<br/><br/>
+
+<div class='jumbotron'>
+  <h3>Informacion de Crimen</h3><br/>
+  <table class='table'>
+    <tr>
+      <td> <strong>CODIGO</strong> </td>
+      <td> <%= @crime.code %> </td>
+      <td> <strong>Nombre</strong> </td>
+      <td> <%= @crime.name %> </td>
+    </tr>
+  </table>
+  <br/>
+</div>

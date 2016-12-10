@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  verification_list_id: 
+  employee_id: 
+  date_of_verification: 2015-10-12 08:16:00
+
+two:
+  verification_list_id: 
+  employee_id: 
+  date_of_verification: 2015-10-12 08:16:00

@@ -1,0 +1,74 @@
+<%= render :partial => 'static_pages/notice_panel' %>
+
+<div class="row">
+  <div class="col-md-7">
+    <h1>Buscar unidad de patrulla </h1>
+    <br>
+  </div>
+  <div class="col-md-5">
+      <%= render :partial => 'patrol_units/search' %>
+      <div class="form-inline">
+        <br>
+        <%= form_tag(patrol_units_path, :method => "get", id: "search-form") do %>
+            <%= text_field_tag :search, params[:search], placeholder: "Nombre de la patrol_unitn", :class => 'form-control'%>
+            <%= submit_tag 'Buscar', :class=>'btn btn-default' %>
+        <% end %>
+      </div>
+  </div>
+</div>
+<h1>Lista de  unidades de patrulla</h1>
+<br>
+<% if @patrol_units.present? %>
+<div class="col-md-4 col-md-offset-4">
+  <div class="digg_pagination">
+    <%= will_paginate @patrol_units,  :previous_label => 'Atras', :next_label => 'Siguiente', :container => true ,renderer: BootstrapPagination::Rails%>
+  </div>
+</div><br>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+
+        <th>Codigo</th>
+          <th>Nombre</th>
+        <th>VER</th>
+        <th>EDITAR</th>
+
+        <th colspan="3">ELIMINAR</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @patrol_units.each do |patrol_unit| %>
+        <tr>
+
+          <td><%= patrol_unit.code %></td>
+          <td><%=patrol_unit.name%></td>
+
+
+          <td><%= link_to 'Ver', patrol_unit , class:'btn btn-default'%></td>
+
+            <td><%= link_to :Editar, edit_patrol_unit_path(patrol_unit), class:'btn btn-primary'%></td>
+            <td><%= link_to 'Eliminar', patrol_unit, method: :delete, data: { confirm: 'Esta seguro?' }, class:'btn btn-danger' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="col-md-4 col-md-offset-4">
+    <div class="digg_pagination">
+      <%= will_paginate @patrol_units,  :previous_label => 'Atras', :next_label => 'Siguiente', :container => true ,renderer: BootstrapPagination::Rails%>
+    </div>
+  </div><br>
+<%else%>
+    <div class="row center actions panel panel-danger">
+      <div class="panel-heading">
+        <% if params[:search] %>
+            <p>Su busqueda no generó resultados</p>
+        <%else%>
+            <p>No existen unidades de patrulla registradas este momento</p>
+        <%end%>
+      </div>
+    </div>
+<%end%>
+<br>
+
+<!--<%= link_to 'New patrol_unit', new_patrol_unit_path %>-->

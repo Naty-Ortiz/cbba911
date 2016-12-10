@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  antecedent: MyText
+  description: MyText
+  conclusion: MyText
+  recommendation: MyText
+  Procedure_id: 
+
+two:
+  title: MyString
+  antecedent: MyText
+  description: MyText
+  conclusion: MyText
+  recommendation: MyText
+  Procedure_id: 

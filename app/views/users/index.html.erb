@@ -1,0 +1,68 @@
+<% if current_user.role != 1 %>
+    <h1> No se tiene permiso para ver esta pagina </h1>
+<% else %>
+    <%= render :partial => 'static_pages/notice_panel' %>
+
+    <div class="row">
+      <div class="col-md-7">
+        <h1>Buscar Usuarios</h1>
+        <br>
+      </div>
+      <div class="col-md-5">
+
+        <div class="form-inline">
+          <br>
+          <%= form_tag(users_path, :method => 'get', id: 'search-form') do %>
+              <%= text_field_tag :search, params[:search], placeholder: 'Nombre de usuario', :class=>'form-control' %>
+              <%= submit_tag 'Buscar' ,:class=>'btn btn-default'%>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <h1>Lista de Usuarios</h1>
+      <div class="col-md-6 col-md-offset-3">
+      <div class="digg_pagination">
+        <%= will_paginate @users,  :previous_label => 'Atras', :next_label => 'Siguiente', :container => true ,renderer: BootstrapPagination::Rails%>
+      </div>
+    </div><br>
+    <table class="table table-striped table-hover">
+      <thead>
+      <tr>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Nombre de usuario</th>
+        <th colspan="2"></th>
+      </tr>
+      </thead>
+
+      <tbody class="cream-pixels">
+      <% @users.each do |user| %>
+          <tr>
+            <td><%= user.email %></td>
+            <td><%= Role.find(user.role).typename %></td>
+            <td><%= user.username %></td>
+            <td><%= link_to 'Ver relacion', user, class: 'btn btn-default' %></td>
+            <!--<% if current_user.role == 1 %> <td><%= link_to 'Editar usuario', edit_user_path(user), class: 'btn btn-primary' %></td> <% end %>-->
+             <% if @current_user!=user %>
+                <td>
+                    <% if current_user.role == 1 && user.active %>
+                        <%= link_to 'Desactivar usuario', 'users/annul/' + user.id.to_s, class: 'btn btn-danger', data: { confirm: 'Esta seguro de que quiere anular esta usuario ?' } %>
+                    <% end %>
+                     <% if current_user.role == 1 && !user.active %>
+                        <%= link_to 'Activar usuario', 'users/activate/' + user.id.to_s, class: 'btn btn-success' %>
+                    <% end %>
+                </td>
+            <% end %>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+
+    <br>
+    <div class="col-md-6 col-md-offset-3">
+      <div class="digg_pagination">
+        <%= will_paginate @users,  :previous_label => 'Atras', :next_label => 'Siguiente', :container => true ,renderer: BootstrapPagination::Rails%>
+      </div>
+    </div><br>
+<% end %>

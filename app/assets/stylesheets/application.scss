@@ -1,0 +1,169 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require_tree
+ *= require_styles.css
+ *= require toastr
+
+ *= require font-awesome
+ 
+ *= require awesomplete
+
+@import 'variables'
+@import 'selectivity'
+@import 'selectivity_bootstrap'
+@import 'bootstrap-sprockets';
+@import 'bootstrap';
+@import 'bootstrap-datetimepicker';
+
+ */
+
+//@import "bootstrap-sprockets";
+//@import "bootstrap";
+//
+//hr{
+//  color: #A4A4A4;
+//  background-color: #A4A4A4;
+//  height: 4px;
+//}
+
+.table-fixed thead {
+  width: 97%;
+}
+.table-fixed tbody {
+  height: 230px;
+  overflow-y: auto;
+  overflow-x: auto;
+  width: 100%;
+}
+.table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+  display: block;
+}
+.table-fixed tbody td, .table-fixed thead > tr> th {
+  float: left;
+  border-bottom-width: 0;
+}
+.table-scroll {
+  position:relative;
+  margin-bottom:30px;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+
+  div {
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+  }
+}
+.table-scroll .scroll-vertical { display:none }
+.table-scroll .scroll-horizontal { display:none }
+
+/* -- TABLA CON SCROLL ENCENDIDO -- */
+.table-scroll.on {
+  position:relative;
+  margin-bottom:30px;
+}
+
+.table-scroll.on .mask { height:inherit; width:100%; overflow:hidden; white-space:nowrap; font-size:0; }
+.table-scroll .mask { white-space:nowrap; font-size:0; }
+
+.table-scroll.on .scrollbars { position:relative; width:100%; height:inherit; }
+.table-scroll.on .scroll-vertical { position:absolute; height:100%; width:18px; right:-2px; z-index:100; overflow-y:scroll; display:block }
+.table-scroll.on .scroll-horizontal { position:absolute; height:18px; width:100%; left:0px; bottom:-17px; z-index:100; overflow-x:scroll; display:block }
+.table-scroll.on .scroll-horizontal div { height:1px }
+
+
+/* -- ESTRUCTURA GRAL DE LA TABLA-- */
+.c-left, .c-right { display:inline-block; vertical-align:top; }
+.c-right { width:inherit }
+
+.t-body { height:inherit; overflow:hidden }
+.t-row { font-size:0; line-height:0 }
+.t-header { overflow:hidden }
+.t-row div { display:inline-block; overflow:hidden }
+a:visited{
+  text-decoration: none;
+}
+
+a:hover{
+  text-decoration: none;
+}
+
+a:not(:focus){
+  text-decoration: none;
+}
+
+div.scroll-div{
+  overflow-y: scroll; height: 700px;
+  overflow-x: hidden;
+}
+
+input[type="checkbox"] {
+  display:none;
+}
+input[type="checkbox"] + label span {
+  display:inline-block;
+  width:19px;
+  height:19px;
+  margin:-1px 4px 0 0;
+  vertical-align:middle;
+  background:image_url("check_radio_sheet.png") left top no-repeat;
+  cursor:pointer;
+}
+input[type="checkbox"]:checked + label span {
+  background:image_url("check_radio_sheet.png") -19px top no-repeat;
+}.digg_pagination {
+
+  cursor: default;
+  /* self-clearing method: */ }
+  .digg_pagination a, .digg_pagination span, .digg_pagination em {
+    padding: 0.2em 0.5em;
+    display: block;
+    float: left;
+    margin-right: 0px; }
+  .digg_pagination .disabled {
+    color: #999999;
+    border: 1px solid #dddddd; }
+  .digg_pagination .current {
+    font-style: normal;
+    font-weight: bold;
+    background: #2e6ab1;
+    color: white;
+    border: 1px solid #2e6ab1; }
+  .digg_pagination a {
+    text-decoration: none;
+    color: #105cb6;
+    border: 1px solid #9aafe5; }
+    .digg_pagination a:hover, .digg_pagination a:focus {
+      color: #000033;
+      border-color: #000033; }
+  .digg_pagination .page_info {
+    background: #2e6ab1;
+    color: white;
+     width: 22em;
+    margin-bottom: 0;
+    text-align: center; }
+    .digg_pagination .page_info b {
+      color: #000033;
+      background: #6aa6ed;
+      padding: 0.1em 0.25em; }
+  .digg_pagination:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden; }
+  * html .digg_pagination {
+    height: 1%; }
+  *:first-child + html .digg_pagination {
+    overflow: hidden; }

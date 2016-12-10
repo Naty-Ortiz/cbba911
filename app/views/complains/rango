@@ -1,0 +1,28 @@
+<div class="row">
+   <div class="col-md-5">
+
+     <div class="form-inline">
+       <br><h4>Probabilidad de contravenciones rango de horas </h4>
+       <%= form_tag('/index_oficial', :method => 'get', :id =>"eventForm"  ,:class=>"form-horizontal") do %>
+
+           <%= awesomplete_field( :searchContravertionProbabilityDate,  collection: @contravertions.map{|v| v.to_s.encode("UTF-8").gsub(/[^a-z0-9\s]/i, '')},class: 'form-control') %>
+            <label>Fecha inicio</label>
+            <%= date_select_tag :startdate,"", :class=>'linecons-calendar' %>
+            
+    </div>
+              <label >fecha final</label>
+            <%= date_select_tag :enddate,"", :class=>'linecons-calendar' %>
+
+
+           <%= submit_tag 'Buscar', class: 'btn btn-default' %>
+       <% end %>
+     </div>
+     <%if @probabilityContravertionsPerDate!=nil&&@day=="day"%>
+     <h4>PROBABILIDAD DE <%=@searchContravertionProbabilityDate%> POR DIA</h4><br/>
+     <h5>  <p><%= sprintf('%.3f',@probabilityContravertionsProbabilityDate ) *100%></p></h5>
+     <%end%>
+      
+   </div>
+
+
+  

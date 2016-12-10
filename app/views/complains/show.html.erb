@@ -1,0 +1,128 @@
+<%= render :partial => 'static_pages/notice_panel' %>
+
+<h2>Ver Denuncia</h2>
+
+<div class="jumbotron">
+  <table class="table">
+      <tr>
+        <%if   @complain.crime_id!=nil%>
+          <td><strong>delito</strong></td>
+        <td><%= @complain.crime.name %></td>
+        <%end%>
+        <%if   @complain.contravertion_id!=nil%>
+          <td><strong>contravencion</strong></td>
+        <td><%= @complain.contravertion.name %></td>
+        <%end%>
+        </tr>
+        <tr>
+        <%if   @complainant.name!=nil%>
+        <td><strong>denunciante</strong></td>
+        <td><%= @complainant.name %></td>
+        <%end%>
+        <%if   @complainant.last_name!=nil%>
+        <td><strong>apellido</strong></td>
+        <td><%= @complainant.last_name %></td>
+        <%end%>
+        <%if   @complainant.ci!=nil%>
+        <td><strong>ci</strong></td>
+        <td><%= @complainant.ci %></td>
+        <%end%>
+        </tr>
+      <tr>
+        <%if  @complain.description!=nil%>
+          <td><strong>Descripcion</strong></td>
+          <td><%= @complain.description %></td>
+          <%end%>
+          <%if   @complain.observations!=nil%>
+            <td><strong>observaciones</strong></td>
+          <td><%= @complain.observations %></td>
+          <%end%>
+      </tr>
+       <tr>
+        <td><strong>Zona</strong></td>
+        <td><%= @complain.zone %></td>
+      </tr>
+
+  </table>  <hr>
+  <div class="field"   <% if @observationsAux=="true" %>style ="display:block"  <%else%> style ="display:none" <%end%>>
+    <%if ( current_user.role==1 || current_user.role==2 )&& @complain.observations==nil%>
+    <label>Observaciones <i class="fa fa-asterisk"></i></label><br>
+
+    <%= form_for(@complain) do|f| %>
+    <%= f.text_area :observations, :class => 'form-control small-text-area'  %>
+    <div class="actions center">
+      <%= f.submit 'Registrar', :class => 'btn btn-default'  %>
+    </div>
+    <%end%>
+  <%end%>
+  </div><br>
+
+  <div class="field"   <% if @caseReportAux=="true" %>style ="display:block"  <%else%> style ="display:none" <%end%>>
+    <%if ( current_user.role==1  && @complain.caseReport==nil)%>
+    <label>Reporte del caso </label><br>
+    <%= form_for(@complain ) do|f| %>
+
+    <div class="field">
+        <%= f.radio_button  :caseReport, 'yes', :checked=>false,:id=>'caseReportA'%>
+      <label ><span></span></label><sup>(marcar si el caso fue positivo  )</sup>
+    </div>
+    <div class="field">
+      <%= f.radio_button :caseReport, 'no' , :checked=>false,:id=>'caseReportA2'%>
+
+      <label ><span></span></label><sup>(marcar si el caso fue negativo  )</sup>
+    </div><br>
+
+      <div class="field" id="case_report"  style="display:none" >
+         <label>Protagonistas <i class="fa fa-asterisk"></i></label>
+            <%= f.text_area( :protagonists,  :class => 'form-control small-text-area' ) %><br>
+         <label>Breve Informe <i class="fa fa-asterisk"></i></label>
+         <%= f.text_area( :shortReport,  :class => 'form-control small-text-area' ) %><br>
+        <label>Remision del caso<i class="fa fa-asterisk"></i></label>
+         <%= f.text_area( :derivationCase,  :class => 'form-control small-text-area' ) %><br>
+      </div><br>
+
+
+
+    <div class="actions center">
+      <%= f.submit 'Registrar', :class => 'btn btn-default'  %>
+    </div>
+    <%end%>
+  <%end%>
+
+
+    </div><br>
+  <div style="padding-left:15px;">
+    <strong>Ubicacion:</strong>
+    <div id="map" style="width: 100%; height: 250px;"></div>
+  </div>
+</div>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+        gmap_show(<%== @complain.to_json %>);
+console.log("gggg");
+    var caseReport= document.getElementById('caseReportA');
+$("input[type=radio]").change(function() {
+    console.log("gggg");
+        if($(this).attr('id') == 'caseReportA') {
+             $('#case_report').show();
+        }else {
+             $('#case_report').hide();
+        }
+    })
+});
+
+</script>
+
+<div class="row">
+  <div class="col-xs-6 col-sm-3  "></div>
+    <% if current_user.role==1  %>
+      <div class="col-xs-6 col-sm-3 ">
+            <%= link_to 'Editar', edit_complain_path(@complain), class: 'btn btn-primary' %>
+      </div>
+    <% end %>
+
+   <div class="col-xs-6 col-sm-3  ">
+    <%= link_to 'Atras', complains_path, class: 'btn btn-default' %>
+  </div>
+</div>

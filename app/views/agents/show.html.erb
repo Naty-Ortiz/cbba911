@@ -1,0 +1,65 @@
+<%= render :partial => 'static_pages/notice_panel' %>
+
+<h1>Ver Representante Legal</h1>
+
+<div class="jumbotron">
+  <table class="table">
+    <tr>
+      <td> <strong>Nombre</strong> </td>
+      <td> <%= @legal_agent.person.first_name %> </td>
+      <td> <strong>Apellido</strong> </td>
+      <td> <%= @legal_agent.person.last_name %> </td>
+    </tr>
+
+    <tr>
+      <td> <strong>Numero de identificacion</strong> </td>
+      <td> <%= @legal_agent.person.identification_number %> </td>
+      <td> <strong>Estado de usuario</strong> </td>
+      <td> <%if @legal_agent.person.user.active%> Activo <%else%> Desactivo <%end%></td>
+    </tr>
+    <tr>
+      <td> <strong>Pais</strong> </td>
+      <td> <%= Carmen::Country.coded(@legal_agent.person.country) %> </td>
+      <td> <strong>Ciudad</strong> </td>
+      <td> <%= if !Carmen::Country.coded(@legal_agent.person.country).subregions.empty? then Carmen::Country.coded(@legal_agent.person.country).subregions.coded(@legal_agent.person.city) else @legal_agent.person.city end %> </td>
+    </tr>
+
+    <tr>
+      <td> <strong>Direccion</strong> </td>
+      <td> <%= @legal_agent.person.address %> </td>
+      <td> <strong>Telefono</strong> </td>
+      <td> <%= @legal_agent.person.phone_number %> </td>
+    </tr>
+    <tr>
+      <td> <strong>Compania</strong> </td>
+      <td> <%=link_to @legal_agent.company.name, @legal_agent.company %> </td>
+      <td> <strong>Nombre de Usuario</strong> </td>
+      <td> <%=@legal_agent.person.user.username%></td>
+    </tr>
+    <tr>
+      <td> <strong>Correo electronico</strong> </td>
+      <td> <%= @legal_agent.person.user.email %> </td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+
+</div>
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <strong>Informacion de acceso a sistema generada automaticamente</strong>
+        <br/>Nombre de usuario: [numero_de_identificacion]_[nombre(s)], los espacios son sustituidos por '_'
+        <br/>Contrase&ntilde;a: [nombre_de_compa&ntilde;ia]_[nombre(s)], los espacios son sustituidos por '_'
+        <br> Click en nombre de compa&ntilde;ia para ver detalles 
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-6 col-sm-3  "></div>
+  <div class="col-xs-6 col-sm-3 ">
+    <%= link_to 'Editar', edit_legal_agent_path(@legal_agent), :class=>'btn btn-primary'%>
+  </div>  
+  <div class="col-xs-6 col-sm-3  ">
+    <%= link_to 'Volver a registrar proyecto', new_project_path ,class: 'btn btn-info'%>
+  </div>     
+</div>

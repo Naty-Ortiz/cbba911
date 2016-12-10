@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  principal_activity: MyString
+  nit: 1
+  address: MyString
+  canton: MyString
+  province: MyString
+  departament: MyString
+  phones: MyString
+  fax: MyString
+  mailbox: MyString
+
+two:
+  name: MyString
+  principal_activity: MyString
+  nit: 1
+  address: MyString
+  canton: MyString
+  province: MyString
+  departament: MyString
+  phones: MyString
+  fax: MyString
+  mailbox: MyString

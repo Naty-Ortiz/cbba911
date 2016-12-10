@@ -1,0 +1,32 @@
+<%= render :partial => 'static_pages/notice_panel' %>
+<h1>Lista de Roles</h1>
+
+
+<br>
+<%if  @roles.present? %>
+
+  <br>
+  <table class="table table-striped table-hover">
+    <thead>
+        <tr>
+          <th>Rol</th>
+          <th colspan="3"></th>
+        </tr>
+    </thead>
+
+    <tbody class="cream-pixels">
+      <% @roles.each_with_index do |role, index| %>
+          <tr>
+            <td><%= role.typename%></td>
+            <%if current_user.role==1 or current_user.role==4 %>
+
+                <td><%= link_to 'Editar', edit_role_path(role) , class: 'btn btn-primary'%></td>
+              <!--  <td><%= link_to 'Eliminar', role, method: :delete, data: { confirm: 'Confirmacion' },class:'btn btn-danger' %></td>
+          -->  <%end%>
+         </tr>
+      <% end %>
+    </tbody>
+  </table>
+<%end%>
+
+<br>

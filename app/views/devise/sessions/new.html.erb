@@ -1,0 +1,47 @@
+<div class="page-holder" >
+  <div class="center">
+    <h1 style="center"id="homeTitle"> Sistema de Registro de Denuncias 911 </h1>
+  </div>
+
+  <div class="col-md-4 col-md-offset-4">
+
+
+    <div class="login-box">
+
+      <div class="login-logo">
+
+        <h2>Iniciar Sesion</h2>
+      </div>
+      <!-- /.login-logo -->
+      <div class="login-box-body" style="border-radius: 7px; overflow: hidden">
+         <p class="login-box-msg">Ingrese al sistema con su nombre de usuario y contrase&ntilde;a</p>
+
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+            <p style="color:red;">
+              <% if alert == 'Invalid login or password.' %>
+                  Usuario o contrase&ntilde;a invalidos.
+              <% end %>
+            </p>
+            <p style="color:red;" id="error-box">  </p>
+            <div class="form-group has-feedback">
+              <%= f.text_field :login, autofocus: true , class: 'form-control', id: 'login', :maxlength => 25, placeholder: 'Nombre de Usuario' %>
+              <span class="fa fa-fw fa-user form-control-feedback"></span>
+            </div>
+
+            <div class="form-group has-feedback">
+              <%= f.password_field :password, autocomplete: "off" , class: 'form-control', id: 'password', :maxlength => 45, placeholder: 'Contraseña' %>
+              <span class="fa fa-fw fa-lock form-control-feedback"></span>
+            </div>
+
+
+            <div class="">
+              <%= f.submit 'Ingresar', class: 'btn btn-primary btn-block btn-flat', id:'loginButton' %>
+            </div>
+        <% end %>
+          </div>
+        </div>
+      </div>
+      <!-- /.login-box-body -->
+
+</div>
+<%# render "devise/shared/links" %>

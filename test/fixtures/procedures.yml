@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  state: 1
+  start_date: 2015-10-11
+  end_date: 2015-10-11
+  user_id: 
+  project_id: 
+
+two:
+  state: 1
+  start_date: 2015-10-11
+  end_date: 2015-10-11
+  user_id: 
+  project_id: 

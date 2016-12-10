@@ -1,0 +1,56 @@
+<h1>Nuevo Usuario</h1>
+
+<div class="col-md-6">
+  <%= form_for @user , :url => '/createuser' do |f| %>
+
+      <% if @user.errors.any? %>
+            <div class="panel panel-danger">
+              <div class="panel-heading">Errores al registrar usuario</div>
+              <ul class="list-group">
+                <% @user.errors.full_messages.each do |message| %>
+                    <li class='list-group-item'><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+      <% end %>
+      <br>
+
+      <div class="form-group">
+        <label>Rol</label>
+        <select class="form-control" name="user[role]" id="user_role">
+          <option value="1"> Encargado </option>
+          <option value="2"> Receptionista </option>
+          <option value="3"> Representante legal </option>
+          <option value="4"> Jefe de Unidad </option>
+          <option value="5"> Revisor tecnico </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Email</label><br>
+        <%= f.text_field :email, :class => 'form-control',:maxlength => 35, :placeholder=>'Email' %>
+      </div>
+
+      <div class="form-group">
+        <label>Nombre de usuario</label><br>
+        <%= f.text_field :username, :class => 'form-control',:maxlength => 25, :placeholder=>'Nombre de usuario' %>
+      </div>
+
+      <div class="form-group">
+        <label> Contrase&ntilde;a </label><br>
+        <%= f.password_field :password, class: 'form-control',  :placeholder=>'Password' %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit  'Crear usuario', class: 'btn btn-default '  %>
+      </div>
+
+      <div class="form-group">
+        <br><br>
+        <p>*Todos los campos son obligatorios.</p>
+      </div>
+
+  <% end %>
+</div>
+
+<!--<%= link_to 'Back', users_path %>-->

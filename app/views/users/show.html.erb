@@ -1,0 +1,31 @@
+<!--<p id="notice"><%= notice %></p>-->
+
+<h1>Usuario</h1>
+
+<div class="jumbotron">
+  <p>
+    <strong>Rol:</strong>
+    <%= Role.find(@user.role).typename %>
+    <br>
+    <strong>Email:</strong>
+    <%= @user.email %>
+  </p>
+  <% unless @user.active %>
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-alert"></span>
+          &nbsp;Este usuario se encuentra anulada.
+        </div>
+      </div>
+  <% end %>
+</div>
+
+<% if current_user.role == 1 %>
+    <%= link_to 'Editar usuario', edit_user_path(@user), class: 'btn btn-primary' %>
+    <% if @user.active %>
+        <%= link_to 'Anular usuario', 'annul/' + @user.id.to_s, class: 'btn btn-danger' %>
+    <% else %>
+        <%= link_to 'Activar usuario', 'activate/' + @user.id.to_s, class: 'btn btn-success' %>
+    <% end %>
+<% end %>
+<!--<%= link_to 'Back', users_path %>-->

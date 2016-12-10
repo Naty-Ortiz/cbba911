@@ -1,0 +1,112 @@
+
+<h1>Registrar Representante Legal</h1>
+
+<% if !@companies.any? %>
+    <br/>
+    <div class="row center actions">
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          En este momento no se pueden registrar representantes legales ya que no existen companias registradas,
+          registra una compania <%= link_to :aqui, :new_company %>.
+        </div>
+      </div>
+    </div>
+
+<% else %>
+
+    <%if not params[:id]%>
+        <%=form_tag controller:'legal_agents' %>
+    <%else%>
+        <%= form_tag 'update'%>
+    <%end%>
+
+    <% if @person.errors.any? or @user.errors.any?%>
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <div class="panel panel-danger">
+            <div class="panel-heading">Errores al registrar representante legal</div>
+            <ul class="list-group">
+              <% @person.errors.full_messages.each do |message| %>
+                  <li class="list-group-item"><%= message %></li>
+              <% end %>
+              <% @user.errors.full_messages.each do |message| %>
+                  <li class="list-group-item"><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+    <% end %>
+    <br>
+
+    <%= hidden_field :legal_agent, :id  %>
+    <%= hidden_field :user, :role , :value=>3  %>
+    <%= hidden_field :user, :active, :value=>true  %>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="field">
+          <label>Compa&ntilde;ia</label> <br/>
+              <%= select :legal_agent, :company_id, options_from_collection_for_select(@companies,'id','name'), {}, :class=>'form-control'%>
+        </div><br>
+        <div class="field">
+          <label>Numero de Identificacion </label> <i class="fa fa-asterisk"></i> <br>
+          <%= text_field :person, :identification_number, :class => 'form-control' %>
+        </div><br>
+        <div class="field">
+          <label>Nombre</label> <i class="fa fa-asterisk"></i><br>
+          <%= text_field :person, :first_name, :class => 'form-control' %>
+        </div><br>
+        <div class="field">
+          <label>Apellido</label> <i class="fa fa-asterisk"></i><br>
+          <%= text_field :person, :last_name, :class => 'form-control' %>
+        </div><br>
+        <div class="field">
+          <label>Telefono</label> <i class="fa fa-asterisk"></i><br>
+          <%= text_field :person, :phone_number, :class => 'form-control' %>
+        </div><br>
+      </div>
+
+      <div class="col-md-6">
+        <div class="field">
+          <label>Correo electronico</label> <i class="fa fa-asterisk"></i><br>
+          <%= text_field :user, :email, :class=>'form-control'%>
+        </div><br>
+
+        <div class="field">
+          <div class="field">
+            <%= label_tag :pais %><br />
+            <%= country_select :person, :country, priority: %w(BO), prompt: 'Seleccione un pais', onload: 'loadCountries()' %>
+          </div>
+        </div><br>
+
+        <div class="field">
+          <div class="field">
+            <%= label_tag :ciudad %><br />
+            <%= hidden_field :person, :city  %>
+            <%= render partial: 'static_pages/subregion_select' %>
+          </div>
+        </div><br>
+
+        <div class="field">
+          <label>Direccion</label> <i class="fa fa-asterisk"></i><br>
+          <%= text_field :person, :address, :class => 'form-control' %>
+        </div><br>
+      </div>
+    </div>
+    <div class="panel panel-info">
+      <div class="panel-heading"><i class="fa fa-asterisk"></i> Indica campo obligatorio</div>
+    </div>
+    <div class="row center">
+      <div class="actions">
+        <%= submit_tag 'Registrar',class: 'btn btn-default ' %>
+      </div>
+    </div>
+    <br>
+    <% #end %>
+
+    <script type="text/javascript" charset="utf-8">
+        loadCountries();
+    </script>
+
+
+<% end %>

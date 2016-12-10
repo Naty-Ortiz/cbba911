@@ -1,0 +1,20 @@
+<%= render :partial => 'static_pages/notice_panel' %>
+
+<h1>Ver Contravension</h1>
+  <br>
+<%= link_to 'Editar', edit_contravertion_path(@contravertion), :class=>'btn btn-primary' %>
+
+<br/><br/>
+
+<div class='jumbotron'>
+  <h3>Informacion de Contravension</h3><br/>
+  <table class='table'>
+    <tr>
+      <td> <strong>CODIGO</strong> </td>
+      <td> <%= @contravertion.code %> </td>
+      <td> <strong>Nombre</strong> </td>
+      <td> <%= @contravertion.name %> </td>
+    </tr>
+  </table>
+  <br/>
+</div>

@@ -1,0 +1,33 @@
+<%= form_for(@role) do |f| %>
+<% if @role.errors.any? %>
+ <div class="col-md-3"></div>
+    <div class="col-md-6">
+
+      <div class="panel panel-danger">
+        <div class="panel-heading">Errores al registrar rol</div>
+          <ul class="list-group">
+                <% @role.errors.full_messages.each do |message| %>
+              <li class='list-group-item'><%= message %></li>
+            <% end %>
+          </ul>
+      </div>
+    </div>
+  <% end %>
+<br>
+
+   <div class="col-md-4 ">
+     <label>Rol <span class="glyphicon glyphicon-asterisk"></span></label>
+       <%= f.text_field :typename, :class => 'form-control input-small'%>
+     <br/>
+     <div class="panel panel-info">
+       <div class="panel-heading"><span class="glyphicon glyphicon-asterisk"></span> Indica campo obligatorio</div>
+     </div>
+
+    <div class="row center actions">
+         <div class="actions">
+          <%= f.submit 'Registrar' , class: 'btn btn-default '%>
+        </div>
+    </div>
+   </div><br>
+
+<% end %>

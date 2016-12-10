@@ -1,0 +1,42 @@
+// Place all the styles related to the static_pages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+.center{
+  text-align: center;
+}
+
+.white-wall{
+  background-image: image-url("white-wall-texture.png");
+  height:100%;
+  width: 100%;
+}
+
+.cream-pixels{
+  background-image: image-url("cream-pixels-texture.png");
+}
+
+.fondo-cocha{
+  background-image: image_url("cochabamba-picture.jpg");
+  background-size: cover;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
+
+.home-title{
+  border-radius: 7px;
+  color: rgb(244, 243, 242);
+  //background-color: rgba(8, 8, 8, 0.46);
+}
+
+.home-footer{
+  display: none;
+}
+
+.desk-background{
+  background-image: image_url("desk-picture.jpg");
+  height: 800px;
+  background-size: cover;
+}

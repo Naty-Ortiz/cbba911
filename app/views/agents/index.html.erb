@@ -1,0 +1,69 @@
+<%= render :partial => 'static_pages/notice_panel' %>
+
+<div class="row">
+  <div class="col-md-7">
+    <h1>Buscar Representante Legal </h1>
+    <br>
+  </div>
+  <div class="col-md-5">
+      <%= render :partial => 'legal_agents/search' %>
+      <div class="form-inline">
+        <br>
+        <%= form_tag( legal_agents_path , :method => "get", id: "search-form") do %>
+            <%= text_field_tag :search, params[:search], placeholder: "Nombre o Apellido", :class=>'form-control' %>
+            <%= submit_tag "Buscar" ,:class=>'btn btn-default'%>
+        <% end %>
+      </div>
+  </div>
+</div>
+<h1>Lista de Representantes Legales</h1>
+<br>
+<%if not @legal_agents.present? %>
+    <div class="row center actions panel panel-danger">
+      <div class="panel-heading">
+        <% if params[:search] %>
+            <p>Su busqueda no genero resultados</p>
+        <%else%>
+            <p>No existen representantes legales registrados este momento</p>
+        <%end%>
+      </div>
+    </div>
+<%else%>
+    <br>
+    <table class="table table-striped table-hover">
+      <thead>
+      <tr>
+        <th>Nombre(s)</th>
+        <th>Apellido(s)</th>
+        <th>No. de Identificacion </th>
+        <th>Telefono</th>
+        <th>Usuario</th>
+        <th>Compania</th>
+        <th colspan="3"></th>
+      </tr>
+      </thead>
+
+      <tbody class="cream-pixels">
+      <% @legal_agents.each do |legal_agent| %>
+          <tr>
+            <td><%= legal_agent.person.first_name %></td>
+            <td><%= legal_agent.person.last_name %></td>
+            <td><%= legal_agent.person.identification_number %></td>
+            <td><%= legal_agent.person.phone_number %></td>
+            <td><%= legal_agent.person.user.username %></td>
+            <td><%= link_to legal_agent.company.name, legal_agent.company%></td>
+            <td><%= link_to 'Ver', legal_agent, class:'btn btn-default' %></td>
+            <td><%= link_to 'Editar', edit_legal_agent_path(legal_agent), class:'btn btn-primary' %></td>
+            <%if current_user.role==1 or current_user.role==4 %>
+                <td><%= link_to 'Eliminar', legal_agent, method: :delete, data: { confirm: 'Confirmacion' },class:'btn btn-danger' %></td>
+            <%end%>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+<%end%>
+
+<br>
+
+
+<!--<%= link_to 'New Legal agent', new_legal_agent_path %>-->

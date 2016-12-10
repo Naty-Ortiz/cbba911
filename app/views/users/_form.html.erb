@@ -1,0 +1,31 @@
+<%= form_for(@user) do |f| %>
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+      <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!--<div class="field">-->
+    <!--<%= f.label :role %><br>-->
+    <!--<%= f.number_field :role %>-->
+  <!--</div>-->
+
+    <div class="form-group">
+      <label>Rol</label>
+      <select class="form-control" name="user[role]" id="user_role">
+        <option value="1"> Capitan</option>
+        <option value="2"> Oficial de turno</option>
+      
+      </select>
+    </div>
+
+  <div class="actions">
+    <%= f.submit 'Guarar cambios', :class => 'btn btn-default' %>
+  </div>
+<% end %>

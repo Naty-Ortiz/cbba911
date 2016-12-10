@@ -1,0 +1,33 @@
+<%= render :partial => 'static_pages/notice_panel' %>
+
+<h2>Ver Anuncio</h2>
+<br>
+<div class='jumbotron'>
+  <table class='table'>
+    <tr>
+      <td><strong>Titulo</strong></td>
+      <td><%= @announcement.title %></td>
+    </tr>
+    <tr>
+      <td><strong>Contenido</strong></td>
+      <td> <%= @announcement.content %></td>
+    </tr>
+    <!--<tr>-->
+      <!--<td><strong>Visto</strong></td>-->
+      <!--<td> <%# @announcement.accepted %></td>-->
+    <!--</tr>-->
+    <tr>
+        <% if @announcement.global %>
+            <td> <strong>Global</strong></td>
+            <td> Si</td>
+        <%else%>
+            <td> <strong>Nombre del empleado</strong></td>
+            <td> <%=@employeeName%></td>
+        <%end%>
+    </tr>
+
+  </table>
+</div>
+
+<%= link_to 'Editar ', edit_announcement_path(@announcement) , class: 'btn btn-primary' %>
+<%= link_to 'Atras', announcements_path , class: 'btn btn-default' %>

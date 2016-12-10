@@ -1,0 +1,45 @@
+<%= form_for(@crime) do |f| %>
+  <% if @crime.errors.any? %>
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+
+      <div class="panel panel-danger">
+        <div class="panel-heading">Errores al registrar crimen</div>
+          <ul class="list-group">
+            <% @crime.errors.full_messages.each do |message| %>
+              <li class='list-group-item'><%= message %></li>
+            <% end %>
+          </ul>
+      </div>
+    </div>
+  <% end %>
+<br>
+
+<div class="row">
+      <div class="col-md-6">
+        <div class="field">
+          <div class="field">
+            <label>Codigo <i class="fa fa-asterisk"></i></label><br>
+            <%= f.text_field :code, :class => 'form-control' %>
+          </div><br>
+          <label>Nombre <i class="fa fa-asterisk"></i></label><br>
+          <%= f.text_field :name, :class => 'form-control'%>
+        </div><br>
+
+
+      </div>
+      <div class="col-md-6">
+
+      </div><br>
+
+</div>
+
+    <div class="panel panel-info">
+      <div class="panel-heading"> <i class="fa fa-asterisk"></i> Indica campo obligatorio</div>
+    </div>
+
+
+   <div class="row center actions">
+    <%= f.submit 'Registrar', class: 'btn btn-default ' %>
+  </div>
+<% end %>

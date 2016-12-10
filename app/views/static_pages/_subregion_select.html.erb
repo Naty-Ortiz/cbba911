@@ -1,0 +1,31 @@
+<div id="order_state_code_wrapper">
+  <% parent_region = params[:parent_region] %>
+  <% city = params[:city] %>
+  <% country = Carmen::Country.coded(parent_region) %>
+
+  <% if country.nil? %>
+      <em>Seleccione un pais primero.</em>
+  <% elsif country.subregions? %>
+      <%= subregion_select(:decoy, :city, parent_region, {:selected => city}) %>
+  <% else %>
+      <%= text_field(:decoy, :city) %>
+  <% end %>
+
+  <script type="application/javascript">
+      var citySelect = $('#decoy_city');
+      var personCity = $('#person_city');
+      citySelect.addClass('form-control');
+      citySelect.change(function(){
+          personCity.val($(this).val())
+      });
+      if(citySelect.is('select')){
+          if($('#decoy_city option[value="'+personCity.val()+'"]').length != 0){
+              citySelect.val(personCity.val());
+          }
+          else{
+              citySelect.val($("#decoy_city option:first").val());
+          }
+      }
+          citySelect.trigger('change');
+  </script>
+</div>

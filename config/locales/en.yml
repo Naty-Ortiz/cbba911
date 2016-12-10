@@ -1,0 +1,129 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+en:
+  date:
+    formats:
+      default: "%d/%m/%Y"
+  time:
+    formats:
+      default: "%d/%m/%Y %H:%M"
+  hello: "Hello world"
+
+  activerecord:
+      attributes:
+        user:
+          username: "Nombre de usuario"
+          password: "Contrasena"
+          current_password: "Contrasena actual"
+          password_confirmation: "Confirmacion de contrasena "
+        company:
+          name: "Nombre"
+          nit: "NIT"
+          principal_activity: "Actividad principal"
+          zone: "Zona"
+          address: 'Direccion'
+          departament: 'Departamento'
+          phones: 'Telefono'
+          email: 'Correo electronico'
+        legal_agent:
+          identification_number: 'Numero de Identificacion'
+          identification_type: 'Documento de identificacion'
+          first_name: 'Nombre'
+          last_name: 'Apellido'
+          country: 'Pais'
+          city: 'Ciudad'
+          address: 'Direccion'
+          phone_number: 'Telefono'
+          mailbox: 'Codigo Postal'
+        person:
+          identification_number: 'Numero de Identificacion'
+          identification_type: 'Documento de identificacion'
+          first_name: 'Nombre'
+          last_name: 'Apellido'
+          country: 'Pais'
+          city: 'Ciudad'
+          address: 'Direccion'
+          phone_number: 'Telefono'
+        project:
+          name: 'Nombre'
+          description: 'Descripcion'
+          address: 'Direccion'
+          canton: 'Canton'
+          departament: 'Departamento'
+          latitude: 'Latitud'
+          longitude: 'Longitud'
+          province: 'Provincia'
+        employee:
+          position: 'posicion'
+          proffession: 'profesion'
+          agent_id: 'identificador de empleado'
+        verification_list:
+          name: 'Nombre'
+        report:
+          title: 'titulo'
+          antecedent: 'antecedente'
+          description: 'descripcion'
+          conclusion: 'conclusiones'
+          recommendation: 'recomendaciones'
+          regulatory_framework: 'Marco normativo'
+        role:
+          typename: 'rol'
+        list_category:
+          name: 'Nombre'
+        announcement:
+          title: 'titulo'
+          content: 'contenido'
+
+        procedure_type:
+          name: 'Nombre'
+        document:
+          typename: 'Nombre'
+        complainant:
+          name: 'Nombre'
+          last_name: 'Apellido'
+          address: 'Dirección'
+          phone: 'Teléfono'
+        complains:
+          description: 'Descripcion'
+          protagonists: 'Protagonistas'
+          zone: 'Zona'
+          latitude: 'Latitud'
+          longitude: 'Longitud'
+          observations: 'Observationes'
+          shortReport: 'Breve informe'
+      errors:
+        models:
+          user:
+            attributes:
+              email:
+                blank: "no debe dejarse en blanco"
+                taken: " ya fue registrado, no debe repetirse"
+                invalid: "no tiene un formato valido"
+              password:
+                blank: 'no debe dejarse en blanco'
+                too_short: 'es muy corta, debe tener minimamente %{count} caracteres'
+              password_confirmation:
+                blank: "Debe ingresasr la confirmacion de la contrasena."
+                confirmation: "no coincide con la contrasena."
+              current_password:
+                blank: "no puede dejarse vacia."
+                invalid: "no es correcta."

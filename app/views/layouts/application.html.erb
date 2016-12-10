@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sistema de Registro de Denuncias 911</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= yield :javascript_includes %>
+  <%= csrf_meta_tags %>
+  <%= favicon_link_tag('icons/escudo-cochabamba.ico') %>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&key=
+AIzaSyDJCxMIk3GTjMB77nK64W9DosMwb6w5oe0&libraries=places"
+  type="text/javascript"></script>
+
+  <script type="text/javascript"src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  
+</head>
+<body >
+
+
+<div class="content-wrapper white-wall" style="min-height: 1078px;">
+   <!-- Content Header (Page header) -->
+   <section class="content-header">
+ <% if user_signed_in? %>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+     
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+         <% if current_user.role == 1 %>
+        
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Usuarios <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/users">Ver usuarios</a></li>
+        
+          </ul>
+        </li>
+         <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Oficiales<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/employees/new">Registrar nuevo </a></li>
+            <li><a href="/employees">Ver Lista</a></li>
+            
+          </ul>
+        </li>
+      
+         <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Delitos<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/crimes/new">Registrar nuevo </a></li>
+            <li><a href="/crimes">Ver Lista</a></li>
+            
+          </ul>
+        </li>
+         <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Contravenciones<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/contravertions/new">Registrar nuevo </a></li>
+            <li><a href="/contravertions">Ver Lista</a></li>
+            
+          </ul>
+        </li>
+         <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Patrullas<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/patrol_units/new">Registrar nueva patrulla </a></li>
+            <li><a href="/patrol_units">Ver Lista</a></li>
+            
+          </ul>
+        </li>
+        <%end%>
+        
+        <% if  current_user.role == 2  || current_user.role == 1%>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Denuncias<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/complains/new">Registrar nueva denuncia </a></li>
+            <li><a href="/complains">Ver denuncias</a></li>
+           
+          </ul>
+        </li>
+       <%end%>
+      </ul>
+
+     <% if user_signed_in? %>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a id="sign-out" rel="nofollow" href="/logout">
+          <i class="fa fa-fw fa-lock"></i>Cerrar Sesion
+        </a></li>
+        <li> <a href="/users/edit"><span class="glyphicon glyphicon-log-in"></span>   <%= current_user.person.first_name %>&nbsp;<%= current_user.person.last_name %>  </a></li>
+      </ul>
+      <%end%>
+    </div>
+
+  </div>
+</nav>
+<%end%>
+
+   </section>
+
+   <!-- Main content -->
+   <section class="content">
+     <div class="row">
+         <div class="col-md-1"></div>
+         <div class="col-md-10">
+           <%= yield %> 
+           <% if  user_signed_in? && current_user.role == 1%>
+
+           
+            <% end%>
+     <% unless flash.empty? %>
+    <script type="text/javascript">
+        <% flash.each do |f| %>
+        <% type = f[0].to_s.gsub('alert', 'error').gsub('notice', 'info') %>
+         toastr['<%= type %>']('<%= f[1] %>');
+        <% end %>
+    </script>
+   <% end %>
+  
+  
+    </div><br>
+
+         </div>
+         <div class="col-md-1"></div>
+     </div>
+   </section><!-- /.content -->
+ </div>
+  <footer class="footer">
+      <div class="container">
+        <footer class="main-footer" style="max-height: 60px">
+           <!-- To the right -->
+           <div class="pull-right hidden-xs">
+             <strong> Nataly Ortiz </strong>
+           </div>
+           <!-- Default to the left -->
+           <strong>  <a href="https://www.ucbcba.edu.bo/"><%= image_tag( 'logo-UCB.png', { height: '40px', width: '30px' } ) %> Universidad Cat&oacute;lica Boliviana "San Pablo"</a> <%= Date.today.year %> </strong> Cochabamba
+         </footer>
+      </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<%= render :partial => 'static_pages/notice_panel' %>
+
+<h1>Ver empleado</h1>
+
+<div class="jumbotron">
+
+  <table class="table">
+    <tr>
+      <td> <strong>Nombre</strong> </td>
+      <td> <%= @employee.person.first_name %> </td>
+      <td> <strong>Apellido</strong> </td>
+      <td> <%= @employee.person.last_name %> </td>
+    </tr>
+
+    <tr>
+     <td> <strong>Numero de identificacion</strong> </td>
+      <td> <%= @employee.person.identification_number %> </td>
+      <td> <strong>Tipo de indentificacion </strong></td>
+      <td>
+        <% if @employee.person.identification_type == 1 %>
+          Carnet de Identidad
+        <% elsif @employee.person.identification_type == 2 %>
+          Libreta Militar
+        <% else %>
+          Pasaporte
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td> <strong>Pais</strong> </td>
+      <td> <%= Carmen::Country.coded(@employee.person.country) %> </td>
+      <td> <strong>Ciudad</strong> </td>
+          <td> <%= if !Carmen::Country.coded(@employee.person.country).subregions.empty? then Carmen::Country.coded(@employee.person.country).subregions.coded(@employee.person.city) else @employee.person.city end %> </td>
+    </tr>
+
+    <tr>
+      <td> <strong>Direccion</strong> </td>
+      <td> <%= @employee.person.address %> </td>
+      <td> <strong>Telefono</strong> </td>
+      <td> <%= @employee.person.phone_number %> </td>
+    </tr>
+    <tr>
+      <td> <strong>Posicion</strong> </td>
+    <!--  <td> <%#= Role.find(@employee.position).typename || '' %> </td> -->
+      <td><%=@employee.position%></td>
+      <td> <strong>Nombre de Usuario</strong> </td>
+      <td> <%=@employee.person.user.username%></td>
+    </tr>
+    <tr>
+      <td> <strong>Profesion</strong> </td>
+      <td> <%= @employee.profession %> </td>
+
+      <td> <strong>Estado de usuario</strong> </td>
+      <td> <%if @employee.person.user.active%> Activo <%else%> Desactivo <%end%></td>
+    </tr>
+    <tr>
+       <td> <strong>Correo electronico</strong> </td>
+      <td> <%= @employee.person.user.email %> </td>
+      <!--  <td> <strong>identificador de empleado</strong> </td>
+      <td> <%= @employee.agent_id %> </td> -->
+    </tr>
+  </table>
+</div>
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <strong>Informacion de acceso a sistema generada automaticamente</strong>
+        <br/>Nombre de usuario: [numero_de_identificacion]_[nombre(s)], los espacios son sustituidos por '_'
+        <br/>Contrase&ntilde;a: [numero_de_identificacion]_[nombre(s)], los espacios son sustituidos por '_'
+  </div>
+</div>
+
+<%= link_to 'Editar', edit_employee_path(@employee), :class=>'btn btn-primary'%>
+<%= link_to 'Atras', employees_path, :class=>'btn btn-default'%>

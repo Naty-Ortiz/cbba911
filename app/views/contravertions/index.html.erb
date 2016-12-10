@@ -1,0 +1,74 @@
+<%= render :partial => 'static_pages/notice_panel' %>
+
+<div class="row">
+  <div class="col-md-7">
+    <h1>Buscar Contravension </h1>
+    <br>
+  </div>
+  <div class="col-md-5">
+      <%= render :partial => 'contravertions/search' %>
+      <div class="form-inline">
+        <br>
+        <%= form_tag(contravertions_path, :method => "get", id: "search-form") do %>
+            <%= text_field_tag :search, params[:search], placeholder: "Nombre de la contraversion", :class => 'form-control'%>
+            <%= submit_tag 'Buscar', :class=>'btn btn-default' %>
+        <% end %>
+      </div>
+  </div>
+</div>
+<h1>Lista de Contravensiones</h1>
+<br>
+<% if @contravertions.present? %>
+<div class="col-md-4 col-md-offset-4">
+  <div class="digg_pagination">
+    <%= will_paginate @contravertions,  :previous_label => 'Atras', :next_label => 'Siguiente', :container => true ,renderer: BootstrapPagination::Rails%>
+  </div>
+</div><br>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+
+        <th>Codigo</th>
+          <th>Nombre</th>
+        <th>VER</th>
+        <th>EDITAR</th>
+
+        <th colspan="3">ELIMINAR</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @contravertions.each do |contravertion| %>
+        <tr>
+
+          <td><%= contravertion.code %></td>
+          <td><%=contravertion.name%></td>
+
+
+          <td><%= link_to 'Ver', contravertion , class:'btn btn-default'%></td>
+
+            <td><%= link_to :Editar, edit_contravertion_path(contravertion), class:'btn btn-primary'%></td>
+            <td><%= link_to 'Eliminar', contravertion, method: :delete, data: { confirm: 'Esta seguro?' }, class:'btn btn-danger' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="col-md-4 col-md-offset-4">
+    <div class="digg_pagination">
+      <%= will_paginate @contravertions,  :previous_label => 'Atras', :next_label => 'Siguiente', :container => true ,renderer: BootstrapPagination::Rails%>
+    </div>
+  </div><br>
+<%else%>
+    <div class="row center actions panel panel-danger">
+      <div class="panel-heading">
+        <% if params[:search] %>
+            <p>Su busqueda no generó resultados</p>
+        <%else%>
+            <p>No existen Contraversiones registradas este momento</p>
+        <%end%>
+      </div>
+    </div>
+<%end%>
+<br>
+
+<!--<%= link_to 'New contravertion', new_contravertion_path %>-->

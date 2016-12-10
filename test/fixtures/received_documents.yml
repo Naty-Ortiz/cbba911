@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  procedure_id: 
+  document_id: 
+  reference: MyString
+
+two:
+  procedure_id: 
+  document_id: 
+  reference: MyString
