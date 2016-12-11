@@ -17,7 +17,7 @@
 
 //= require turbolinks
 //= require jQuery-2.1.4.min
-
+//= require bootstrap
 //= require gmaps/google
 //= require underscore
 //= require markerclusterer
