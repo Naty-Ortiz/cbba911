@@ -303,7 +303,7 @@ class ComplainsController < ApplicationController
     def index3
      #@differenceHour=(((strftime('%s', '2011-11-10 11:46') - strftime('%s', '2011-11-09 09:00')) % (60 * 60 * 24)) / (60 * 60) 
 
-          ComplainsAuxiliar.all.where("id > 17009").each do |comp|
+          ComplainsAuxiliar.all.where("id > 17029").each do |comp|
      # if @complainAux.contravencion=="380.3" || @complainAux.contravencion=="380.2" || @complainAux.contravencion=="380.4" || @complainAux.contravencion="380.10"
          
        @complainAux = comp

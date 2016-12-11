@@ -14,7 +14,8 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
-
+//= require bootstrap
+//= require turbolinks
 //= require jQuery-2.1.4.min
 //= require bootstrap-sprockets
 //= require gmaps/google
@@ -28,7 +29,7 @@
 //= require moment
 
 //= require toastr
-//= require_tree 
+//= require_tree .
 $(function(){
     if ($("#complains").length > 0){
         setTimeout(updateComplains,10000);
