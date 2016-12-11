@@ -21,8 +21,7 @@
 @import 'variables'
 @import 'selectivity'
 @import 'selectivity_bootstrap'
-@import 'bootstrap-sprockets';
-@import 'bootstrap';
+import $ from 'jquery';
 @import 'bootstrap-datetimepicker';
 
  */

@@ -14,7 +14,7 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
-//= require bootstrap
+
 //= require turbolinks
 //= require jQuery-2.1.4.min
 
