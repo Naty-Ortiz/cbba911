@@ -20,6 +20,11 @@ gem 'groupdate'
 
 gem 'yaml_db'
 
+gem 'bootstrap-sass', '~> 3.3.5'
+gem 'will_paginate-bootstrap'
+gem 'momentjs-rails'
+
+gem 'bootstrap3-datetimepicker-rails', '~> 4.17.42'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring'
@@ -45,11 +50,6 @@ gem 'coffee-rails'
 # gem 'realtime-validations'
 gem 'font-awesome-rails'
 # gem 'will_paginate'
-gem 'bootstrap-sass', '~> 3.3.5'
-gem 'will_paginate-bootstrap'
-gem 'momentjs-rails'
-
-gem 'bootstrap3-datetimepicker-rails', '~> 4.17.42'
 
 gem 'rails4-autocomplete'
 gem 'jquery-ui-rails'

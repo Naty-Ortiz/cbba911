@@ -15,7 +15,7 @@
 //= require jquery-ui
 //= require jquery_ujs
 
-//= require turbolinks
+
 //= require jQuery-2.1.4.min
 //= require bootstrap
 //= require gmaps/google
@@ -29,6 +29,7 @@
 //= require moment
 
 //= require toastr
+//= require turbolinks
 //= require_tree .
 $(function(){
     if ($("#complains").length > 0){
