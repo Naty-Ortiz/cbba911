@@ -1,0 +1,91 @@
+select created_at, strftime('%w', created_at) day_of_week from complains where day_of_week like 0  and created_at between '2014-04-1 23:50:38.000000' and '2014-04-2 23:50:38.000000'
+
+
+cantidad de denuncias entre fechas
+
+
+select  COUNT( *) from (select   created_at, strftime('%w', created_at) day_of_week from complains where  created_at between '2014-11-09 09:00' and '2014-11-17 09:00') 
+
+GET all complins per day
+
+
+SELECT 
+     created_at ,  strftime('%w', created_at) day_of_week from complains 
+  JOIN (SELECT MAX(created_at) 'maxtimestamp'
+         FROM complains
+     GROUP BY date(created_at)) m ON m.maxtimestamp = created_at
+
+
+     select  COUNT( *) from( 
+SELECT MAX(created_at)  FROM complains
+WHERE created_at >= '2014-11-09 09:00'
+      AND created_at <='2014-11-17 09:00'
+and strftime('%w', created_at) like 1
+     GROUP BY date(created_at))
+@companies = Company.joins(:persons).where(:persons => { active: true } ).all
+Item.all(:conditions => ['dayofweek(created_at) = ?', 1])
+
+Book.where(:created_at =>Book.select("max(created_at) as created_at").group("date_trunc('day',created_at)"))
+
+select * from complains_auxiliars where "descripcionHecho" = ' A HRS. 23:43 EN EL LUGAR INDICAN QUE HAY PROBLEMAS DE FAMILIA '
+
+select * from complains where id >200
+
+POSTGRES
+       @aux= Complain.joins(:crime).where(:created_at => [('2014-11-09 09:00')..('2014-11-17 09:00')],:created_at => ['dayofweek(created_at) = ?', 1],:created_at =>Complain.select("max(created_at) as created_at").group("date_trunc('day',created_at)")).count
+
+
+   #@differenceHour=(((strftime('%s', '2011-11-10 11:46') - strftime('%s', '2011-11-09 09:00')) % (60 * 60 * 24)) / (60 * 60) 
+   UPDATE complains_auxiliars SET "nroTelefono" = 70301370 WHERE ID = 438
+     
+TRUNCATE TABLE contravertions RESTART IDENTITY CASCADE
+
+
+
+SELECT DISTINCT ON (created_at)
+       
+  FROM complains 
+
+  where 
+
+  datepart(dw,[Date]) = 1
+
+  
+
+SELECT 
+     created_at ,  strftime('%w', created_at) day_of_week from complains 
+  JOIN (SELECT MAX(created_at) as 'maxtimestamp'
+         FROM complains
+     GROUP BY date(created_at)) m ON m.maxtimestamp = created_at
+
+     SELECT MAX(precio_libro) AS precioAlto, MIN(precio_libro) AS precioBajo FROM ventas WHERE fecha_de_compra BETWEEN '03/01/2001' AND '04/01/2001';
+
+
+ 
+
+
+ select  created_at , extract (dow 
+from created_at ) as dow  from complains  where extract (dow 
+from created_at )= 1 
+
+
+
+
+     SELECT MAX(created_at) AS created_at FROM complains WHERE  extract (dow 
+from created_at )= 1  and  created_at BETWEEN '2014-11-09 09:00' AND '2014-11-17 09:00' ;
+ created_at
+
+
+
+
+ SELECT  EXTRACT(DOW FROM created_at )  from complains    WHERE created_at >= '2014-11-09 09:00'
+      AND created_at <='2014-11-17 09:00'
+and EXTRACT(DOW FROM TIMESTAMP 'created_at') = 1  and created_at in (select max(created_at) from complains group by date(created_at))
+
+
+ (SELECT MAX(created_at)  FROM complains
+WHERE created_at >= '2014-11-09 09:00'
+      AND created_at <='2014-11-17 09:00'
+and extract (dow 
+from created_at )= 2
+     GROUP BY date(created_at))

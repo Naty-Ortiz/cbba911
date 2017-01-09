@@ -15,12 +15,14 @@ class Complain < ActiveRecord::Base
 	def self.search(search)
 		where("name LIKE :search ", search:"%#{search}%")
 	end
-	def crime_name
-		crime.name if crime
-	end
+	
 	def crime_name=(name)
 	self.crime= Crime.find_by_name(name) unless name.blanck?
 	end
+	
+			
+
+	
 
 	protected
 	def uppercase

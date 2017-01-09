@@ -8,12 +8,19 @@
        <br><h4>Probabilidad de delitos  en una zona </h4>
         <%= form_tag('/index_oficial', :method => 'get', :id =>"eventForm"  ) do %>
 
-            <%= awesomplete_field( :searchCrimeProbabilityDateZone,  collection: @crimes.map{|v| v.to_s.encode("UTF-8").gsub(/[^a-z0-9\s]/i, '')},class: 'form-control') %> <br>
-         <div class="field">
+<div class="field">
               <label>Turno</label> <br>
               <%= select  :complain, :turnHour,  ['8:00-16:00','16:00-00:00','00:00-8:00'] ,{},:class => 'form-control'  %>
               <label>Zona</label> <br>
               <%= select  :complain, :zoneCrime, ['Nor Este','Nor Oeste','Central Norte','Central Sud','Sud Este','Sud Oeste'] ,{},:class => 'form-control'  %><br><br><br>
+       <div class='input-group date' id='datetimepicker'>
+  <input type='text' class="form-control" name="event[time]" id="event_time" <% if @event.start_time %>value="<%= @event.start_time.strftime("%m/%d/%Y %I:%M %p") %><% else %> value="<%= DateTime.now.strftime("%m/%d/%Y %I:%M %p") %>"<% end %>">
+  <span class="input-group-addon">
+    <span class="glyphicon glyphicon-calendar"></span>
+  </span>
+</div>
+
+
        <%= submit_tag 'Buscar', class: 'btn btn-default' %>
         <% end %>
       </div><br><br><br><br>

@@ -19,12 +19,13 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'groupdate'
 
 gem 'yaml_db'
+ gem 'bootstrap-timepicker-rails'
 
 gem 'bootstrap-sass', '~> 3.3.5'
 gem 'will_paginate-bootstrap'
-gem 'momentjs-rails'
+gem 'momentjs-rails', '>= 2.9.0'
+gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
 
-gem 'bootstrap3-datetimepicker-rails', '~> 4.17.42'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring'

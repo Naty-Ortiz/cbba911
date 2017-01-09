@@ -142,58 +142,40 @@ handler.getMap().setZoom(38);
  handler.getMap().setZoom(18);
 
 }
+function getColorBorder (prob){
+        if (prob>=0.0 && prob<=0.30){
+       return "#1B592B"
+       }
+        if  (prob>=0.31 && prob<=0.49)
+        {  return "#1231C8"
+        }
+      if (prob>=0.50 && prob<=0.79)
+         {
+         return "#E8F853"
+       }
+        if (prob>=0.80 && prob<=1.0)
+        {      
+          return"#FFFFFF"  
+        }
+}
 
+ 
 
-function gmap_show_polygons(numberN,numberW,numberS,NE,NW,CN,CS,SE,SW) {
+function gmap_show_polygons(list,turn) {
   
-var colorNW;
-var colorNE;
-var colorCN;
-var colorCS;
-var colorSE;
-var colorSO;
+var todayDate = new Date();
+var todayHours = todayDate.getHours();
+var todayMinutes =todayDate.getMinutes();
+console.log( list)
+console.log( "ist")
+console.log( turn)
 
- if ((numberN>=numberS&&numberN>=numberW)&&(numberW<numberS)){
-           colorW="#2EFE64";
-       colorN ="#FFFF00";
-        colorS="#FF000";
- }
-   else if((numberS>=numberN)&&(numberS>=numberW)){
-       colorN="#2EFE64";
-       colorS ="#FFFF00";
-        colorW="#FF0000";
-    
-      console.log("numberN");
-    }
 
   
   
  var handler = Gmaps.build('Google');
-     handler.buildMap({ internal: {id: 'map'}}, function(){
-      marker = handler.addMarkers([
-                {
-                    "lat":-17.442072,
-                    "lng": -66.207866,
-                    "picture": {
-                        "url": 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-                        "width":  32,
-                        "height": 32
-                    },
-                    "infowindow": "la probabilidad es"+NE
-                }
-            ]);
-          marker2 = handler.addMarkers([
-                {
-                    "lat":-17.186415,
-                    "lng": -66.150529,
-                    "picture": {
-                        "url": 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-                        "width":  32,
-                        "height": 32
-                    },
-                    "infowindow": "la probbilidad es"+NW
-                }
-            ]);
+     handler.buildMap({ internal: {id: 'map'},provider: { scrollwheel: false, zoomControl: false , draggable: false}}, function(){
+    
      var polyNW = handler.addPolygons(
        [
          [
@@ -209,7 +191,7 @@ var colorSO;
          ]
        ],
         {
-        "strokeColor": colorN
+        "strokeColor": getColorBorder(list[1]),
 
       
         }
@@ -228,7 +210,7 @@ var colorSO;
          ]
        ],
         {
-        "strokeColor": colorW,
+        "strokeColor": getColorBorder(list[1]),
         } 
 
      );
@@ -246,7 +228,7 @@ var colorSO;
           ]
        ],
         {
-        "strokeColor": colorN,
+        "strokeColor": getColorBorder(list[1]),
         } 
 
      );
@@ -259,7 +241,7 @@ var polyCS = handler.addPolygons(
        ]
        ],
         {
-        "strokeColor": colorN,
+        "strokeColor": getColorBorder(list[1]),
         } 
 
      );
@@ -273,7 +255,7 @@ var polySW = handler.addPolygons(
        ]
        ],
         {
-        "strokeColor": colorS,
+        "strokeColor": getColorBorder(list[1]),
         } 
 
      );
@@ -287,7 +269,7 @@ var polySE = handler.addPolygons(
        ]
        ],
         {
-        "strokeColor": colorW,
+        "strokeColor": getColorBorder(list[1]),
         } 
 
      );
@@ -296,24 +278,44 @@ function initialize() {
 
 var i;
   var arrDestinations = [
+ {
+      lat: -17.284131, 
+      lon:  -66.165636 ,
+      title: "probabilidad" +"es" +  list[1], 
+      description:"probabilidad" +"es" +  list[0]
+    },
     {
-      lat: -17.433432, 
-      lon: -66.072673, 
+      lat: -17.253969,  
+      lon: -66.122377,
+      title: "probabilidad" +"es" +  list[0], 
+      description:"probabilidad" +"es" +  list[0]
+    },
+     {
+      lat: -17.365412,
+      lon:  -66.147783, 
 
-      title: "probabilidad", 
-      description: "es" + NE 
+      title: "probabilidad" +"es" +  list[0], 
+      description: "probabilidad" +"es" +  list[0]
     },
-    {
-      lat: -17.346734, 
-      lon:  -66.110017,
-      title: "probabilidad", 
-      description:"es" + NW
+     {
+      lat: -17.415341,
+      lon:  -66.142593, 
+
+      title: "probabilidad" + "es" +  list[2], 
+      description: "probabilidad" +"es" +  list[2]
     },
-    {
-      lat: -17.246756, 
-      lon: -66.107957,
-      title: "English's", 
-      description: CN
+     {
+      lat: -17.468273,
+      lon:   -66.211986, 
+
+      title: "probabilidad" +"es" +  list[0], 
+      description: "probabilidad" +"es" +  list[0]
+    }, {
+      lat:-17.453208,
+      lon:  -66.131990 , 
+
+      title: "probabilidad" +"es" +  list[1], 
+      description: "probabilidad" +"es" +  list[1]
     }
   ];
   
@@ -322,25 +324,12 @@ var i;
   var myOptions = {
     zoom: 15,
     center: homeLatlng,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    scrollwheel:  false
   };
 
  
- var infowindow1 =  new google.maps.InfoWindow({
-    content: "la probabilidad es "+ NE,
-    map: handler.getMap(),
-    position: new google.maps.LatLng( -17.277247, -66.182802)
-  });
-  var infowindow2 =  new google.maps.InfoWindow({
-    content:"la probabilidad es "+  NW,
-    map: handler.getMap(),
-    position:new google.maps.LatLng(-17.346734, -66.110017)
-  });
-  var infowindow3 =  new google.maps.InfoWindow({
-    content: "la probabilidad es "+ CN,
-    map: handler.getMap(),
-    position: new google.maps.LatLng( -17.370327, -66.149156)
-  });
+
   
 
   var infowindow =  new google.maps.InfoWindow({
@@ -372,8 +361,7 @@ function bindInfoWindow(marker, map, infowindow, html) {
 } 
 
 google.maps.event.addDomListener(window, 'load', initialize);
-     handler.bounds.extendWith(marker);
-    handler.bounds.extendWith(marker2);
+
  
      handler.map.centerOn([-17.3941855, -66.1585695]);
      handler.bounds.extendWith(polyNW);
@@ -385,5 +373,6 @@ google.maps.event.addDomListener(window, 'load', initialize);
      handler.bounds.extendWith(polySE);
      handler.fitMapToBounds();
      handler.getMap().setZoom(12);
+  
    });
 }

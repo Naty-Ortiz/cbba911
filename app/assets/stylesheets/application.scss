@@ -13,6 +13,8 @@
  *= require_tree
  *= require_styles.css
  *= require toastr
+ *= require bootstrap-timepicker
+
 
  *= require font-awesome
  
@@ -21,8 +23,11 @@
 @import 'variables'
 @import 'selectivity'
 @import 'selectivity_bootstrap'
-import $ from 'jquery';
+
 @import 'bootstrap-datetimepicker';
+@import "bootstrap-sprockets";
+@import "bootstrap";
+import $ from 'jquery';
 
  */
 

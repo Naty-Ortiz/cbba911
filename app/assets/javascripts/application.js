@@ -11,9 +11,6 @@
 // about supported directives.
 
 
-//= require jquery
-//= require jquery-ui
-//= require jquery_ujs
 
 
 //= require jQuery-2.1.4.min
@@ -25,9 +22,13 @@
 //= require autocomplete-rails
 //= require selectivity
 //= require awesomplete
-
 //= require moment
+//= require bootstrap-datetimepicker
+//= require bootstrap-timepicker
 
+//= require jquery
+//= require jquery-ui
+//= require jquery_ujs
 //= require toastr
 //= require turbolinks
 //= require_tree .

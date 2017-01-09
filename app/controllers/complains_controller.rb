@@ -5,6 +5,7 @@ class ComplainsController < ApplicationController
     before_action :verify_password_change
     autocomplete :complain, :contravertion
     autocomplete :complain, :crime
+     helper_method :getColor
     def index
         if user_signed_in?
             @role_current_user = current_user.role
@@ -53,176 +54,67 @@ class ComplainsController < ApplicationController
     end
     def index_oficial
 
-        #   File.open("/home/nataly/1/aux/911/unidades", "r") do |f|
-
-        #    f.each_line do |line|
-        #    @aux2=line
-
-        #    @aux = PatrolUnit.new
-        #    if @aux2!=nil
-        #        @aux.code =  @aux2
-        #      if @aux.valid?
-
-        #        @aux.save!
-        #      end
-        #    end
-        #    end
-        #  end
-        @crimes = Array.new
-        Crime.all.each do |comp|
-          @crimes << [comp.code + ' ' + comp.name]
-        end
-        @contravertions = Array.new
-        Contravertion.all.each do |comp|
-          @contravertions << [comp.code + ' ' + comp.name]
-        end
-        @day = params[:day]
-        @dayP = params[:dayP]
-        @totalDaysDB = ComplainsAuxiliar.where('fecha >= ?', 3.year.ago).map { |p| p.fecha.beginning_of_day }.uniq.size
-        @totalCrimes = ComplainsAuxiliar.where( "delito like ?", "%DH%").count
-        @totalHoursDB = @totalDaysDB*24
-        @averagePerDay= @totalCrimes.to_f/@totalDaysDB
-        if params[:searchCrime] && @day=="day"
-          @totalCrimesSearched = ComplainsAuxiliar.where( "delito like ?", "%#{params[:searchCrime].split[0...2].join(' ')}%").count
-          @averageCrimePerDay = @totalCrimesSearched.to_f/@totalDaysDB
-          @searchCrime =  params[:searchCrime]
-
-        elsif params[:searchCrime] && @day=="hour"
-           @totalCrimesSearched = ComplainsAuxiliar.where( "delito like ?", "%#{params[:searchCrime].split[0...2].join(' ')}%").count
-           @averageCrimePerHour= @totalCrimesSearched.to_f/@totalHoursDB
-           @searchCrime =  params[:searchCrime]
-         end
-         if params[:searchContravertion] && @day=="day"
-           @totalContravertionsSearched = ComplainsAuxiliar.where( "contravencion like ?", "%#{params[:searchContravertion].split[0...2].join(' ')}%").count
-           @averageContravertionsPerDay = @totalContravertionsSearched.to_f/@totalDaysDB
-           @searchConstravertion =  params[:searchConstravertion]
-         elsif params[:searchContravertion] && @day=="hour"
-           @totalContravertionsSearched = ComplainsAuxiliar.where( "contravencion like ?", "%#{params[:searchContravertion].split[0...2].join(' ')}%").count
-           @averageContravertionsPerHour= @totalContravertionsSearched.to_f/@totalHoursDB
-           @searchContravertion =  params[:searchContravertion]
-          end
-          if params[:searchCrimeProbability] && @dayP=="day"
-           @totalCrimesSearched = ComplainsAuxiliar.where( "delito like ?", "%#{params[:searchCrimeProbability].split[0...2].join(' ')}%").count
-          @probabilityCrimePerDay = @totalCrimesSearched.to_f/@totalDaysDB
-          
-          @searchCrimeProbability =  params[:searchCrimeProbability]
-           
-
-        elsif params[:searchCrimeProbability] && @dayP=="hour"
-           @totalCrimesSearched = ComplainsAuxiliar.where( "delito like ?", "%#{params[:searchCrimeProbability].split[0...2].join(' ')}%").count
-           @probabilityCrimePerHour= @totalCrimesSearched.to_f/@totalHoursDB
-           @searchCrimeProbability =  params[:searchCrimeProbability]
-          
-          end
-
-          if params[:searchContravertionProbability] && @dayP=="day"
-           @totalContravertionsSearched = ComplainsAuxiliar.where( "contravencion like ?", "%#{params[:searchContravertionProbability].split[0...2].join(' ')}%").count
-           @probabilityContravertionsPerDay = @totalContravertionsSearched.to_f/@totalDaysDB
-           @searchConstravertionProbability =  params[:searchConstravertionProbability]
-           
-         elsif params[:searchContravertionProbability] && @dayP=="hour"
-           @totalContravertionsSearched = ComplainsAuxiliar.where( "contravencion like ?", "%#{params[:searchContravertionProbability].split[0...2].join(' ')}%").count
-           @probabilityContravertionsPerHour= @totalContravertionsSearched.to_f/@totalHoursDB
-           @searchContravertionProbability =  params[:searchContravertionProbability]
-            
-           
-        end
-        
-          
-          if params[:searchContravertionProbabilityDate] 
-         @dateStart = params[:startdate]
-         @dateEnd=params[:enddate]
-          @dateStart = DateTime.new params[:startdate]["{:ampm=>true}(1i)"].to_i,params[:startdate] ["{:ampm=>true}(2i)"].to_i, params[:startdate]["{:ampm=>true}(3i)"].to_i, params[:startdate]["{:ampm=>true}(4i)"].to_i,  params[:startdate]["{:ampm=>true}(5i)"].to_i
-          @dateEnd = DateTime.new params[:enddate]["{:ampm=>true}(1i)"].to_i, params[:enddate]["{:ampm=>true}(2i)"].to_i, params[:enddate]["{:ampm=>true}(3i)"].to_i, params[:enddate]["{:ampm=>true}(4i)"].to_i, params[:enddate]["{:ampm=>true}(5i)"].to_i
-
-         @dateS=@dateStart.strftime("%d/%m/%Y") 
-         @dateE=@dateEnd.strftime("%d/%m/%Y") 
-         @hourE= @dateEnd.strftime("%H:%M")
-         @hourS =@dateStart.strftime("%H:%M")
-         @totalContravertionsSearched = ComplainsAuxiliar.where( "(fecha >= ? AND fecha <= ? ) AND  (hora >=? AND hora <=?) AND contravencion like ?", "#{@dateS}","#{@dateE}","#{@hourS}","#{@hourE}","#{params[:searchContravertionProbabilityDate]}").count
-         @probabilityContravertionsProbabilityDate = @totalContravertionsSearched.to_f/@totalDaysDB
-         @searchContravertionProbabilityDate =  params[:searchContravertionProbabilityDate]
-
-           
-          end
-    
- if params[:searchCrimeProbabilityDate] 
-         @dateStart = params[:startdate]
-         @dateEnd=params[:enddate]
-         @dateStart = DateTime.new params[:startdate]["{:ampm=>true}(1i)"].to_i,params[:startdate] ["{:ampm=>true}(2i)"].to_i, params[:startdate]["{:ampm=>true}(3i)"].to_i, params[:startdate]["{:ampm=>true}(4i)"].to_i,  params[:startdate]["{:ampm=>true}(5i)"].to_i
-          @dateEnd = DateTime.new params[:enddate]["{:ampm=>true}(1i)"].to_i, params[:enddate]["{:ampm=>true}(2i)"].to_i, params[:enddate]["{:ampm=>true}(3i)"].to_i, params[:enddate]["{:ampm=>true}(4i)"].to_i, params[:enddate]["{:ampm=>true}(5i)"].to_i
-
-         @dateS=@dateStart.strftime("%d/%m/%Y") 
-         @dateE=@dateEnd.strftime("%d/%m/%Y") 
-         @hourE= @dateEnd.strftime("%H:%M")
-         @hourS =@dateStart.strftime("%H:%M")
-         @totalCrimeSearched = ComplainsAuxiliar.where( "(fecha >= ? AND   @averageCrimePerDay = @totalCrimesSearched.to_f/@totalDaysDB fecha <= ? ) AND  (hora >=? AND hora <=?) AND delito like ?", "#{@dateS}","#{@dateE}","#{@hourS}","#{@hourE}","#{params[:searchCrimeProbabilityDate]}").count
-         @probabilityCrimeProbabilityDate = @totalCrimesSearched.to_f/@totalDaysDB
-         @searchCrimerobabilityDate =  params[:searchCrimesrobabilityDate]
-
-        
+      
+       
     end
-
- if params[:searchCrimeProbabilityDateZone] 
-         @zoneCrime =  check_box_params[:zoneCrime]
-         @turnHour=check_box_params[:turnHour]
-         puts "dsds"
-         puts check_box_params[:turnHour]
-         puts "DSD"
-         puts  check_box_params[:zoneCrime]
-         @hourS= @turnHour.split('-')[0]
-         @hourE= @turnHour.split('-')[1]
-         
-         @totalCrime = ComplainsAuxiliar.where( "delito like ?","#{params[:searchCrimeProbabilityDateZone]}").count
-        @probabiliteCrime= @totalCrime.to_f/@totalCrimes.to_f
-        puts "@totalCrime"
-         puts @totalCrime
-         puts "@totalCrimes"
-          puts @totalCrimes
-         puts "proCrimes"
-         puts @probabiliteCrime
-         puts  @totalCrime.to_f/@totalCrimes.to_f
-        @totalCrimeZone = ComplainsAuxiliar.where( "delito like ? AND ZonaUrbana like ?","#{params[:searchCrimeProbabilityDateZone]}","#{check_box_params[:zoneCrime]}").count
-         
-        @norte = ComplainsAuxiliar.where( "delito like ? AND ZonaUrbana like ?","#{params[:searchCrimeProbabilityDateZone]}","NORTE").count
-         @oeste = ComplainsAuxiliar.where( "delito like ? AND ZonaUrbana like ?","#{params[:searchCrimeProbabilityDateZone]}","OESTE").count
-         @sud = ComplainsAuxiliar.where( "delito like ? AND ZonaUrbana like ?","#{params[:searchCrimeProbabilityDateZone]}","SUD").count
-         
-         puts "@totalCrimeZone"
-         puts @totalCrimeZone
-         puts "DSDmm"
-         #@totalCrimeZone
-           @error =  ( ((@probabiliteCrime * (1- @probabiliteCrime) ) / @averagePerDay)**0.5)*1.96
-    
-         puts "DSD"
-       #  @totalCrimeHourZ = ComplainsAuxiliar.where( "(hora BETWEEN >=? AND  <=?) AND delito like ?","#{@hourS}","#{@hourE}","#{params[:searchCrimeProbabilityDateZone]}").count
-         puts @totalCrimeHourZ
-           puts "@totalCrimeHourZ"
-         @probabilityZone=  @totalCrimeZone /@totalCrimes
-         puts "dsds"
-         puts @probabiliyZone
-         puts @totalCrimeHourZ
-
-         @searchCrimeProbabilityDateZone=params[:searchCrimeProbabilityDateZone] 
-         @zoneCrime=check_box_params[:zoneCrime]
-         puts "DSD"
-         @probabilityCrimeProbabilityDateZone = @probabiliteCrime.to_f*@probabiliteCrime.to_f
-            @error =  ( ((@probabilityCrimeProbabilityDateZone *(1- @probabilityCrimeProbabilityDateZone ))/@averagePerDay)**0.5)*1.96
-         @expectedCrime= @averagePerDay *  @probabilityCrimeProbabilityDateZone 
-         @confidenceIntervalD =  (@probabilityCrimeProbabilityDateZone.to_f-@error ) *100
-         @confidenceIntervalU =  (@probabilityCrimeProbabilityDateZone.to_f+@error ) *100
-         @probabilityCrimeProbabilityDateZone=@probabilityCrimeProbabilityDateZone.to_f*100
-    end
-    end
-
+    def getColor(prob)
+        if prob>=0.0 && prob<=0.30
+       return "#1B592B"
+       end
+        if  prob>=0.31 && prob<=0.49
+          return "#0431B4"
+        end
+      if prob>=0.50 && prob<=0.79
+         return "#E8F853"
+        end
+        if prob>=0.80 && prob<=0.100
+              
+          return"#FFFFFF"  
+        end
+end
 
     def index2
-
-         
    
-      @dateStart = params[:startdate]
-         @dateEnd=params[:enddate]
-         #if @dateStart!=nil
+    @dateStart = params[:startdate]
+    @dateEnd=params[:enddate]
+    @turn=params[:turnHour]
+
+    @aux1 = Complain.joins(:crime).last
+    @dateStartToTime =Time.now
+    @probOfDay=1
+    @dateBegin = Complain.first.created_at
+    @dateFinal =Complain.last.created_at
+    @totalDaysDB = Complain.group("date_trunc('day',complains.created_at)").where('  complains.created_at BETWEEN ? AND ? ', @dateBegin,@dateFinal).count.size
+    @thereIsRecordsInDB = true
+    @turnHour=""
+    if @turn!=nil
+      puts "entra"
+      puts case @turn
+      when '8:00-16:00'
+        @turnHour="morning"
+        puts"sad"
+        puts@turnHour
+      when '16:00-00:00'
+         @turnHour="afternoon"
+          puts"sad2"
+        puts@turnHour
+      else
+         @turnHour="night"
+          puts"sad3"
+        puts@turnHour
+      end
+    end
+    if @dateStart!=nil && @dateStart!=""
+    if (Time.parse(@dateStart).strftime("%d/%m/%y")>=@dateBegin &&Time.parse(@dateStart).strftime("%d/%m/%y") <=@dateFinal ) 
+       @dateStartToTime=  Time.parse(@dateStart)
+    elsif (Time.parse(@dateStart).strftime("%d/%m/%y")<@dateBegin.strftime("%d/%m/%y"))
+         @thereIsRecordsInDB = false
+    elsif  (Time.parse(@dateStart).strftime("%d/%m/%y")>=Time.now.strftime("%d/%m/%y"))
+           @dateStartToTime=  Time.parse(@dateStart)
+           @probOfDay=@totalTodayDays/@totalDaysDB.to_f
+     end 
+     end 
+    
          # @dateStart = DateTime.new params[:startdate]["{:ampm=>true}(1i)"].to_i,params[:startdate] ["{:ampm=>true}(2i)"].to_i, params[:startdate]["{:ampm=>true}(3i)"].to_i, params[:startdate]["{:ampm=>true}(4i)"].to_i,  params[:startdate]["{:ampm=>true}(5i)"].to_i
           #@dateEnd = DateTime.new params[:enddate]["{:ampm=>true}(1i)"].to_i, params[:enddate]["{:ampm=>true}(2i)"].to_i, params[:enddate]["{:ampm=>true}(3i)"].to_i, params[:enddate]["{:ampm=>true}(4i)"].to_i, params[:enddate]["{:ampm=>true}(5i)"].to_i
 
@@ -230,71 +122,169 @@ class ComplainsController < ApplicationController
         # @dateE=@dateEnd.strftime("%d/%m/%Y") 
         # @hourE= @dateEnd.strftime("%H:%M")
          #@hourS =@dateStart.strftime("%H:%M")
-         @totalDaysDB =10000
-        #@totalDaysDB = ComplainsAuxiliar.where('fecha >= ?', 3.year.ago).map { |p| p.fecha.beginning_of_day }.uniq.size
-        @totalCrimes = ComplainsAuxiliar.where( "delito like ?", "%DH%").count
-        @totalHoursDB = @totalDaysDB*24
-        @totalCrime = ComplainsAuxiliar.where( "delito is NOT NULL").count
-        @averagePerDay= @totalCrime.to_f/@totalDaysDB.to_f
-      puts @averagePerDay
-         puts  @totalCrime.to_f/@totalCrimes.to_f
-        
-        @norE= ComplainsAuxiliar.where( "delito  is NOT NULL AND 'complains_auxiliars.ZonaUrbana' like ? ","Nor Este").count
-        @norO = ComplainsAuxiliar.where( "delito  is NOT NULL AND  'complains_auxiliars.ZonaUrbana'  like ? ","Nor Oeste").count
-        @centralN = ComplainsAuxiliar.where( "delito  is NOT NULL AND 'complains_auxiliars.ZonaUrbana'  like ?","Central Norte").count
-       # @aux= Crime.joins(:complain).where(("created_at >= ? and created_at <= ? and dayofweek(created_at) = ? ", '2014-11-09 09:00', '2014-11-17 09:00',1 ) :created_at =>Complain.select("max(created_at) as created_at").group("date_trunc('day',created_at)")).count
-     #  @aux= Complain.joins(:crime).where(:created_at => [('2014-11-09 09:00')..('2014-11-17 09:00')],:created_at => ['dayofweek(created_at) = ?', 1]).count
-             # @aux= Complain.joins(:crime).where(:created_at => [('2014-11-09 09:00')..('2014-11-17 09:00')],:created_at => ['dayofweek(created_at) = ?', 1],:created_at =>Complain.select("max(created_at) as created_at").group("date_trunc('day',created_at)")).count
+         # @aux= Complain.joins(:crime).group("date_trunc('day',complains.created_at)").where('EXTRACT(DOW FROM complains.created_at) = ? and complains.created_at BETWEEN ? AND ? ', 5, '2014-11-09 09:00','2014-11-17 09:00').count
+   
+ 
+    puts @totalDaysDB
+    @totalHoursDB = 24 * @totalDaysDB
 
-             #puts @aux
-             #Complain.select("max(created_at)  as created_at").group("max(created_at) ")
-         @centralS= ComplainsAuxiliar.where( "delito  is NOT NULL AND  'complains_auxiliars.ZonaUrbana'  like ? ","Central Sud").count
+    @totalTodayDays = Complain.group("date_trunc('day',complains.created_at)").where('EXTRACT(DOW FROM complains.created_at) = ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , @dateBegin,@dateFinal).count.size
+    if @dateStart!=nil && @dateStart!=""
+     if ( Time.parse(@dateStart).strftime("%d/%m/%y")>Time.now.strftime("%d/%m/%y"))
+      @probOfDay= @totalTodayDays.to_f/@totalDaysDB
+     end 
+    end
+       @totalHoursTodayDays = @totalTodayDays *8
+
+       @totalCrimes = Crime.includes(:complains).count
+       @totalContravertions = Contravertion.includes(:complains).count
+        @totalHoursDB = @totalDaysDB*24
+        @totalCrimesDayToday = Complain.where( ' EXTRACT(DOW FROM complains.created_at) = ? and complains.created_at BETWEEN ? AND ? ',@dateStartToTime.wday , @dateBegin,@dateFinal).includes(:crimes).count 
+        @totalCrimesDayTodayBetween8to16 = Complain.includes(:crimes).where( ' EXTRACT(DOW FROM complains.created_at) = ?  and complains.created_at::time BETWEEN ? AND ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , '08:00:00','15:59:59' , @dateBegin,@dateFinal).count
+        @totalCrimesDayTodayBetween16to0 = Complain.includes(:crimes).where( 'EXTRACT(DOW FROM complains.created_at) = ?  and   complains.created_at::time BETWEEN ? AND ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , '16:00:00','23:59:59' , @dateBegin,@dateFinal).count
+            puts "total"
+        @totalCrimesDayTodayBetween0to8 = Complain.includes(:crimes).where( ' EXTRACT(DOW FROM complains.created_at) = ?  and  complains.created_at::time BETWEEN ? AND ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , '00:00:00','07:59:59'  , @dateBegin,@dateFinal).count
+        @totalCrimesZoneNorEste= Complain.includes(:crimes).where( ' complains.zone = ? ', 'Nor Este').count 
+        @totalContravertionsZoneNorEste=  Complain.includes(:contravertions).where( '  complains.zone = ? ', 'Nor Este').count 
+        @probDay = @totalTodayDays/@totalDaysDB.to_f
+
+        @probDayCrime=@totalCrimesDayToday.to_f/(@totalCrimes+@totalContravertions)
+
+        @probCrime =( @totalCrimesDayTodayBetween8to16/(@totalDaysDB+@totalHoursDB.to_f)) + (@totalCrimesDayTodayBetween16to0/(@totalDaysDB+@totalHoursDB.to_f))+(  @totalCrimesDayTodayBetween0to8/(@totalDaysDB+@totalHoursDB.to_f) ) 
+    #NOR ESTE INI
+        @probZoneNE =( @totalCrimesZoneNorEste.to_f+@totalContravertionsZoneNorEste)/ (@totalCrimes+@totalContravertions)
+        @probDayAndHourRange8to16 =( @totalCrimesDayTodayBetween8to16/(@totalHoursDB+@totalDaysDB.to_f))/@probCrime
+        @probDayAndHourRange16to0 =( @totalCrimesDayTodayBetween16to0 /(@totalHoursDB+@totalDaysDB.to_f))/@probCrime
+        @probDayAndHourRange0to8 =( @totalCrimesDayTodayBetween0to8/(@totalHoursDB+@totalDaysDB.to_f))/@probCrime
+        
+        @probNE8to16 =( @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneNE.to_f
+        @probNE16to0 =( @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange16to0.to_f ) / @probZoneNE.to_f
+       
+        @probNE0to8 =( @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange0to8.to_f ) / @probZoneNE.to_f
+     
+      #FIN NOR ESTE
+      #ini no oeste
+      @totalCrimesZoneNorOeste=  Complain.includes(:crimes).where( ' complains.zone = ? ', 'Nor Oeste').count 
+      @totalContravertionsZoneNorOeste=   Complain.includes(:contravertions).where( ' complains.zone = ? ', 'Nor Oeste').count 
+      @probZoneNO= ( @totalCrimesZoneNorOeste.to_f+@totalContravertionsZoneNorOeste)/ (@totalCrimes+@totalContravertions)
+      @probNO8to16 =(  @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneNO.to_f
+      @probNO16to0 =(  @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange16to0.to_f ) / @probZoneNO.to_f
+      @probNO16to0=@probNO16to0.round(1)
+      @probNO0to8 =(  @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange0to8.to_f ) / @probZoneNO.to_f
+       @probNO0to8 = @probNO0to8.round(1)
+      #fin nor oeste
+      #CENTRAL NORTE
+      @totalCrimesZoneCentralNorte=  Complain.includes(:crimes).where( '  complains.zone = ? ', 'Nor Oeste').count 
+      @totalContravertionsZoneCentralNorte=  Complain.includes(:contravertions).where( '  complains.zone = ? ', 'Central Norte').count 
+      @probZoneCN= ( @totalCrimesZoneCentralNorte.to_f+@totalContravertionsZoneCentralNorte)/ (@totalCrimes+@totalContravertions)
+      @probCN8to16 =( @probOfDay*  @probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneCN.to_f
+      @probCN16to0 =( @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange16to0.to_f ) / @probZoneCN.to_f
+      @probCN0to8 =(  @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange0to8.to_f ) / @probZoneCN.to_f
+      # FIN CN
+      #ini cs
+       @totalCrimesZoneCentralSud= Complain.includes(:crimes).where( ' complains.zone = ? ', 'Nor Oeste').count 
+      @totalContravertionsZoneCentralSud=  Complain.includes(:contravertions).where( '  complains.zone = ? ', 'Central Sud').count 
+      @probZoneCS= ( @totalCrimesZoneCentralSud.to_f+@totalContravertionsZoneCentralSud)/ (@totalCrimes+@totalContravertions)
+      @probCS8to16 =(  @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneCS.to_f
+      @probCS16to0 =( @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange16to0.to_f ) / @probZoneCS.to_f
+      @probCS0to8 =(  @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange0to8.to_f ) / @probZoneCS.to_f
+     #fin cs
+     #ini sud este
+      @totalCrimesZoneSudEste=  Complain.includes(:crimes).where(   'complains.zone = ? ', 'Nor Oeste').count 
+      @totalContravertionsZoneSudEste=  Complain.includes(:contravertions).where( ' complains.zone = ? ', 'Sud Este').count 
+      @probZoneSE= ( @totalCrimesZoneSudEste.to_f+@totalContravertionsZoneSudEste)/ (@totalCrimes+@totalContravertions)
+      @probSE8to16 =( @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneSE.to_f
+      @probSE16to0 =( @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange16to0.to_f ) / @probZoneSE.to_f
+      @probSE0to8 =(  @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange0to8.to_f ) / @probZoneSE.to_f
+     
+    #fin sud este
+     #ini sud oeste
+     @totalCrimesZoneSudEste=  Complain.includes(:crimes).where( ' complains.zone = ? ', 'Nor Oeste').count 
+      @totalContravertionsZoneSudEste=  Complain.includes(:contravertions).where( '  complains.zone = ? ', 'Sud Oeste').count 
+      @probZoneSO= ( @totalCrimesZoneSudEste.to_f+@totalContravertionsZoneSudEste)/ (@totalCrimes+@totalContravertions)
+      @probSO8to16 =(  @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneSO.to_f
+      @probSO16to0 =(  @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange16to0.to_f ) / @probZoneSO.to_f
+      @probSO0to8 =(   @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange0to8.to_f ) / @probZoneSO.to_f
+      
+    #fin sdoeste
+  
+
+        @listProb =Array.new()
+        @listProb <<(@probNO8to16*100).round(2)
+        @listProb <<(@probNE8to16*100).round(2)
+        @listProb <<(@probCN8to16*100).round(2)
+        @listProb <<(@probCS8to16*100).round(2)
+        @listProb <<(@probSO8to16*100).round(2)
+        @listProb <<(@probSE8to16*100).round(2)
+      
+        @listProb <<(@probNO16to0*100).round(2)
+        @listProb <<(@probNE16to0*100).round(2)
+        @listProb <<(@probCN16to0*100).round(2)
+        @listProb <<(@probCS16to0*100).round(2)
+        @listProb <<(@probSO16to0*100).round(2)
+        @listProb <<(@probSE16to0*100).round(2)
+       
+        @listProb <<(@probNO0to8*100).round(2) 
+        @listProb <<(@probNE0to8*100).round(2)
+        @listProb <<(@probCN0to8*100).round(2)            
+        @listProb <<(@probCS0to8*100).round(2)  
+        @listProb <<(@probSO0to8*100).round(2)
+        @listProb <<(@probSE0to8*100).round(2)
+
+         @averageCrimesPerDay=@totalCrimes/@totalDaysDB.to_f 
+        
+        @norE= ComplainsAuxiliar.where( "delito  is NOT NULL  and 'complains_auxiliars.ZonaUrbana'  like ? ",'Nor Este').count
+        puts "nore"
+        puts @norE
+        @norO = ComplainsAuxiliar.where( "delito  is NOT NULL AND  'complains_auxiliars.ZonaUrbana'  like ? ",'Nor Oeste').count
+        @centralN = ComplainsAuxiliar.where( "delito  is NOT NULL AND 'complains_auxiliars.ZonaUrbana'  like ?","Central Norte").count
+     
+         @centralS= ComplainsAuxiliar.where( "complains_auxiliars.delito  is NOT NULL AND  'complains_auxiliars.ZonaUrbana'  like ? ","Central Sud").count
          @surE= ComplainsAuxiliar.where( "delito  is NOT NULL AND  'complains_auxiliars.ZonaUrbana'  like ? ","Sud Este").count
          @surO = ComplainsAuxiliar.where( "delito  is NOT NULL AND  'complains_auxiliars.ZonaUrbana'  like ? ","Sud Oeste").count
-         
-         @probNE= @norE.to_f/ @totalCrime.to_f 
-         @errorNE =   ((( @probNE * (1-  @probNE )) / @averagePerDay)**0.5)*1.96       
-         @espNE= @averagePerDay *  @probNE 
-         @inINE =  (@probNE.to_f-@errorNE ) *100
-         @inSNE =  (@probNE.to_f+@errorNE ) *100
-         @probNE=@probNE.to_f*100
 
-         @probNO= @norO.to_f/ @totalCrime.to_f
-         puts @nor0.to_f   
-         puts  @totalCrime.to_f
-         puts   @probN0    
+        # @errorNE =   ((( @probNE * (1-  @probNE )) / @averageCrimesPerDay)**0.5)*1.96       
+        # @espNE= @averageCrimesPerDay *  @probNE 
+         #@inINE =  (@probNE.to_f-@errorNE ) *100
+         #@inSNE =  (@probNE.to_f+@errorNE ) *100
+   
 
-         @errorNO =   ((( @probNO * (1-  @probNO )) / @averagePerDay)**0.5)*1.96
-         @espNO= @averagePerDay *  @probNO 
+         @probNO= @norO.to_f/ @totalCrimes.to_f
+         puts @nor0.to_f.to_s + "nor|"   
+         puts  @totalCrime 
+         puts   @probN0.to_s    + "pron"
+
+         @errorNO =   ((( @probNO * (1-  @probNO )) / @averageCrimesPerDay)**0.5)*1.96
+         @espNO= @averageCrimesPerDay *  @probNO 
          @inINO =  (@probNO.to_f-@errorNO) *100
          @inSNO =  (@probNO.to_f+@errorNO ) *100
          @probN0=@probN0.to_f*100
 
          @probCN= @centralN.to_f/ @totalCrime.to_f 
-         @errorCN =   ((( @probCN * (1-  @probCN )) / @averagePerDay)**0.5)*1.96  
-         @espCN= @averagePerDay *  @probCN 
+         @errorCN =   ((( @probCN * (1-  @probCN )) / @averageCrimesPerDay)**0.5)*1.96  
+         @espCN= @averageCrimesPerDay *  @probCN 
          @inICN =  (@probCN.to_f-@errorCN ) *100
          @inSCN =  (@probCN.to_f+@errorCN ) *100
          @probCN=@probCN.to_f*100
 
          @probCS= @centralS.to_f/ @totalCrime.to_f 
-         @errorCS =   ((( @probCS * (1-  @probCS )) / @averagePerDay)**0.5)*1.96
+         @errorCS =   ((( @probCS * (1-  @probCS )) / @averageCrimesPerDay)**0.5)*1.96
         
-         @espCS= @averagePerDay *  @probCS 
+         @espCS= @averageCrimesPerDay *  @probCS 
          @inICS =  (@probCS.to_f-@errorCS ) *100
          @inSCS =  (@probCS.to_f+@errorCS ) *100
          @probCS=@probCS.to_f*100
  
         @probSE= @surE.to_f/ @totalCrime.to_f 
-         @errorSE =   ((( @probSE * (1-  @probSE )) / @averagePerDay)**0.5)*1.96       
-         @espSE= @averagePerDay *  @probSE.to_f 
+         @errorSE =   ((( @probSE * (1-  @probSE )) / @averageCrimesPerDay)**0.5)*1.96       
+         @espSE= @averageCrimesPerDay *  @probSE.to_f 
          @inISE =  (@probSE.to_f-@errorSE ) *100
          @inSSE =  (@probSE.to_f+@errorSE ) *100
          @probSE=@probSE.to_f*100
 
          @probSO= @surO.to_f/ @totalCrime.to_f          
-         @errorSO =   ((( @probSO * (1-  @probSO )) / @averagePerDay)**0.5)*1.96
-         @espSO= @averagePerDay *  @probSO 
+         @errorSO =   ((( @probSO * (1-  @probSO )) / @averageCrimesPerDay)**0.5)*1.96
+         @espSO= @averageCrimesPerDay *  @probSO 
          @inISO =  (@probSO.to_f-@errorSO ) *100
          @inSSO =  (@probSO.to_f+@errorSO ) *100
          @probSO=@probSO.to_f*100
@@ -303,7 +293,7 @@ class ComplainsController < ApplicationController
     def index3
      #@differenceHour=(((strftime('%s', '2011-11-10 11:46') - strftime('%s', '2011-11-09 09:00')) % (60 * 60 * 24)) / (60 * 60) 
 
-          ComplainsAuxiliar.all.where("id > 17029").each do |comp|
+          ComplainsAuxiliar.all.where("id >= 9999999").each do |comp|
      # if @complainAux.contravencion=="380.3" || @complainAux.contravencion=="380.2" || @complainAux.contravencion=="380.4" || @complainAux.contravencion="380.10"
          
        @complainAux = comp
@@ -389,19 +379,6 @@ class ComplainsController < ApplicationController
 
     def index_aux
 
-
-# @aux= Complain.joins(:crime).where(:created_at =>Complain.select("max(created_at) as created_at").group("date_trunc('day',created_at)"))..wcount
- # @aux= Complain.joins(:crime).where(:created_at => [('2014-11-09 09:00')..('2014-11-17 09:00')],:created_at => ['dayofweek(created_at) = ?', 1],:created_at =>Complain.select("max(created_at) as created_at").group("date_trunc('day',created_at)")).count
- # @aux = Complain.joins(:crime).where(('dayofweek(created_at) = ? AND created_at BETWEEN ? AND ?', 1, '2014-11-09 09:00','2014-11-17 09:00').where.(:created_at =>Complain.select("max(created_at) as created_at").group("date_trunc('day',created_at)"))).count
- # @aux= Complain.joins(:crime).select("max(created_at) as created_at").where(:created_at => [('2014-11-09 09:00')..('2014-11-17 09:00')],:created_at => ['extract  dow 
-#from created_at  ? , 1])
- 
-  @aux= Complain.where("created_at >= ? and created_at <= ? and dayofweek(created_at) = ? ", '2014-11-09 09:00', '2014-11-17 09:00',1 ).joins(:crime)
- puts @aux
-   #@aux= Complain.joins(:crime).select(("max(created_at) as created_at").
-
-    # SELECT MAX(created_at) AS created_at FROM complains WHERE  extract (dow 
-#from created_at )= 1  and  created_at BETWEEN '2014-11-09 09:00' AND '2014-11-17 09:00' ;
   end
 
     def new
@@ -582,7 +559,7 @@ class ComplainsController < ApplicationController
         params.require(:complain).permit(:protagonists, :description, :zone, :latitude, :longitude, :crime_id, :observations)
       end
       def check_box_params
-        params.require(:complain).permit( :contravertion,:crime, :crime_checkbox , :contravertion_checkbox, :crimeAux,  :crime_id,:contravertion_id,:auxCrime, :auxContravertion, :observations,:patrol_unit,:turnHour,:zoneCrime)
+        params.require(:complain).permit( :contravertion,:crime, :crime_checkbox , :contravertion_checkbox, :crimeAux,  :crime_id,:contravertion_id,:auxCrime, :auxContravertion, :observations,:patrol_unit, :turnHour ,:zoneCrime)
       end
       def complainant_params
         params.require(:complainant).permit(:name, :last_name,:ci, :phone, :address)
