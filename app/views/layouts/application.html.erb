@@ -51,7 +51,15 @@ AIzaSyDJCxMIk3GTjMB77nK64W9DosMwb6w5oe0&libraries=places"
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
          <% if current_user.role == 1 %>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#"><b>Estadistica </b><span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/index2">Ver probabilidad por fecha</a></li>
         
+          </ul>
+        </li>
+
+
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#"><b>Usuarios </b><span class="caret"></span></a>
           <ul class="dropdown-menu">
