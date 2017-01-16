@@ -127,7 +127,8 @@ end
  
     puts @totalDaysDB
     @totalHoursDB = 24 * @totalDaysDB
-
+   @dateBegin = Complain.first.created_at
+         @dateFinal =Complain.last.created_at
     @totalTodayDays = Complain.group("date_trunc('day',complains.created_at)").where('EXTRACT(DOW FROM complains.created_at) = ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , @dateBegin,@dateFinal).count.size
     if @dateStart!=nil && @dateStart!=""
      if ( Time.parse(@dateStart).strftime("%d/%m/%y")>Time.now.strftime("%d/%m/%y"))
@@ -136,15 +137,15 @@ end
     end
        @totalHoursTodayDays = @totalTodayDays *8
 
-       @totalCrimes = Crime.includes(:complains).count
+       @totalCrimes = Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).count
        @totalContravertions = Contravertion.includes(:complains).count
         @totalHoursDB = @totalDaysDB*24
         @totalCrimesDayToday = Complain.where( ' EXTRACT(DOW FROM complains.created_at) = ? and complains.created_at BETWEEN ? AND ? ',@dateStartToTime.wday , @dateBegin,@dateFinal).includes(:crimes).count 
-        @totalCrimesDayTodayBetween8to16 = Complain.includes(:crimes).where( ' EXTRACT(DOW FROM complains.created_at) = ?  and complains.created_at::time BETWEEN ? AND ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , '08:00:00','15:59:59' , @dateBegin,@dateFinal).count
-        @totalCrimesDayTodayBetween16to0 = Complain.includes(:crimes).where( 'EXTRACT(DOW FROM complains.created_at) = ?  and   complains.created_at::time BETWEEN ? AND ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , '16:00:00','23:59:59' , @dateBegin,@dateFinal).count
+        @totalCrimesDayTodayBetween8to16 =  Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where( ' EXTRACT(DOW FROM complains.created_at) = ?  and complains.created_at::time BETWEEN ? AND ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , '08:00:00','15:59:59' , @dateBegin,@dateFinal).count
+        @totalCrimesDayTodayBetween16to0 =  Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where( 'EXTRACT(DOW FROM complains.created_at) = ?  and   complains.created_at::time BETWEEN ? AND ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , '16:00:00','23:59:59' , @dateBegin,@dateFinal).count
             puts "total"
-        @totalCrimesDayTodayBetween0to8 = Complain.includes(:crimes).where( ' EXTRACT(DOW FROM complains.created_at) = ?  and  complains.created_at::time BETWEEN ? AND ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , '00:00:00','07:59:59'  , @dateBegin,@dateFinal).count
-        @totalCrimesZoneNorEste= Complain.includes(:crimes).where( ' complains.zone = ? ', 'Nor Este').count 
+        @totalCrimesDayTodayBetween0to8 =  Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where( ' EXTRACT(DOW FROM complains.created_at) = ?  and  complains.created_at::time BETWEEN ? AND ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , '00:00:00','07:59:59'  , @dateBegin,@dateFinal).count
+        @totalCrimesZoneNorEste=  Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where( ' complains.zone = ? ', 'Nor Este').count 
         @totalContravertionsZoneNorEste=  Complain.includes(:contravertions).where( '  complains.zone = ? ', 'Nor Este').count 
         @probDay = @totalTodayDays/@totalDaysDB.to_f
 
@@ -164,7 +165,7 @@ end
      
       #FIN NOR ESTE
       #ini no oeste
-      @totalCrimesZoneNorOeste=  Complain.includes(:crimes).where( ' complains.zone = ? ', 'Nor Oeste').count 
+      @totalCrimesZoneNorOeste=   Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where( ' complains.zone = ? ', 'Nor Oeste').count 
       @totalContravertionsZoneNorOeste=   Complain.includes(:contravertions).where( ' complains.zone = ? ', 'Nor Oeste').count 
       @probZoneNO= ( @totalCrimesZoneNorOeste.to_f+@totalContravertionsZoneNorOeste)/ (@totalCrimes+@totalContravertions)
       @probNO8to16 =(  @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneNO.to_f
@@ -174,7 +175,7 @@ end
        @probNO0to8 = @probNO0to8.round(1)
       #fin nor oeste
       #CENTRAL NORTE
-      @totalCrimesZoneCentralNorte=  Complain.includes(:crimes).where( '  complains.zone = ? ', 'Nor Oeste').count 
+      @totalCrimesZoneCentralNorte=   Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where( '  complains.zone = ? ', 'Nor Oeste').count 
       @totalContravertionsZoneCentralNorte=  Complain.includes(:contravertions).where( '  complains.zone = ? ', 'Central Norte').count 
       @probZoneCN= ( @totalCrimesZoneCentralNorte.to_f+@totalContravertionsZoneCentralNorte)/ (@totalCrimes+@totalContravertions)
       @probCN8to16 =( @probOfDay*  @probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneCN.to_f
@@ -182,7 +183,7 @@ end
       @probCN0to8 =(  @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange0to8.to_f ) / @probZoneCN.to_f
       # FIN CN
       #ini cs
-       @totalCrimesZoneCentralSud= Complain.includes(:crimes).where( ' complains.zone = ? ', 'Nor Oeste').count 
+       @totalCrimesZoneCentralSud=  Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where( ' complains.zone = ? ', 'Nor Oeste').count 
       @totalContravertionsZoneCentralSud=  Complain.includes(:contravertions).where( '  complains.zone = ? ', 'Central Sud').count 
       @probZoneCS= ( @totalCrimesZoneCentralSud.to_f+@totalContravertionsZoneCentralSud)/ (@totalCrimes+@totalContravertions)
       @probCS8to16 =(  @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneCS.to_f
@@ -190,7 +191,7 @@ end
       @probCS0to8 =(  @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange0to8.to_f ) / @probZoneCS.to_f
      #fin cs
      #ini sud este
-      @totalCrimesZoneSudEste=  Complain.includes(:crimes).where(   'complains.zone = ? ', 'Nor Oeste').count 
+      @totalCrimesZoneSudEste=   Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where(   'complains.zone = ? ', 'Nor Oeste').count 
       @totalContravertionsZoneSudEste=  Complain.includes(:contravertions).where( ' complains.zone = ? ', 'Sud Este').count 
       @probZoneSE= ( @totalCrimesZoneSudEste.to_f+@totalContravertionsZoneSudEste)/ (@totalCrimes+@totalContravertions)
       @probSE8to16 =( @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneSE.to_f
@@ -199,7 +200,7 @@ end
      
     #fin sud este
      #ini sud oeste
-     @totalCrimesZoneSudEste=  Complain.includes(:crimes).where( ' complains.zone = ? ', 'Nor Oeste').count 
+     @totalCrimesZoneSudEste=   Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where( ' complains.zone = ? ', 'Nor Oeste').count 
       @totalContravertionsZoneSudEste=  Complain.includes(:contravertions).where( '  complains.zone = ? ', 'Sud Oeste').count 
       @probZoneSO= ( @totalCrimesZoneSudEste.to_f+@totalContravertionsZoneSudEste)/ (@totalCrimes+@totalContravertions)
       @probSO8to16 =(  @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneSO.to_f
@@ -367,7 +368,8 @@ end
       puts "complain.patrol_unit_id "
      
       puts @complain.patrol_unit_id 
-     end
+     end.change({ hour:   Time.at((@complainAux.hora.split(':').map { |a| a.to_i }.inject(0) { |a, b| a * 60 + b})).hour, min: Time.at((@complainAux.hora.split(':').map { |a| a.to_i }.inject(0) { |a, b| a * 60 + b})).min, sec: Time.at((@complainAux.hora.split(':').map { |a| a.to_i }.inject(0) { |a, b| a * 60 + b})).sec })
+    
       @complain.derivationCase=@complainAux.remisionCaso
       @complain.shortReport =@complainAux.breveInforme
       @complain.protagonists= @complainAux.protagonista
@@ -378,7 +380,95 @@ end
     end
 
     def index_aux
+          @dateStartToTime =Time.now
+    @dateBegin = Complain.order("complains.created_at ASC").first.created_at
+    @dateFinal =Complain.order("complains.created_at ASC").last.created_at
+    @totalDaysDB = Complain.group("date_trunc('day',complains.created_at)").where('  complains.created_at BETWEEN ? AND ? ', @dateBegin,@dateFinal).count.size
+    
+    @totalCrimesDayToday =  Complain.where( 'complains.created_at BETWEEN ? AND ? ' , @dateBegin,@dateBegin).includes(:crimes).count 
+    @date =@dateBegin.change({ hour: 0, min: 0, sec: 1 })
 
+    @dateFinal=@date.change({ hour: 23, min: 59, sec: 59 })
+     @average8=Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where( ' complains.created_at BETWEEN ? AND ? ', @date,@dateFinal).order("complains.created_at ASC").count
+     puts "mmmmmmm"
+      @totalTodayDays = Complain.group("date_trunc('day',complains.created_at)").where('EXTRACT(DOW FROM complains.created_at) = ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , @dateBegin,@dateFinal).count.size
+   
+     puts "mmmmmmm"
+ 
+ @average4=Complain.where( ' complains.created_at BETWEEN ? AND ? ', @date,@dateFinal).includes(:crimes).count
+
+
+     @i=999999
+    until @i >= @totalDaysDB  do
+      @average = Average.new
+      @average.name = "delitos"
+      @average.created_at=@date
+
+      @average.average= Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where( ' complains.created_at BETWEEN ? AND ? ', @date,@dateFinal).count
+
+      puts  @average.average
+      #@average.save!
+      
+      if @i==1
+      @average1 = Average.new
+      @average1.name = "prob"
+      @average1.created_at=@date
+      @average1.average= 0 
+      #@average1.save!
+    else
+      @average2 = Average.new
+      @average2.name = "prob"
+      @average2.created_at=@date
+      @avg=  Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where( 'complains.created_at BETWEEN ? AND ? ' , @dateBegin,@date).count
+
+      @avg=@avg  /@i.to_f
+      @average2.average=@avg.round(2) ;
+      #@average2.save!
+      end
+      @i +=1;
+      @date= @date+1.day
+      @dateFinal=@dateFinal+1.day
+
+
+
+end
+@size= Average.all.where( ' name = ? ', 'prob').count 
+puts @size
+puts "dsf"
+    @pro1= Average.all.where( ' name = ? ', 'prob')
+puts @pro1 
+puts "msmd"
+    @pro2= Average.all.where( ' name = ? ', 'delitos')
+    puts @pro2 
+puts "msd"
+    @items = []
+    
+      @i = 0
+puts @size.to_i
+    while (@i < @size.to_i-1)
+       @subarray = [] 
+      if @i==0
+        @subarray.push( 'date'.to_json)
+        @subarray.push("Bytes from network:Bytes to network".to_json)
+        @subarray.push("Bytes".to_json)
+        @items.push(@subarray)
+      end
+     @subarray = [] 
+     puts @pro1[@i].created_at.strftime("%d/%m/%y")  
+puts "msmdmmm"
+    puts @pro2[@i].created_at.strftime("%d/%m/%y")  
+puts "msmdmkkkkmm"
+     # if @pro1[@i].created_at.strftime("%d/%m/%y") ==@pro2[@i].created_at.strftime("%d/%m/%y")
+        puts "sdkfdjkfjk"
+      @subarray.push(@pro1[@i].created_at.utc.to_i*1000)
+      @subarray.push(@pro1[@i].average)
+      @subarray.push(@pro2[@i].average)
+     @items.push(@subarray)
+    #end
+      @i += 1
+    end
+
+        
   end
 
     def new

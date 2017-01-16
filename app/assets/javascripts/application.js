@@ -31,6 +31,8 @@
 //= require jquery_ujs
 //= require toastr
 //= require turbolinks
+//= require Chart.bundle
+//= require chartkick
 //= require_tree .
 $(function(){
     if ($("#complains").length > 0){

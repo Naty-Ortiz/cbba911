@@ -34,7 +34,7 @@ gem 'rack','1.6.5'
 gem 'pg'
 gem 'taps'
 gem 'yaml2env'
-
+gem "chartkick"
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
 

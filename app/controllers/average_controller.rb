@@ -1,0 +1,2 @@
+class AverageController < ApplicationController
+end

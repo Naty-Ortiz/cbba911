@@ -1,72 +1,53 @@
-<%= render :partial => 'static_pages/notice_panel' %>
-<%=@ww%>
 
-<div class="row">
-  <div class="col-md-7">
-    <h1>Buscar Denuncia </h1>
-    <br>
-  </div>
-  <div class="col-md-5">
-    <%= render :partial => 'complains/search' %>
-    <div class="form-inline">
-      <br>
-      <%= form_tag(complains_path, :method => 'get', id: 'search-form') do %>
-          <%= text_field_tag :search, params[:search], placeholder: 'Nombre de denuncia', class: 'form-control' %>
-          <%= submit_tag 'Buscar', class: 'btn btn-default' %>
-      <% end %>
-    </div>
-  </div>
+
+<head>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+<div id="dashboard_div">
+    <div id="filter_div"></div>
+    <div id="curve_chart" style="width:900px;height:500px"></div>
 </div>
-<%if not @complains.present? %>
-
-    <div class="row center actions panel panel-danger">
-      <div class="panel-heading">
-        <% if params[:search] %>
-            <p>Su busqueda no generó resultados</p>
-        <%else%>
-            <p>No existen denuncias registrados este momento</p>
-        <%end%>
-      </div>
-    </div>
-<%else%>
-
-    <h1>Lista de denuncias</h1><br/>
-    <div class="col-md-8 col-md-offset-2">
-      <div class="digg_pagination">
-        <%= will_paginate @complains,  :previous_label => 'Atras', :next_label => 'Siguiente', :container => false, renderer: BootstrapPagination::Rails %>
-      </div>
-    </div><br><br><br><br><br>
- <div class="table-responsive">
-<table class="table table-striped table-hover">
-  <thead>
-    <tr>
-
-      <th>Protagonistas</th>
-      <th>Descripcion</th>
-      <th>Zona</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody class="cream-pixels">
-    <% @complains.each do |complain| %>
-      <tr>
-        <% if  complain.delito!=nil%>
-        <td><%= complain.delito%></td>
-        <%end %>
-        <% if  complain.contravencion!=nil%>
-        <td><%= complain.contravencion%></td>
-        <%end %>
-        <% if  complain.protagonista!=nil%>
-        <td><%= complain.protagonista %></td>
-        <%end %>
+    <script type="text/javascript">
+     google.load("visualization", "1", {
+    packages: ['controls', 'corechart'],
+    callback: drawDashboard
+});
 
 
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-</div>
-<br>
-<%end%>
-<%=@aux.size%>hhhh
+function drawDashboard() {
+    
+    var data= <%=raw @items%>
+
+
+     data [0][0]={label:'date',type:'datetime'};
+     data[0][1]={label:'Proba',type:'number'}
+     data[0][2]={label:'Delitos',type:'number'}
+     console.log()
+for(var i = 1; i < data.length; i++) {
+
+    var cube = data[i];
+    for(var j = 0; j < cube.length; j++) {
+        console.log (data [i][j]);
+        data[i][0]= new Date(data[i][0]);
+        
+    }
+    console.log("DDF");
+}
+var dataSet  = google.visualization.arrayToDataTable(data);
+    var dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'));
+
+    var dateRangeFilter = new google.visualization.ControlWrapper({'controlType':'ChartRangeFilter','containerId':'filter_div','options': {'filterColumnLabel':'date'}});
+
+    var lineChart = new google.visualization.ChartWrapper({'chartType':'LineChart','containerId':'curve_chart','options':{'title': 'Probabilidad vs delistos ','curveType': 'function','legend': {'postition':'bottom'}}});
+
+    dashboard.bind(dateRangeFilter,lineChart);
+
+    dashboard.draw(dataSet);
+}
+  </script>
+</head>
+<body>
+
+</body>
