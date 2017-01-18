@@ -3,6 +3,7 @@ development:
   encoding: unicode
   database: cbba_911_development
   pool: 5
+  timeout: 5000
   username: postgres
   password: postgres
   host: localhost
@@ -15,6 +16,7 @@ test:
   encoding: unicode
   database: cbba_911_test
   pool: 5
+  timeout: 5000
   username: postgres
   password: postgres
   host: localhost
@@ -27,3 +29,4 @@ production:
   username: postgres
   password: postgres
   host: localhost
+  timeout: 5000

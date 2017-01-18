@@ -1,7 +1,7 @@
 
 
 <head>
-<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 
@@ -22,18 +22,18 @@ function drawDashboard() {
 
 
      data [0][0]={label:'date',type:'datetime'};
-     data[0][1]={label:'Proba',type:'number'}
-     data[0][2]={label:'Delitos',type:'number'}
-     console.log()
+     data[0][1]={label:'Proba',type:'number'};
+     data[0][2]={label:'Delitos',type:'number'};
+
 for(var i = 1; i < data.length; i++) {
 
     var cube = data[i];
     for(var j = 0; j < cube.length; j++) {
-        console.log (data [i][j]);
+        
         data[i][0]= new Date(data[i][0]);
         
     }
-    console.log("DDF");
+
 }
 var dataSet  = google.visualization.arrayToDataTable(data);
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'));

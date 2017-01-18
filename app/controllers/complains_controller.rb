@@ -74,8 +74,8 @@ class ComplainsController < ApplicationController
 end
 
     def index2
-   
-    @dateStart = params[:startdate]
+
+    @dateStart =  params[:startdate]
     @dateEnd=params[:enddate]
     @turn=params[:turnHour]
 
@@ -104,8 +104,9 @@ end
         puts@turnHour
       end
     end
+
     if @dateStart!=nil && @dateStart!=""
-    if (Time.parse(@dateStart).strftime("%d/%m/%y")>=@dateBegin &&Time.parse(@dateStart).strftime("%d/%m/%y") <=@dateFinal ) 
+    if ((Time.parse(@dateStart)>=Time.parse(@dateBegin) )&&(Time.parse(@dateStart).strftime("%d/%m/%y") <=@dateFinal.strftime("%d/%m/%y")) ) 
        @dateStartToTime=  Time.parse(@dateStart)
     elsif (Time.parse(@dateStart).strftime("%d/%m/%y")<@dateBegin.strftime("%d/%m/%y"))
          @thereIsRecordsInDB = false

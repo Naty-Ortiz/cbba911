@@ -40,7 +40,7 @@
             </div>
         <% end %>
   </div><br>
-  <%if  @thereIsRecordsInDB == true%>
+
 <div class="jumbotron">
   <table class="table">
     <thead>
@@ -107,9 +107,7 @@
     </div>
   <%end%>
 
- <%else%>
- <h3>No existen datos registrados en la fecha <%=@dateStartToTime.strftime("%d/%m/%y")%> solicitada </h3>
-<%end%> 
+
 
 <div class="container">
     <div class='col-md-5'>
@@ -139,7 +137,7 @@
            
         
  $(function () {
-        $('#datetimepicker1').datetimepicker();
+        $('#datetimepicker1').datetimepicker({format: 'DD MM YY h:mm'});
         $('#datetimepicker6').datetimepicker();
         $('#datetimepicker7').datetimepicker({
             useCurrent: false //Important! See issue #1075
