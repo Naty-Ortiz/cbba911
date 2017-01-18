@@ -3,11 +3,14 @@
 <head>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<div class="col-md-4 col-md-offset-4">
+<h3>Probabilidad vs delitos</h3>
+ </div>  
+<div id="dashboard_div"><br><br><br>
 
-
-<div id="dashboard_div">
     <div id="filter_div"></div>
-    <div id="curve_chart" style="width:900px;height:500px"></div>
+    <div id="curve_chart" ></div>
+    
 </div>
     <script type="text/javascript">
      google.load("visualization", "1", {
@@ -38,9 +41,23 @@ for(var i = 1; i < data.length; i++) {
 var dataSet  = google.visualization.arrayToDataTable(data);
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'));
 
-    var dateRangeFilter = new google.visualization.ControlWrapper({'controlType':'ChartRangeFilter','containerId':'filter_div','options': {'filterColumnLabel':'date'}});
+  
+      var dateRangeFilter = new google.visualization.ControlWrapper({
+        controlType:'ChartRangeFilter',
+        containerId: 'filter_div',
+        options: {
+          filterColumnLabel:'date',
+        
+          chartArea: {height: '100%', width: '100%'}
+        
+         
+        ,
+         legend: {position: 'none'}
+        }
+      });
+  
 
-    var lineChart = new google.visualization.ChartWrapper({'chartType':'LineChart','containerId':'curve_chart','options':{'title': 'Probabilidad vs delistos ','curveType': 'function','legend': {'postition':'bottom'}}});
+    var lineChart = new google.visualization.ChartWrapper({'chartType':'LineChart','containerId':'curve_chart','options':{'title': 'Probabilidad vs delitos ','curveType': 'function','legend': {'postition':'bottom'}}});
 
     dashboard.bind(dateRangeFilter,lineChart);
 

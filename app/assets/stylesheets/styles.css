@@ -58,7 +58,9 @@ html,body {
 body {
     display: table;
 }
-
+.dashboard_div{height: auto;width: auto;}
+.filter_div{height: auto;width: auto;}
+.curve_chart{height: auto;width: auto;}
 .container {
 
     height: auto;

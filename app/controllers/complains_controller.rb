@@ -74,11 +74,36 @@ class ComplainsController < ApplicationController
 end
 
     def index2
-
+    
     @dateStart =  params[:startdate]
+    puts params[:startdate]
+    @aux=@dateStart
+    @aux2=@dateStart
+    
+    if @dateStart!=nil
+       @aux=@aux.split(' ')[1..-1].join(' ')
+       puts "asd"
+      puts  @aux2.split("/")[0]
+        puts "asdmmm"
+        puts  @aux2.split("/")[1]
+        puts"cdff"
+        puts  (@aux2.split("/")[2]).partition(" ").first
+ puts"cdffjjjjjjjjj"
+    puts @aux
+    @aux=@aux.chomp(' AM')
+    puts "fdsffsd"
+    puts @aux
+ @aux= DateTime.new( (@aux2.split("/")[2]).partition(" ").first.to_i,(@aux2.split("/")[0]).to_i,(@aux2.split("/")[1]).to_i,  (@aux.split(":")[0]).to_i, ( @aux.split(":")[1]).to_i, 0,0)
+   #@aux= Time.parse(@dateStart).strftime("%d/%m/%y").change({ hour: ( @aux.split(":")[0]).to_i, min:( @aux.split(":")[1]).to_i})
+ #puts DateTime.new(@aux2.split("/")[0],@aux2.split("/")[1],(@aux2.split("/")[2]).partition(" ").first,@aux.split(":")[0]).to_i, ( @aux.split(":")[1]).to_i, 0,0) 
+  
+puts @aux
+ 
+    end
     @dateEnd=params[:enddate]
     @turn=params[:turnHour]
-
+   @totalTodayDays = Complain.group("date_trunc('day',complains.created_at)").where('EXTRACT(DOW FROM complains.created_at) = ? and complains.created_at BETWEEN ? AND ? ', @aux.wday , @dateBegin,@dateFinal).count.size
+  
     @aux1 = Complain.joins(:crime).last
     @dateStartToTime =Time.now
     @probOfDay=1
@@ -106,12 +131,16 @@ end
     end
 
     if @dateStart!=nil && @dateStart!=""
-    if ((Time.parse(@dateStart)>=Time.parse(@dateBegin) )&&(Time.parse(@dateStart).strftime("%d/%m/%y") <=@dateFinal.strftime("%d/%m/%y")) ) 
+    if ((@aux.to_i>=@dateBegin.to_i )&&(@aux.to_i <=@dateFinal.to_i) ) 
        @dateStartToTime=  Time.parse(@dateStart)
-    elsif (Time.parse(@dateStart).strftime("%d/%m/%y")<@dateBegin.strftime("%d/%m/%y"))
+    elsif (@aux.to_i<@dateBegin.to_i)
          @thereIsRecordsInDB = false
-    elsif  (Time.parse(@dateStart).strftime("%d/%m/%y")>=Time.now.strftime("%d/%m/%y"))
-           @dateStartToTime=  Time.parse(@dateStart)
+    elsif  (@aux.to_i>=Time.now.to_i)
+           @dateStartToTime=  @aux
+           puts "nnnn"
+           puts @totalTodayDays
+           puts"nnnnnnn"
+           puts @totalDaysDB
            @probOfDay=@totalTodayDays/@totalDaysDB.to_f
      end 
      end 
@@ -132,7 +161,7 @@ end
          @dateFinal =Complain.last.created_at
     @totalTodayDays = Complain.group("date_trunc('day',complains.created_at)").where('EXTRACT(DOW FROM complains.created_at) = ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , @dateBegin,@dateFinal).count.size
     if @dateStart!=nil && @dateStart!=""
-     if ( Time.parse(@dateStart).strftime("%d/%m/%y")>Time.now.strftime("%d/%m/%y"))
+     if ( @aux.to_i>Time.now.to_i)
       @probOfDay= @totalTodayDays.to_f/@totalDaysDB
      end 
     end
