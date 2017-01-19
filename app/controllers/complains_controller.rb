@@ -28,7 +28,8 @@ class ComplainsController < ApplicationController
             if params[:search]
               @complains = Complain.search(params[:search]).order("created_at DESC")
             else
-               @complains = Complain.all
+               @complains=Complain.where("created_at <?",DateTime.now ).paginate(:page => params[:page], :per_page => 10).order("created_at ASC")
+                 
              end
           end
         end
