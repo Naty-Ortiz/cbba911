@@ -20,7 +20,9 @@ class Complainant < ActiveRecord::Base
 
 protected
 def uppercase
+	if self.name!=nil
   self.name = self.name.upcase
+  end
 end
 
 

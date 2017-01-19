@@ -3,14 +3,13 @@ class ComplainsController < ApplicationController
     before_action :authenticate_user!
     before_action :set_complain, only: [:show, :edit, :update, :destroy]
     before_action :verify_password_change
-    autocomplete :complain, :contravertion
-    autocomplete :complain, :crime
+ 
      helper_method :getColor
     def index
         if user_signed_in?
           @patrol_units = Array.new
             @role_current_user = current_user.role
-
+            @auxCrime=false
           if      @role_current_user==1
               
             PatrolUnit.all.each do |comp|
@@ -23,13 +22,13 @@ class ComplainsController < ApplicationController
                 if params[:search]
                   @complains = Complain.search(params[:search]).order("created_at DESC")
                 else
-                 @complains=Complain.where("created_at <?",DateTime.now ).paginate(:page => params[:page], :per_page => 10)
+                 @complains=Complain.where("created_at <?",DateTime.now ).paginate(:page => params[:page], :per_page => 10).order("created_at ASC")
                  end
           elsif  @role_current_user==2
             if params[:search]
               @complains = Complain.search(params[:search]).order("created_at DESC")
             else
-               @complains = Complain.where(:user_id =>current_user.id)
+               @complains = Complain.all
              end
           end
         end
@@ -41,6 +40,9 @@ class ComplainsController < ApplicationController
       @caseReportAux = params[:caseReportAux]
       @complain = Complain.find(params[:id])
       @complainant = Complainant.where(:complain_id => @complain.id).first
+      if @observationsAux!=nil
+
+      end
     end
     def caseReport
 
@@ -529,7 +531,25 @@ puts "msmdmkkkkmm"
           redirect_to root_url
         end
   end
-   
+   def index4
+      Complain.all.each do |comp|
+        if comp.complainant==nil
+          @complainant= Complainant.new
+            if  @complainant.name!=nil
+            @complainant.name=comp.complainantNameFromMigrateData
+            @complainant.last_name=comp.complainantNameFromMigrateData
+            @complainant.ci=000000
+          else
+            @complainant.name= "no se reporto"
+            @complainant.last_name= "no se reporto"
+            @complainant.ci=000000
+          end
+        @complainant.complain_id=comp.id
+       # @complainant.save!
+
+        end
+      end
+   end
     def edit
         @complain = Complain.find(params[:id])
         @complainant = Complainant.where(:complain_id => @complain.id).first
@@ -616,10 +636,12 @@ puts "msmdmkkkkmm"
     def update
       if @observationsAux==nil
       @complain = Complain.find(params[:id])
+
       @complain.observations = params[:observations]
       @complainant = Complainant.where(:complain_id => @complain.id).first
       if @complainant==nil
           @complainant = Complainant.new(complainant_params)
+         # @complainant = Complainant.new()
       end
       @crimes = Array.new
       Crime.all.each do |comp|
@@ -645,6 +667,8 @@ puts "msmdmkkkkmm"
       end
     end
       respond_to do |format|
+      @crime_id= @complain.crime_id
+      @contravertion_id=@complain.contravertion_id
         if ((check_box_params[:crime]=='0'&& check_box_params[:contravertion]=='0')|| ( @auxCrime_id== 0 && @auxContravertion_id==0 ) || (check_box_params[:crime]=='1' && @auxCrime_id == 0)|| (check_box_params[:contravertion]=='1' && @auxContravertion_id == 0))
           flash[:notice] = "Debe registrar un delito o una contraversion correctamente"
           format.html { render :new }
@@ -689,9 +713,9 @@ puts "msmdmkkkkmm"
         params.require(:complain).permit(:protagonists, :description, :zone, :latitude, :longitude, :crime_id, :observations)
       end
       def check_box_params
-        params.require(:complain).permit( :contravertion,:crime, :crime_checkbox , :contravertion_checkbox, :crimeAux,  :crime_id,:contravertion_id,:auxCrime, :auxContravertion, :observations,:patrol_unit, :turnHour ,:zoneCrime)
+        params.require(:complain).permit( :contravertion,:crime, :crime_checkbox , :contravertion_checkbox, :crimeAux,  :crime_id,:contravertion_id,:auxCrime, :auxContravertion, :observations,:patrol_unit, :turnHour ,:zoneCrime, :observationsAux)
       end
       def complainant_params
-        params.require(:complainant).permit(:name, :last_name,:ci, :phone, :address)
+       params.require(:complainant).permit(:name, :last_name,:ci, :phone, :address,:observationsAux)
       end
   end

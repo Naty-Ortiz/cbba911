@@ -13,7 +13,7 @@ class Complain < ActiveRecord::Base
 
 
 	def self.search(search)
-		where("name LIKE :search ", search:"%#{search}%")
+		where("description LIKE :search ", search:"%#{search}%")
 	end
 	
 	def crime_name=(name)

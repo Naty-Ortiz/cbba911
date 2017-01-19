@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
   resources :documents
   resources :complains do
-    get :autocomplete_complain_contravertion, :on => :collection
-    get :autocomplete_complain_crime, :on => :collection
+   
     member do
         post 'caseReport'
     end
@@ -11,14 +10,10 @@ Rails.application.routes.draw do
     get '/index_aux' => 'complains#index_aux'
     get '/index2' => 'complains#index2'
     get '/index3' => 'complains#index3'
+    get '/index4' => 'complains#index4'
     post '/complains'=>'complains#patrol_unit_asign'
     put '/complains'=>'complains#patrol_unit_asign'
-  resources :contravertions do
-        get :autocomplete_contravertion_name, :on => :collection
-  end
-  resources :crimes do
-      get :autocomplete_crime_name, :on => :collection
-  end
+
   resources :patrol_units
     resources :reports, except: [:new,:index]
 
@@ -33,7 +28,7 @@ devise_scope :user do
     root 'devise/sessions#new', as: :unauthenticated_root
   end
 end
-get "complains/autocomplete" => "complains#autocomplete"
+
 
     # resources :people
     # devise_for :users, :controllers => {:registrations => 'registrations'}

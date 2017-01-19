@@ -11,7 +11,7 @@
     <div class="form-inline">
       <br>
       <%= form_tag(complains_path, :method => 'get', id: 'search-form') do %>
-          <%= text_field_tag :search, params[:search], placeholder: 'Nombre de denuncia', class: 'form-control' %>
+          <%= text_field_tag :search, params[:search], placeholder: 'Descripcion de denuncia', class: 'form-control' %>
           <%= submit_tag 'Buscar', class: 'btn btn-default' %>
       <% end %>
     </div>
@@ -49,9 +49,9 @@
       <th style="width: 10%">ver</th>
       <th style="max-width: 5%">observacion</th>
       <th style="width: 5%">unidad</th>
-      <th style="width: 5%">Reporte Caso</th>
+   
       <th style="width: 15%">Editar</th>
-
+       <th>Delito o contravencion</th>
     </tr>
   </thead>
 
@@ -61,42 +61,45 @@
     <tr>
       <% if  complain.crime_id?%>
         <td><%= complain.crime.code%><%=complain.crime.name%></td>
+        <%@auxCrime=true%>
       <%end %>
+      <%if@auxCrime==false %>
       <% if  complain.contravertion_id?%>
         <td><%= complain.contravertion.code%><%=complain.contravertion.name%></td>
       <%end %>
-
+       <%end %>
       <td><%= complain.zone %></td>
       <td><%= complain.description %></td>
       <td><%= link_to 'Ver', complain, class: 'btn btn-default' %></td>
-      <%if complain.observations==nil %>
+      <%if complain.observations==nil ||complain.observations=="" %>
            <td><%= link_to "Observacion", {:action => 'show', :id => complain.id,:observationsAux => true } , class: 'btn btn-primary' %></td>
-
-       <%end%> <%=current_user.role%>
-        <%if current_user.role == 1 %>
+          <%else%>
+          <td><%=complain.observations%></td>
+       <%end%>
+        <%if current_user.role == 1 %><%=current_user.role%><%=complain.patrol_unit_id%>
           <%if complain.patrol_unit_id==nil %>
               <%= form_for(complain, :url => { :action => "patrol_unit_asign" }, :html => { :method => :put } ) do |f| %>
                   <%= f.hidden_field :complain_id, :value => complain.id %>
-         
-                  <%= f.awesomplete_field( :patrol_unit_id, collection: @patrol_units.map{|v| v.to_s.encode("UTF-8").gsub(/[^a-z0-9\s]/i, '')}) %>
-                <%= f.submit 'Asignar', :class => 'btn btn-default'%>
-
-
-                 </td>
+                <td style="max-width: 5%">  <%= f.awesomplete_field( :patrol_unit_id, collection: @patrol_units.map{|v| v.to_s.encode("UTF-8").gsub(/[^a-z0-9\s]/i, '')}) %>
+                <%= f.submit 'Asignar', :class => 'btn btn-default'%> </td>
             <%end%>
         <%else%>
-          <td><div style="max-width: 0; overflow:hidden"><%if complain.patrol_unit!=nil %><%if complain.patrol_unit.code!=nil %><%=complain.patrol_unit.code%> <%end%><%if complain.patrol_unit.name!=nil %> <%=complain.patrol_unit.name%><%end%><%end%></div></td>
+          <td><div><%if complain.patrol_unit!=nil %><%if complain.patrol_unit.code!=nil %><%=complain.patrol_unit.code%> <%end%><%if complain.patrol_unit.name!=nil %> <%=complain.patrol_unit.name%><%end%><%end%></div></td>
         <%end%>
         <%if complain.caseReport == nil%>
-
           <td><%= link_to "Reporte Caso", {:action => 'show', :id => complain.id,:caseReportAux => true } , class: 'btn btn-primary' %></td>
-        <%else%>
-          <td> <%= complain.caseReport %></td>
+            
         <%end%>
       <td><%= link_to 'Editar', edit_complain_path(complain) , class:'btn btn-primary'%></td>
             
         <% end %>
+        <td><%if@auxCrime==true %>
+      <% if  complain.contravertion_id?%>
+        <td><%= complain.contravertion.code%><%=complain.contravertion.name%></td>
+      <%end %>
+       <%end %></td>
       </tr>
+      <%@auxCrime=false %>
     <% end %>
   </tbody>
 </table>

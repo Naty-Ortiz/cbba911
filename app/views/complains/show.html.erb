@@ -15,6 +15,7 @@
         <%end%>
         </tr>
         <tr>
+        <%if @complainant!=nil%>
         <%if   @complainant.name!=nil%>
         <td><strong>denunciante</strong></td>
         <td><%= @complainant.name %></td>
@@ -27,6 +28,7 @@
         <td><strong>ci</strong></td>
         <td><%= @complainant.ci %></td>
         <%end%>
+         <%end%>
         </tr>
       <tr>
         <%if  @complain.description!=nil%>
