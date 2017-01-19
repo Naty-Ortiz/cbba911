@@ -25,7 +25,12 @@
 //= require moment
 //= require bootstrap-datetimepicker
 //= require bootstrap-timepicker
+//= require bootstrap-typeahead-rails
+//= require jquery2
 
+//= require bootstrap
+//= require bootstrap3-typeahead.min
+//= require bootstrap3-autocomplete-input.min
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs

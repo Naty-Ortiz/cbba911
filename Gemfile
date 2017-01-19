@@ -15,17 +15,36 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
+gem 'bootstrap-typeahead-rails'
+gem 'rails4-autocomplete'
+gem 'jquery-ui-rails'
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+# Use postgresql as the database for Active Record
 
+# Use SCSS for stylesheets
+
+# Use CoffeeScript for .coffee assets and views
+
+# See https://github.com/sstephenson/execjs#readme for more supported runtimes
+# gem 'therubyracer', platforms: :ruby
+
+# Optional gems
+gem 'searchlight'
+gem 'slim-rails'
 gem 'groupdate'
 
 gem 'yaml_db'
- gem 'bootstrap-timepicker-rails'
+gem 'bootstrap-timepicker-rails'
 
-gem 'bootstrap-sass', '~> 3.3.5'
+gem 'bootstrap-sass'
+
+
 gem 'will_paginate-bootstrap'
 gem 'momentjs-rails', '>= 2.9.0'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
 
+gem 'simple_form'
+gem 'bootstrap3_autocomplete_input'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring'
@@ -52,10 +71,9 @@ gem 'coffee-rails'
 gem 'font-awesome-rails'
 # gem 'will_paginate'
 
-gem 'rails4-autocomplete'
-gem 'jquery-ui-rails'
 
-	
+
+
 gem 'toastr-rails'
 gem 'gmaps-autocomplete-rails'
 gem 'rails_12factor', group: :production

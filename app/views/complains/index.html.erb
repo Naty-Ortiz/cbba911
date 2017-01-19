@@ -31,7 +31,7 @@
 <%else%>
 
     <h1>Lista de denuncias</h1><br/>
-     <div class="col-md-7 col-md-offset-3">
+     <div class="col-md-20 col-md-offset-2">
       <div class="digg_pagination">
         <%= will_paginate @complains,  :previous_label => 'Atras', :next_label => 'Siguiente', :container => true ,renderer: BootstrapPagination::Rails%>
       </div>
@@ -72,18 +72,23 @@
       <%if complain.observations==nil %>
            <td><%= link_to "Observacion", {:action => 'show', :id => complain.id,:observationsAux => true } , class: 'btn btn-primary' %></td>
 
-       <%end%>
+       <%end%> <%=current_user.role%>
         <%if current_user.role == 1 %>
           <%if complain.patrol_unit_id==nil %>
               <%= form_for(complain, :url => { :action => "patrol_unit_asign" }, :html => { :method => :put } ) do |f| %>
                   <%= f.hidden_field :complain_id, :value => complain.id %>
-                <td style="max-width: 5%">  <%= f.select :patrol_unit_id, options_for_select(@patrol_units),:class => "form-control"  %>
-                <%= f.submit 'Asignar', :class => 'btn btn-default'%> </td>
+         
+                  <%= f.awesomplete_field( :patrol_unit_id, collection: @patrol_units.map{|v| v.to_s.encode("UTF-8").gsub(/[^a-z0-9\s]/i, '')}) %>
+                <%= f.submit 'Asignar', :class => 'btn btn-default'%>
+
+
+                 </td>
             <%end%>
         <%else%>
           <td><div style="max-width: 0; overflow:hidden"><%if complain.patrol_unit!=nil %><%if complain.patrol_unit.code!=nil %><%=complain.patrol_unit.code%> <%end%><%if complain.patrol_unit.name!=nil %> <%=complain.patrol_unit.name%><%end%><%end%></div></td>
         <%end%>
         <%if complain.caseReport == nil%>
+
           <td><%= link_to "Reporte Caso", {:action => 'show', :id => complain.id,:caseReportAux => true } , class: 'btn btn-primary' %></td>
         <%else%>
           <td> <%= complain.caseReport %></td>

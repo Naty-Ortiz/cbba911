@@ -8,10 +8,11 @@ class ComplainsController < ApplicationController
      helper_method :getColor
     def index
         if user_signed_in?
+          @patrol_units = Array.new
             @role_current_user = current_user.role
 
           if      @role_current_user==1
-              @patrol_units = Array.new
+              
             PatrolUnit.all.each do |comp|
               if comp.name == nil
                 comp.name=""
@@ -22,7 +23,7 @@ class ComplainsController < ApplicationController
                 if params[:search]
                   @complains = Complain.search(params[:search]).order("created_at DESC")
                 else
-                 @complains=Complain.where("created_at >?",DateTime.now-316 ).paginate(:page => params[:page], :per_page => 10)
+                 @complains=Complain.where("created_at <?",DateTime.now ).paginate(:page => params[:page], :per_page => 10)
                  end
           elsif  @role_current_user==2
             if params[:search]
@@ -57,6 +58,15 @@ class ComplainsController < ApplicationController
       
        
     end
+    def autocomplete
+      @patrolUnits = PatrolUnit.all.map do |patrol_unit|
+        {
+          name: patrol_unit.name
+        }
+      end
+
+  render json: @patrolUnits
+end
     def getColor(prob)
         if prob>=0.0 && prob<=0.30
        return "#1B592B"

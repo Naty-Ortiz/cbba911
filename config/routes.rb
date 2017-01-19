@@ -33,7 +33,7 @@ devise_scope :user do
     root 'devise/sessions#new', as: :unauthenticated_root
   end
 end
-
+get "complains/autocomplete" => "complains#autocomplete"
 
     # resources :people
     # devise_for :users, :controllers => {:registrations => 'registrations'}

@@ -8,6 +8,7 @@
   <%= yield :javascript_includes %>
   <%= csrf_meta_tags %>
   <%= favicon_link_tag('icons/escudo-cochabamba.ico') %>
+  <%= javascript_tag "var autocomplete_items = #{ @patrol_units.to_json };" %>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&key=
 AIzaSyDJCxMIk3GTjMB77nK64W9DosMwb6w5oe0&libraries=places"
   type="text/javascript"></script>
