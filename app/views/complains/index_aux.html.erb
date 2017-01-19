@@ -3,15 +3,18 @@
 <head>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <div class="col-md-20 col-md-offset-2">
+    <h2>Grafica Promedio calculado vs delitos registrados </h2>
 
-<div class="col-md-8">
+ </div> <br><br><br><br><br>
+  <div class="col-md-20 col-md-offset-1">
     <div class="panel panel-info">
       <div class="panel-heading">Arrastrar con el mouse ambos lados  para ver mas detalle en las fechas en la grafica  </div>
  </div>
- </div> 
 <div id="dashboard_div">
     <div id="filter_div"></div>
     <div id="curve_chart"></div>
+</div>
 </div>
     <script type="text/javascript">
      google.load("visualization", "1", {
@@ -44,7 +47,7 @@ var dataSet  = google.visualization.arrayToDataTable(data);
 
     var dateRangeFilter = new google.visualization.ControlWrapper({'controlType':'ChartRangeFilter','containerId':'filter_div','options': {'filterColumnLabel':'date'}});
 
-    var lineChart = new google.visualization.ChartWrapper({'chartType':'LineChart','containerId':'curve_chart','options':{'title': 'Promedio calculado vs delitos registrados ','curveType': 'function','legend': {'postition':'bottom'}}});
+    var lineChart = new google.visualization.ChartWrapper({'chartType':'LineChart','containerId':'curve_chart','options':{'title': 'Promedio calculado vs delitos registrados ','curveType': 'function'}});
 
     dashboard.bind(dateRangeFilter,lineChart);
 
