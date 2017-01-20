@@ -22,13 +22,13 @@ class ComplainsController < ApplicationController
                 if params[:search]
                   @complains = Complain.search(params[:search]).order("created_at DESC")
                 else
-                 @complains=Complain.where("created_at <?",DateTime.now ).paginate(:page => params[:page], :per_page => 10).order("created_at ASC")
+                 @complains=Complain.where("created_at <?",DateTime.now ).paginate(:page => params[:page], :per_page => 10).order("created_at DESC")
                  end
           elsif  @role_current_user==2
             if params[:search]
               @complains = Complain.search(params[:search]).order("created_at DESC")
             else
-               @complains=Complain.where("created_at <?",DateTime.now ).paginate(:page => params[:page], :per_page => 10).order("created_at ASC")
+               @complains=Complain.where("created_at <?",DateTime.now ).paginate(:page => params[:page], :per_page => 10).order("created_at DESC")
                  
              end
           end
@@ -111,7 +111,8 @@ end
  #puts DateTime.new(@aux2.split("/")[0],@aux2.split("/")[1],(@aux2.split("/")[2]).partition(" ").first,@aux.split(":")[0]).to_i, ( @aux.split(":")[1]).to_i, 0,0) 
   
 puts @aux
- 
+ else
+  @aux = Time.now
     end
     @dateEnd=params[:enddate]
     @turn=params[:turnHour]
