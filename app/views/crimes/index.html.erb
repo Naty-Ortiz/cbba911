@@ -2,7 +2,7 @@
 
 <div class="row">
   <div class="col-md-7">
-    <h1>Buscar Crimen </h1>
+    <h1>Buscar Delito </h1>
     <br>
   </div>
   <div class="col-md-5">
@@ -10,13 +10,13 @@
       <div class="form-inline">
         <br>
         <%= form_tag(crimes_path, :method => "get", id: "search-form") do %>
-            <%= text_field_tag :search, params[:search], placeholder: "Nombre de la Crimen", :class => 'form-control'%>
+            <%= text_field_tag :search, params[:search], placeholder: "Nombre del Delito", :class => 'form-control'%>
             <%= submit_tag 'Buscar', :class=>'btn btn-default' %>
         <% end %>
       </div>
   </div>
 </div>
-<h1>Lista de Crimenes</h1>
+<h1>Lista de Delitoss</h1>
 <br>
 <% if @crimes.present? %>
 <div class="col-md-4 col-md-offset-4">
@@ -30,10 +30,10 @@
 
         <th>Codigo</th>
           <th>Nombre</th>
-        <th>VER</th>
-        <th>EDITAR</th>
+        <th>Ver</th>
+        <th>Eitar</th>
 
-        <th colspan="3">ELIMINAR</th>
+       
       </tr>
     </thead>
 
@@ -48,7 +48,7 @@
           <td><%= link_to 'Ver', crime , class:'btn btn-default'%></td>
 
             <td><%= link_to :Editar, edit_crime_path(crime), class:'btn btn-primary'%></td>
-            <td><%= link_to 'Eliminar', crime, method: :delete, data: { confirm: 'Esta seguro?' }, class:'btn btn-danger' %></td>
+          
         </tr>
       <% end %>
     </tbody>

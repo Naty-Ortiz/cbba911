@@ -33,7 +33,7 @@
         <th>VER</th>
         <th>EDITAR</th>
 
-        <th colspan="3">ELIMINAR</th>
+
       </tr>
     </thead>
 
@@ -48,7 +48,7 @@
           <td><%= link_to 'Ver', contravertion , class:'btn btn-default'%></td>
 
             <td><%= link_to :Editar, edit_contravertion_path(contravertion), class:'btn btn-primary'%></td>
-            <td><%= link_to 'Eliminar', contravertion, method: :delete, data: { confirm: 'Esta seguro?' }, class:'btn btn-danger' %></td>
+            
         </tr>
       <% end %>
     </tbody>

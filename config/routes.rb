@@ -43,7 +43,8 @@ end
     resources :companies
     resources :projects
     resources :roles
-
+    resources :crimes
+    resources :contravertions
   get '/legal_agents/new/:company_id' => 'legal_agents#new2'
   resources :legal_agents ,except: [:update]
     post '/legal_agents/:id/update' => 'legal_agents#update'
