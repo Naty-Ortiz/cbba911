@@ -88,51 +88,6 @@
   </table>
  </div>
 
-<div class="form-inline">
-<div class="col-md-4 col-md-offset-4">
-<%= form_tag( '/index2', :method => 'get', :id =>"eventForm"  ) do %>
-<label>Turno</label>
-   <%= select  :complain, :turnHour,  ['8:00-16:00','16:00-00:00','00:00-8:00'] ,{},:class => 'form-control'  %>
-   <%= submit_tag 'Buscar', class: 'btn btn-default' %>  
- <%end%>
- </div>
- </div>
-   <%if @turnHour!=""%>
-   <script>
-          $(document).ready(function(){
-              gmap_show_polygons(<%==@listProb%>,'<%==@turnHour%>');
-
-              });
-    </script><br><br><br>
-     <div class="col-md-10 col-md-offset-2">
-    <div id="map" style="width: 70%; height: 1050px;"></div>
-    </div>
-  <%end%>
-
-
-
-<div class="container">
-    <div class='col-md-5'>
-        <div class="form-group">
-            <div class='input-group date' id='datetimepicker6'>
-                <input type='text' class="form-control" />
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-            </div>
-        </div>
-    </div>
-    <div class='col-md-5'>
-        <div class="form-group">
-            <div class='input-group date' id='datetimepicker7'>
-                <input type='text' class="form-control" />
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-            </div>
-        </div>
-    </div>
-</div> 
  <script>
           $(document).ready(function(){
               /*gmap_show_polygons(@norte.to_i+1,@oeste.to_i+3,@sud.to_i+20);*/
