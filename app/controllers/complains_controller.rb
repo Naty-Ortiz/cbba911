@@ -612,7 +612,7 @@ puts "msmdmkkkkmm"
       @complainant = Complainant.new(complainant_params)
       @crimes = Array.new
       @complain.user_id= current_user.id
-
+      @auxCrime= ' '
       Crime.all.each do |comp|
         @crimes << [comp.code + ' ' + comp.name]
       end
@@ -733,8 +733,10 @@ puts "msmdmkkkkmm"
     if params[:caseReport]=="yes"
      end 
       respond_to do |format|
+      @auxCrime= @complain.crime_id.code + ' ' + @complain.crime_id.name 
       @crime_id= @complain.crime_id
       @contravertion_id=@complain.contravertion_id
+
         if ((check_box_params[:crime]=='0'&& check_box_params[:contravertion]=='0')|| ( @auxCrime_id== 0 && @auxContravertion_id==0 ) || (check_box_params[:crime]=='1' && @auxCrime_id == 0)|| (check_box_params[:contravertion]=='1' && @auxContravertion_id == 0))
           flash[:notice] = "Debe registrar un delito o una contraversion correctamente"
           format.html { render :new }

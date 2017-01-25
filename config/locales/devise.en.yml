@@ -8,12 +8,12 @@ en:
       send_paranoid_instructions: "If your email address exists in our database, you will receive an email with instructions for how to confirm your email address in a few minutes."
     failure:
       already_authenticated: "Ya se tiene una sesión abierta."
-      inactive: "Your account is not activated yet."
-      invalid: "Invalid %{authentication_keys} or password."
-      locked: "Your account is locked."
-      last_attempt: "You have one more attempt before your account is locked."
+      inactive: "Su cuenta ha sido deshabilitada, por favor pongase en contacto con administrador."
+      invalid: "Nombre de usuario o contrasenha invalida"
+      locked: "Su cuenta ha sido bloqueada."
+      last_attempt: "Usted tiene un intento mas antes de que su cuenta sea bloqueada."
       not_found_in_database: "Invalid %{authentication_keys} or password."
-      timeout: "Your session expired. Please sign in again to continue."
+      timeout: "Su sesion ha expirado. Por favor ingrese nuevamente para continuar."
       unauthenticated: "You need to sign in or sign up before continuing."
       unconfirmed: "You have to confirm your email address before continuing."
     mailer:

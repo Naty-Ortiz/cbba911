@@ -74,7 +74,9 @@
     <%end%><br>
     <div class="field" id="crime-div" <% if  @complain.crime_id!=nil %>style ="display:block" <%else%> style ="display:none" <%end%>>
        <label>Delito <i class="fa fa-asterisk"></i></label>
-          <%= f.awesomplete_field( :auxCrime, collection: @crimes.map{|v| v.to_s.encode("UTF-8").gsub(/[^a-z0-9\s]/i, '')}) %>
+       <%= text_field_tag :auxCrime,if  @complain.crime_id?
+       @complain.crime.code + ' '+@complain.crime.name 
+    end  , class: 'awesomplete', data: { list:  @crimes.map{|v| v.to_s.encode("UTF-8").gsub(/[^a-z0-9\s]/i, '')}} %>
     </div><br>
     <div class="field"  id="contravertion-div" <% if  @complain.contravertion_id!=nil %>style ="display:block" <%else%> style ="display:none" <%end%>>
       <label>Contraversion<i class="fa fa-asterisk"></i></label>

@@ -10,7 +10,7 @@
     <div class="form-inline">
       <br>
       <%= form_tag( employees_path , :method => "get", id: "search-form") do %>
-          <%= text_field_tag :search, params[:search], placeholder: "Buscar", :class=>'form-control' %>
+          <%= text_field_tag :search, params[:search], placeholder: "Buscar por nombre o apellido", :class=>'form-control' %>
           <%= submit_tag "Buscar" ,:class=>'btn btn-default'%>
       <% end %>
     </div>

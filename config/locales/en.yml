@@ -110,6 +110,16 @@ en:
           longitude: 'Longitud'
           observations: 'Observationes'
           shortReport: 'Breve informe'
+        crime:
+          name: 'Nombre'
+          code: 'Codigo'
+        contravertion:
+          name: 'Nombre'
+          code: 'Codigo'
+        patrol_unit:
+          name: 'Nombre'
+          code: 'Codigo' 
+
       errors:
         models:
           user:
