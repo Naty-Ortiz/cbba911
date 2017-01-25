@@ -78,11 +78,8 @@
        <%end%>
         <%if current_user.role == 1 %><%=current_user.role%><%=complain.patrol_unit_id%>
           <%if complain.patrol_unit_id==nil %>
-              <%= form_for(complain, :url => { :action => "patrol_unit_asign" }, :html => { :method => :put } ) do |f| %>
-                  <%= f.hidden_field :complain_id, :value => complain.id %>
-                <td style="max-width: 5%">  <%= f.awesomplete_field( :patrol_unit_id, collection: @patrol_units.map{|v| v.to_s.encode("UTF-8").gsub(/[^a-z0-9\s]/i, '')}) %>
-                <%= f.submit 'Asignar', :class => 'btn btn-default'%> </td>
-            <%end%>
+          
+              <td><%=link_to 'Asignar unidad', {:action =>'show', :id =>complain.id, :asign_patrol_unit =>true}, class: 'btn btn-primary'%></td>
         <%else%>
           <td><div><%if complain.patrol_unit!=nil %><%if complain.patrol_unit.code!=nil %><%=complain.patrol_unit.code%> <%end%><%if complain.patrol_unit.name!=nil %> <%=complain.patrol_unit.name%><%end%><%end%></div></td>
         <%end%>

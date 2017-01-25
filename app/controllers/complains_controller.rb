@@ -16,8 +16,10 @@ class ComplainsController < ApplicationController
               if comp.name == nil
                 comp.name=""
               end
-              @patrol_units << [comp.code + ' ' + comp.name,comp.id]
+              @patrol_units << [comp.code + ' ' + comp.name]
+
             end
+
 
                 if params[:search]
                   @complains = Complain.search(params[:search]).order("created_at DESC")
@@ -37,9 +39,18 @@ class ComplainsController < ApplicationController
     # GET /complains/1
     # GET /complains/1.json
     def show
+       @patrol_units = Array.new 
+            PatrolUnit.all.each do |comp|
+              if comp.name == nil
+                comp.name=""
+              end
+              @patrol_units << [comp.code + ' ' + comp.name]
+
+            end
       @observationsAux = params[:observationsAux]
       @caseReportAux = params[:caseReportAux]
       @complain = Complain.find(params[:id])
+      @asign_patrol_unit=params[:asign_patrol_unit]
       @complainant = Complainant.where(:complain_id => @complain.id).first
       if @observationsAux!=nil
 
@@ -61,15 +72,15 @@ class ComplainsController < ApplicationController
       
        
     end
-    def autocomplete
-      @patrolUnits = PatrolUnit.all.map do |patrol_unit|
-        {
-          name: patrol_unit.name
-        }
-      end
+   # def autocomplete
+   #   @patrolUnits = PatrolUnit.all.map do |patrol_unit|
+    #    {
+     #     name: patrol_unit.name
+      #  }
+      #end
 
-  render json: @patrolUnits
-end
+  #render json: @patrolUnits
+#end
     def getColor(prob)
         if prob>=0.0 && prob<=0.30
        return "#1B592B"
@@ -534,23 +545,46 @@ puts "msmdmkkkkmm"
         end
   end
    def index4
-      Complain.all.each do |comp|
-        if comp.complainant==nil
-          @complainant= Complainant.new
-            if  @complainant.name!=nil
-            @complainant.name=comp.complainantNameFromMigrateData
-            @complainant.last_name=comp.complainantNameFromMigrateData
-            @complainant.ci=000000
-          else
-            @complainant.name= "no se reporto"
-            @complainant.last_name= "no se reporto"
-            @complainant.ci=000000
-          end
-        @complainant.complain_id=comp.id
+      #Complain.all.each do |comp|
+       # if comp.complainant==nil
+       # #  @complainant= Complainant.new
+        #    if  @complainant.name!=nil
+         #   @complainant.name=comp.complainantNameFromMigrateData
+          #  @complainant.last_name=comp.complainantNameFromMigrateData
+          #  @complainant.ci=000000
+          #else
+          #  @complainant.name= "no se reporto"
+         #   @complainant.last_name= "no se reporto"
+         #   @complainant.ci=000000
+         # end
+        #@complainant.complain_id=comp.id
        # @complainant.save!
 
-        end
-      end
+       # end
+     # end
+
+       
+#=begin
+  
+   
+     PatrolUnit.all.where("id >=433").each do |comp|
+
+      @id=comp.id
+      @comp=comp.code.delete("\n")
+      @comp=@comp.gsub(/[^a-z0-9\s]/i, '')
+      @comp=@comp.strip
+      comp.update_attribute(:code,  @comp)
+    comp.save!
+     end
+#=end
+=begin
+  
+
+     Complain.all.where("patrol_unit_id = 432").each do |comp|
+     comp.update_attribute(:patrol_unit_id, 28)
+     comp.save!
+   end
+=end
    end
     def edit
         @complain = Complain.find(params[:id])
@@ -625,8 +659,19 @@ puts "msmdmkkkkmm"
       end
     end
     def patrol_unit_asign
+      puts",,,,,,,,,,,"
+      puts params[:patrolUnitAux]
+      puts"sfsaf"
+      puts params[:complain][:complain_id]
+  
+      puts"asdasd"
+
 
       @complain = Complain.find(params[:complain][:complain_id])
+       @auxPatrolUnit = PatrolUnit.where(:code =>(params[:patrolUnitAux])).pluck(:id).first.to_i
+          puts "fdafafnna"
+       puts @auxPatrolUnit
+                 puts "fdafafnna"
        @complain.update_attribute(:patrol_unit_id,  params[:complain][:patrol_unit_id])
    if @complain.save!
     redirect_to complains_path, :flash => { :success => "Your message was closed." }
@@ -636,6 +681,23 @@ puts "msmdmkkkkmm"
     end
 
     def update
+      puts "asddasd"
+      puts params[:patrolUnitAux]
+      puts "CZXVZV"
+      @patrolUnitAux=  check_box_params[:patrolUnitAux]
+
+      if @patrolUnitAux!=nil
+
+      puts "fdafafnna"
+           puts check_box_params[:patrolUnitAux]
+           puts "sdfdf"
+            flash[:notice] = "Debe regtamente"
+         else 
+          puts"ff"
+          puts params
+          puts "fasdssdqeweqew"
+           flash[:notice] = "Debe registrar o una contraversion correctamente"
+      end
       if @observationsAux==nil
       @complain = Complain.find(params[:id])
 
@@ -668,6 +730,8 @@ puts "msmdmkkkkmm"
         @complain.contravertion_id = @auxContravertion_id
       end
     end
+    if params[:caseReport]=="yes"
+     end 
       respond_to do |format|
       @crime_id= @complain.crime_id
       @contravertion_id=@complain.contravertion_id
@@ -715,7 +779,7 @@ puts "msmdmkkkkmm"
         params.require(:complain).permit(:protagonists, :description, :zone, :latitude, :longitude, :crime_id, :observations)
       end
       def check_box_params
-        params.require(:complain).permit( :contravertion,:crime, :crime_checkbox , :contravertion_checkbox, :crimeAux,  :crime_id,:contravertion_id,:auxCrime, :auxContravertion, :observations,:patrol_unit, :turnHour ,:zoneCrime, :observationsAux)
+        params.require(:complain).permit( :contravertion,:crime, :crime_checkbox , :contravertion_checkbox, :crimeAux,  :crime_id,:contravertion_id,:auxCrime, :auxContravertion, :observations,:patrol_unit, :turnHour ,:zoneCrime, :observationsAux,:patrolUnitAux)
       end
       def complainant_params
        params.require(:complainant).permit(:name, :last_name,:ci, :phone, :address,:observationsAux)
