@@ -1,4 +1,4 @@
-<div class="center"><h2><b>Probabilidad de ocurrencia de delitos para el <%=@dateStartToTime.strftime("%d/%m/%y")%></b></h2>
+<div class="center"><h2><b>Probabilidad de ocurrencia de delitos para el <%=Time.parse(@aux).strftime("%d/%m/%y")%></b></h2>
 </div><br><br>
 
  <table class="table table-bordered">
@@ -93,13 +93,19 @@
   </table>
  </div>
    <%= form_for(@complain, :url => { :action => "index2" }, :html => { :method => :get } ) do |f| %>
-   <div class="field">        
-    <label>Turno</label> <br>
-    <%= f.select   :turnHour,  ['8:00-16:00','16:00-00:00','00:00-08:00'] ,{},:class => 'form-control'  %>              
-    <%= f.submit 'Seleccionar ', :class => 'btn btn-default'%> </td>
-    <%end%>
-
+    <div class="form-inline">
+    <div class="col-md-8 col-md-offset-3">      
+        <label>Seleccione el turno</label> 
+         <div class="form-group">
+          <%= f.hidden_field :startdate, :value => @aux %>
+        <%= f.select   :turnHour,  ['8:00-16:00','16:00-00:00','00:00-08:00'] ,{},:class => 'form-control'  %>              
+        <%= f.submit 'Seleccionar ', :class => 'btn btn-default'%> </td>
+        <%end%>
+    </div>
+</div></div>
  <div class="field" <%if @turnHour=="Turno manhana" || @turnHour=="Turno noche"|| @turnHour=="Turno tarde"|| params[:turnHour]%>style ="display:block"<%else%>style="display:none" <%end%>>
+
+<br><br><label><%=@turnHour%></label>
 <div style='width: 800px;'> 
   <div id="map" style='width: 800px; height: 1000px;'></div>
 </div>

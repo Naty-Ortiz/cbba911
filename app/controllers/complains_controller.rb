@@ -77,32 +77,26 @@ class ComplainsController < ApplicationController
     def index2
     @complain= Complain.new
     @dateStart =  params[:startdate]
+     if @dateStart!=nil
+        @aux=@aux.split(' ')[1..-1].join(' ')
+        @aux=@aux.chomp(' AM')
+        @aux= DateTime.new( (@aux2.split("/")[2]).partition(" ").first.to_i,(@aux2.split("/")[0]).to_i,(@aux2.split("/")[1]).to_i,  (@aux.split(":")[0]).to_i, ( @aux.split(":")[1]).to_i, 0,0)
+     
+     end
     @aux=@dateStart
     @aux2=@dateStart
-       if @dateStart!=nil
-        @aux=@aux.split(' ')[1..-1].join(' ')
-        puts "asd"
-       puts  @aux2.split("/")[0]
-         puts "asdmmm"
-         puts  @aux2.split("/")[1]
-         puts"cdff"
-         puts  (@aux2.split("/")[2]).partition(" ").first
-  puts"cdffjjjjjjjjj"
-     puts @aux
-     @aux=@aux.chomp(' AM')
-     puts "fdsffsd"
-     puts @aux
-  @aux= DateTime.new( (@aux2.split("/")[2]).partition(" ").first.to_i,(@aux2.split("/")[0]).to_i,(@aux2.split("/")[1]).to_i,  (@aux.split(":")[0]).to_i, ( @aux.split(":")[1]).to_i, 0,0)
-    #@aux= Time.parse(@dateStart).strftime("%d/%m/%y").change({ hour: ( @aux.split(":")[0]).to_i, min:( @aux.split(":")[1]).to_i})
-
-    puts @dateStart
-   # @aux = Time.now
- end
-    @dateEnd=params[:enddate]
-    if params[:complain]!=nil
+     if params[:complain]!=nil
     @turn=params[:complain][:turnHour]
+      if params[:complain][:startdate]!=nil
+        @dateStart = params[:complain][:startdate]
+        @aux=@dateStart
+        @aux2=@dateStart
+      end
     end
-    @totalTodayDays = Complain.group("date_trunc('day',complains.created_at)").where('EXTRACT(DOW FROM complains.created_at) = ? and complains.created_at BETWEEN ? AND ? ', @aux.wday , @dateBegin,@dateFinal).count.size
+      
+    @dateEnd=params[:enddate]
+   
+    @totalTodayDays = Complain.group("date_trunc('day',complains.created_at)").where('EXTRACT(DOW FROM complains.created_at) = ? and complains.created_at BETWEEN ? AND ? ', Time.parse(@aux).wday , @dateBegin,@dateFinal).count.size
   
     @aux1 = Complain.joins(:crime).last
     @dateStartToTime =Time.now
@@ -115,7 +109,7 @@ class ComplainsController < ApplicationController
     
     if @dateStart!=nil && @dateStart!=""
     if ((@aux.to_i>=@dateBegin.to_i )&&(@aux.to_i <=@dateFinal.to_i) ) 
-       @dateStartToTime=  Time.parse(@dateStart)
+       @dateStartToTime=  @aux
     elsif (@aux.to_i<@dateBegin.to_i)
          @thereIsRecordsInDB = false
     elsif  (@aux.to_i>=Time.now.to_i)
