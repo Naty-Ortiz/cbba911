@@ -9,14 +9,17 @@
   <%= csrf_meta_tags %>
   <%= favicon_link_tag('icons/escudo-cochabamba.ico') %>
 
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBOQXCYjFFpBjDbJm_YX1BfBCxJNgMXYxA&libraries=places"
-  type="text/javascript"></script>
+
 
 
 <%= javascript_include_tag "bootstrap" if Rails.env.development? %>
- <script type="text/javascript"src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOQXCYjFFpBjDbJm_YX1BfBCxJNgMXYxA">
+    </script>
+
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
@@ -29,8 +32,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js">
   
 </script>
- <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.1/awesomplete.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.1/awesomplete.js"></script>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.1/awesomplete.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.1/awesomplete.min.js"></script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 </head>

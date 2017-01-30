@@ -8,11 +8,13 @@ Rails.application.routes.draw do
   end
     get '/index_oficial' => 'complains#index_oficial'
     get '/index_aux' => 'complains#index_aux'
+    post '/index2' => 'complains#index2'
     get '/index2' => 'complains#index2'
     get '/index3' => 'complains#index3'
     get '/index4' => 'complains#index4'
     post '/complains'=>'complains#patrol_unit_asign'
     put '/complains'=>'complains#patrol_unit_asign'
+    put '/complains?:id'=>'complains#case_report'
 
   resources :patrol_units
     resources :reports, except: [:new,:index]

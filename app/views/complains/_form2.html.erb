@@ -1,0 +1,49 @@
+<%= form_for(@complain, id:'complain_form', controller:'complains') do |f|%>
+  <%= f.hidden_field :complain_id, :value => @complain.id %>
+
+    <div class="field">
+        <%= f.radio_button  :caseReport, 'yes', :checked=>false,:id=>'caseReportA'%>
+      <label ><span></span></label><sup>(marcar si el caso fue positivo  )</sup>
+    </div>
+    <div class="field">
+      <%= f.radio_button :caseReport, 'no' , :checked=>false,:id=>'caseReportA2'%>
+
+      <label ><span></span></label><sup>(marcar si el caso fue negativo  )</sup>
+    </div><br>
+
+      <div class="field" id="case_report"  <% if flash[:notice] == "Debe registrar el campo protagonistas"
+ %>style ="display:block"  <%else%> style ="display:none" <%end%> >
+         <label>Protagonistas <i class="fa fa-asterisk"></i></label>
+            <%= f.text_area( :protagonists,  :value => if  flash[:notice] == "Debe registrar el campo protagonistas"
+       @protagonists else ""
+    end ,  :class => 'form-control small-text-area' ) %><br>
+         <label>Breve Informe <i class="fa fa-asterisk"></i></label>
+         <%= f.text_area( :shortReport,  :class => 'form-control small-text-area' ) %><br>
+        <label>Remision del caso<i class="fa fa-asterisk"></i></label>
+         <%= f.text_area( :derivationCase,  :class => 'form-control small-text-area' ) %><br>
+      </div><br>
+
+
+
+    <div class="actions center">
+      <%= f.submit 'Registrar', :class => 'btn btn-default'  %>
+    </div>
+    <%end%>
+
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+        gmap_show(<%== @complain.to_json %>);
+console.log("gggg");
+    var caseReport= document.getElementById('caseReportA');
+$("input[type=radio]").change(function() {
+    console.log("gggg");
+        if($(this).attr('id') == 'caseReportA') {
+             $('#case_report').show();
+        }else {
+             $('#case_report').hide();
+        }
+    })
+});
+
+</script>

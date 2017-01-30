@@ -1,3 +1,8 @@
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.1/awesomplete.css" />
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.1/awesomplete.min.js" async></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.1/awesomplete.js"></script>
+
 <%= form_for(@complain, id:'complain_form', controller:'complains') do |f|%>
 
 <%if ( @complain.errors.any? ||  @complainant.errors.any? || flash[:notice].to_s== "Debe registrar un delito o una contraversion correctamente")%>
@@ -61,26 +66,28 @@
         <%= f.check_box  :crime ,  :checked => @complain.crime_id!=nil,:id => "crime_checkbox"%>
       <label for="crime_checkbox"><span></span></label><sup>(marcar si quiere registrar un delito )</sup>
     </div><br>
-    <%if  @complain.crime_id?%>
-      <label><span></span><sup><%= @complain.crime.code%> <%=@complain.crime.name%> introduce este dato en el campo delito</label></sup>
-    <%end %><br>
+   
     <div class="field">
       <label>Contravensi&oacute;n</label>
         <%= f.check_box :contravertion , :checked =>  @complain.contravertion_id!=nil,:id => 'contravertion_checkbox'%>
         <label for="contravertion_checkbox"><span></span></label><sup>(marcar si quiere registrar una contraversion)</sup>
     </div><br>
-    <%if  @complain.contravertion_id?%>
-    <label><%= @complain.contravertion.code%> <%=@complain.contravertion.name%></label>
-    <%end%><br>
+    
     <div class="field" id="crime-div" <% if  @complain.crime_id!=nil %>style ="display:block" <%else%> style ="display:none" <%end%>>
        <label>Delito <i class="fa fa-asterisk"></i></label>
        <%= text_field_tag :auxCrime,if  @complain.crime_id?
        @complain.crime.code + ' '+@complain.crime.name 
-    end  , class: 'awesomplete', data: { list:  @crimes.map{|v| v.to_s.encode("UTF-8").gsub(/[^a-z0-9\s]/i, '')}} %>
+    end  , class: 'awesomplete', data: { list:  @crimes.map{|v| v.to_s.encode("UTF-8").gsub!(/[^a-z0-9.\s]/i, '')}} %>
     </div><br>
+ 
+
     <div class="field"  id="contravertion-div" <% if  @complain.contravertion_id!=nil %>style ="display:block" <%else%> style ="display:none" <%end%>>
       <label>Contraversion<i class="fa fa-asterisk"></i></label>
-          <%= f.awesomplete_field( :auxContravertion, collection: @contravertions.map{|v| v.to_s.encode("UTF-8").gsub(/[^a-z0-9\s]/i, '')}) %>
+         
+       <%= text_field_tag :auxContravertion,if @complain.contravertion_id?
+      @complain.contravertion.code + ' '+@complain.contravertion.name 
+    end  , class: 'awesomplete', data: { list:  @contravertions.map{|v| v.to_s.encode("UTF-8").gsub!(/[^a-z0-9.\s]/i, '')}} %>
+     
     </div><br>
 
     <div class="field">

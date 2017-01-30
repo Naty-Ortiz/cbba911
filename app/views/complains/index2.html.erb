@@ -37,6 +37,11 @@
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
                     </div>
+                     <script type="text/javascript">
+                  $(function () {
+                    $('#datetimepicker1').datetimepicker();
+                  });
+                </script>
                 </div>
               <%= submit_tag 'Buscar', class: 'btn btn-default' %>
             </div>
@@ -87,30 +92,45 @@
   </tbody>
   </table>
  </div>
+   <%= form_for(@complain, :url => { :action => "index2" }, :html => { :method => :get } ) do |f| %>
+   <div class="field">        
+    <label>Turno</label> <br>
+    <%= f.select   :turnHour,  ['8:00-16:00','16:00-00:00','00:00-08:00'] ,{},:class => 'form-control'  %>              
+    <%= f.submit 'Seleccionar ', :class => 'btn btn-default'%> </td>
+    <%end%>
 
- <script>
-          $(document).ready(function(){
-              /*gmap_show_polygons(@norte.to_i+1,@oeste.to_i+3,@sud.to_i+20);*/
-           
-        
- $(function () {
-        $('#datetimepicker1').datetimepicker();
-        $('#datetimepicker6').datetimepicker();
-        $('#datetimepicker7').datetimepicker({
-            useCurrent: false //Important! See issue #1075
-        });
-        $("#datetimepicker6").on("dp.change", function (e) {
-            $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
-        });
-        $("#datetimepicker7").on("dp.change", function (e) {
-            $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
-        });
-    });
+ <div class="field" <%if @turnHour=="Turno manhana" || @turnHour=="Turno noche"|| @turnHour=="Turno tarde"|| params[:turnHour]%>style ="display:block"<%else%>style="display:none" <%end%>>
+<div style='width: 800px;'> 
+  <div id="map" style='width: 800px; height: 1000px;'></div>
+</div>
 
-          }); 
-
-
-         
-      </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+               
+               gmap_show_polygons( <%=raw @items%>);
+               $(function () {
+                $('#datetimepicke1').datetimepicker({
+                   });
+             $('#datetimepicker6').datetimepicker({
+                   });
+             $('#datetimepicker7').datetimepicker({
+               format: 'DD-MM-YYYY HH:mm:ss',
+                 useCurrent: false //Important! See issue #1075
  
+             });
+             $("#datetimepicker6").on("dp.change", function (e) {
+ 
+                 $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+             });
+             $("#datetimepicker7").on("dp.change", function (e) {
+                 $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+             });
+         });
+          });
+    </script>
+
+
+ 
+    </div>
+
  

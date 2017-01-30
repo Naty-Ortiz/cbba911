@@ -18,21 +18,21 @@ class ComplainsController < ApplicationController
               end
               @patrol_units << [comp.code + ' ' + comp.name]
 
-            end
+             end
 
 
                 if params[:search]
                   @complains = Complain.search(params[:search]).order("created_at DESC")
                 else
                  @complains=Complain.where("created_at <?",DateTime.now ).paginate(:page => params[:page], :per_page => 10).order("created_at DESC")
-                 end
+                end
           elsif  @role_current_user==2
-            if params[:search]
-              @complains = Complain.search(params[:search]).order("created_at DESC")
-            else
-               @complains=Complain.where("created_at <?",DateTime.now ).paginate(:page => params[:page], :per_page => 10).order("created_at DESC")
-                 
-             end
+                if params[:search]
+                  @complains = Complain.search(params[:search]).order("created_at DESC")
+                else
+                   @complains=Complain.where("created_at <?",DateTime.now ).paginate(:page => params[:page], :per_page => 10).order("created_at DESC")
+                     
+                end
           end
         end
     end
@@ -52,82 +52,57 @@ class ComplainsController < ApplicationController
       @complain = Complain.find(params[:id])
       @asign_patrol_unit=params[:asign_patrol_unit]
       @complainant = Complainant.where(:complain_id => @complain.id).first
-      if @observationsAux!=nil
-
-      end
+      
     end
-    def caseReport
 
-   @complain = Complain.find(params[:id])
-   @complain.completeDate = Date.today
-   if @message.save
-    redirect_to myHomeMessages_path, :flash => { :success => "." }
-   else
-    redirect_to myHomeMessages_path, :flash => { :error => "." }
-   end
-
-    end
     def index_oficial
 
-      
-       
     end
-   # def autocomplete
-   #   @patrolUnits = PatrolUnit.all.map do |patrol_unit|
-    #    {
-     #     name: patrol_unit.name
-      #  }
-      #end
 
-  #render json: @patrolUnits
-#end
     def getColor(prob)
-        if prob>=0.0 && prob<=0.30
+      if prob>=0.0 && prob<=0.30
        return "#1B592B"
-       end
-        if  prob>=0.31 && prob<=0.49
-          return "#0431B4"
-        end
+      end
+      if  prob>=0.31 && prob<=0.49
+         return "#0431B4"
+      end
       if prob>=0.50 && prob<=0.79
          return "#E8F853"
-        end
-        if prob>=0.80 && prob<=0.100
-              
+      end
+        if prob>=0.80 && prob<=0.100  
           return"#FFFFFF"  
         end
-end
+      end
 
     def index2
-    
+    @complain= Complain.new
     @dateStart =  params[:startdate]
-    puts params[:startdate]
     @aux=@dateStart
     @aux2=@dateStart
-    
-    if @dateStart!=nil
-       @aux=@aux.split(' ')[1..-1].join(' ')
-       puts "asd"
-      puts  @aux2.split("/")[0]
-        puts "asdmmm"
-        puts  @aux2.split("/")[1]
-        puts"cdff"
-        puts  (@aux2.split("/")[2]).partition(" ").first
- puts"cdffjjjjjjjjj"
-    puts @aux
-    @aux=@aux.chomp(' AM')
-    puts "fdsffsd"
-    puts @aux
- @aux= DateTime.new( (@aux2.split("/")[2]).partition(" ").first.to_i,(@aux2.split("/")[0]).to_i,(@aux2.split("/")[1]).to_i,  (@aux.split(":")[0]).to_i, ( @aux.split(":")[1]).to_i, 0,0)
-   #@aux= Time.parse(@dateStart).strftime("%d/%m/%y").change({ hour: ( @aux.split(":")[0]).to_i, min:( @aux.split(":")[1]).to_i})
- #puts DateTime.new(@aux2.split("/")[0],@aux2.split("/")[1],(@aux2.split("/")[2]).partition(" ").first,@aux.split(":")[0]).to_i, ( @aux.split(":")[1]).to_i, 0,0) 
-  
-puts @aux
- else
-  @aux = Time.now
-    end
+       if @dateStart!=nil
+        @aux=@aux.split(' ')[1..-1].join(' ')
+        puts "asd"
+       puts  @aux2.split("/")[0]
+         puts "asdmmm"
+         puts  @aux2.split("/")[1]
+         puts"cdff"
+         puts  (@aux2.split("/")[2]).partition(" ").first
+  puts"cdffjjjjjjjjj"
+     puts @aux
+     @aux=@aux.chomp(' AM')
+     puts "fdsffsd"
+     puts @aux
+  @aux= DateTime.new( (@aux2.split("/")[2]).partition(" ").first.to_i,(@aux2.split("/")[0]).to_i,(@aux2.split("/")[1]).to_i,  (@aux.split(":")[0]).to_i, ( @aux.split(":")[1]).to_i, 0,0)
+    #@aux= Time.parse(@dateStart).strftime("%d/%m/%y").change({ hour: ( @aux.split(":")[0]).to_i, min:( @aux.split(":")[1]).to_i})
+
+    puts @dateStart
+   # @aux = Time.now
+ end
     @dateEnd=params[:enddate]
-    @turn=params[:turnHour]
-   @totalTodayDays = Complain.group("date_trunc('day',complains.created_at)").where('EXTRACT(DOW FROM complains.created_at) = ? and complains.created_at BETWEEN ? AND ? ', @aux.wday , @dateBegin,@dateFinal).count.size
+    if params[:complain]!=nil
+    @turn=params[:complain][:turnHour]
+    end
+    @totalTodayDays = Complain.group("date_trunc('day',complains.created_at)").where('EXTRACT(DOW FROM complains.created_at) = ? and complains.created_at BETWEEN ? AND ? ', @aux.wday , @dateBegin,@dateFinal).count.size
   
     @aux1 = Complain.joins(:crime).last
     @dateStartToTime =Time.now
@@ -137,24 +112,7 @@ puts @aux
     @totalDaysDB = Complain.group("date_trunc('day',complains.created_at)").where('  complains.created_at BETWEEN ? AND ? ', @dateBegin,@dateFinal).count.size
     @thereIsRecordsInDB = true
     @turnHour=""
-    if @turn!=nil
-      puts "entra"
-      puts case @turn
-      when '8:00-16:00'
-        @turnHour="morning"
-        puts"sad"
-        puts@turnHour
-      when '16:00-00:00'
-         @turnHour="afternoon"
-          puts"sad2"
-        puts@turnHour
-      else
-         @turnHour="night"
-          puts"sad3"
-        puts@turnHour
-      end
-    end
-
+    
     if @dateStart!=nil && @dateStart!=""
     if ((@aux.to_i>=@dateBegin.to_i )&&(@aux.to_i <=@dateFinal.to_i) ) 
        @dateStartToTime=  Time.parse(@dateStart)
@@ -288,6 +246,49 @@ puts @aux
         @listProb <<(@probSE0to8*100).round(2)
 
          @averageCrimesPerDay=@totalCrimes/@totalDaysDB.to_f 
+         @items= Array.new()
+         if @turn!=nil
+    
+      puts case @turn
+        
+      when '8:00-16:00'
+        @turnHour="Turno manhana"
+         @items= @items.clear()
+        @items <<(@probNO8to16*100).round(2)
+        @items <<(@probNE8to16*100).round(2)
+        @items <<(@probCN8to16*100).round(2)
+        @items <<(@probCS8to16*100).round(2)
+        @items <<(@probSO8to16*100).round(2)
+        @items <<(@probSE8to16*100).round(2)
+        puts"sad"
+        puts@turnHour
+      when '16:00-00:00'
+        @items= @items.clear()
+         @turnHour="Turno tarde"
+        @items <<(@probNO16to0*100).round(2)
+        @items <<(@probNE16to0*100).round(2)
+        @items <<(@probCN16to0*100).round(2)
+        @items <<(@probCS16to0*100).round(2)
+        @items <<(@probSO16to0*100).round(2)
+        @items <<(@probSE16to0*100).round(2)
+       
+          puts"sad2"
+        puts@turnHour
+      when '00:00-08:00'
+         @items= @items.clear()
+         @turnHour="Turno noche"
+        @items <<(@probNO0to8*100).round(2) 
+        @items <<(@probNE0to8*100).round(2)
+        @items <<(@probCN0to8*100).round(2)            
+        @items <<(@probCS0to8*100).round(2)  
+        @items <<(@probSO0to8*100).round(2)
+        @items <<(@probSE0to8*100).round(2)
+
+          puts"sad3"
+        puts@turnHour
+      end
+    end
+
         
         @norE= ComplainsAuxiliar.where( "delito  is NOT NULL  and 'complains_auxiliars.ZonaUrbana'  like ? ",'Nor Este').count
         puts "nore"
@@ -563,25 +564,58 @@ puts "msmdmkkkkmm"
        # end
      # end
 
-       
-#=begin
-  
-   
-     PatrolUnit.all.where("id >=433").each do |comp|
+=begin
+@aux = 5062
+  PatrolUnit.all.order("id ASC").where("id >=?", @aux).each do |comp|
 
       @id=comp.id
       @comp=comp.code.delete("\n")
-      @comp=@comp.gsub(/[^a-z0-9\s]/i, '')
+      @comp=@comp.gsub(/^A-Za-z0-9-,/, '')
+      @comp=@comp.strip
+      if PatrolUnit.where("id <= ?",@aux).exists?(code: @comp)
+        puts "asada"
+        puts @id 
+        puts "mnasdas"
+
+        @idAux= PatrolUnit.where(:code => @comp).pluck(:id).first.to_i
+          puts @idAux
+          puts "sdadasdasdsdasd"
+      Complain.all.where("patrol_unit_id =?", comp.id).each do |comp|
+       comp.update_attribute(:patrol_unit_id, @idAux)
+       comp.save!
+       end
+      
+       PatrolUnit.destroy(@id)
+       
+      else
+      comp.update_attribute(:code,  @comp)
+      comp.save!
+      end
+      @aux+=1
+      
+     end
+=end
+#
+
+
+=begin
+  
+   
+     PatrolUnit.all.order("id ASC").where("id >=5149").each do |comp|
+
+      @id=comp.id
+      @comp=comp.code.delete("\n")
+      @comp=@comp.gsub(/^A-Za-z0-9-,/, '')
       @comp=@comp.strip
       comp.update_attribute(:code,  @comp)
     comp.save!
      end
-#=end
+=end
 =begin
   
 
-     Complain.all.where("patrol_unit_id = 432").each do |comp|
-     comp.update_attribute(:patrol_unit_id, 28)
+     Complain.all.where("patrol_unit_id = 5149").each do |comp|
+     comp.update_attribute(:patrol_unit_id, 814)
      comp.save!
    end
 =end
@@ -592,6 +626,12 @@ puts "msmdmkkkkmm"
      
         if current_user.role==2 ||current_user.role==1
       #  check_box_params[:auxCrime]= @complain.crie.code+ ' ' +@complain.crime.name
+      if @complain.crime_id!=nil
+       @auxCrime= @complain.crime.code + ' ' + @complain.crime.name 
+     end
+     if @complain.contravertion_id!=nil
+       @auxContravertion= @complain.contravertion.code + ' ' + @complain.contravertion.name 
+     end
           @crimes = Array.new
           Crime.all.each do |comp|
             @crimes << [comp.code + ' ' + comp.name]
@@ -612,7 +652,8 @@ puts "msmdmkkkkmm"
       @complainant = Complainant.new(complainant_params)
       @crimes = Array.new
       @complain.user_id= current_user.id
-      @auxCrime= ' '
+      @auxCrime= ''
+      @auxContravertion=''
       Crime.all.each do |comp|
         @crimes << [comp.code + ' ' + comp.name]
       end
@@ -622,6 +663,16 @@ puts "msmdmkkkkmm"
       end
 
       if check_box_params[:crime]=='1'
+             puts"<zx<x"
+        @aux22=params[:auxCrime]
+puts @aux22
+ puts"<zx<xc"
+        @aux22=@aux22.split[0...2].join(' ')
+        puts @aux22
+        @aux22=@aux22 [4..-1]
+         puts"<zx<xvv"
+         puts @aux22
+         puts"asddadas"
         @auxCrime_id = Crime.where(:code =>(params[:auxCrime]).split[0...2].join(' ')).pluck(:id).first.to_i
       end
       if check_box_params[:contravertion]=='1'
@@ -659,45 +710,104 @@ puts "msmdmkkkkmm"
       end
     end
     def patrol_unit_asign
-      puts",,,,,,,,,,,"
-      puts params[:patrolUnitAux]
-      puts"sfsaf"
-      puts params[:complain][:complain_id]
-  
-      puts"asdasd"
+       @complain = Complain.find(params[:complain][:complain_id])
+       @patrol_unit_params= params[:complain][:patrolUnitAux]
+      
+       @caseReport= params[:complain][:caseReport]
+       @protagonists=params[:complain][:protagonists]
+       @shortReport=params[:complain][:shortReport]
+       @derivationCase=params[:complain][:derivationCase]
+      if @patrol_unit_params==nil
+        @patrol_unit_params=params[:patrolUnitAux].delete("\n")
+       @patrol_unit_params=@patrol_unit_params.gsub(/^A-Za-z0-9-,/, '')
+       @patrol_unit_params=@comp.strip
+      end
+    
+     
+     if @patrol_unit_params!=nil
+       @auxPatrolUnit = PatrolUnit.where(:code =>(@patrol_unit_params)).pluck(:id).first.to_i
+         if @auxPatrolUnit==0
+          @newPatrolUnit= PatrolUnit.new
+          @newPatrolUnit.code = params[:patrolUnitAux]
+          @newPatrolUnit.save!
+           @complain.update_attribute(:patrol_unit_id, @newPatrolUnit.id )
+        else
+          @complain.update_attribute(:patrol_unit_id,  params[:complain][:patrol_unit_id])
+          
+        end
+     respond_to do |format|
+       if @complain.save!
 
+     
+        flash[:notice]  = "Se asigno la unidad seleccionada" 
+        format.html { redirect_to action: "index", notice: 'Se asigno la unidad seleccionada'}
+     
+       else
+          flash[:error]+= 'Error al asignar unidad'+ '\n\n'
+          format.html { redirect_to action: "show", error: 'Error al asignar unidad' ,:patrolUnitAsign => true, :patrolUnitAux =>  @patrol_unit_params}
+       end
+      end
 
+    end
+end
+    def case_report
       @complain = Complain.find(params[:complain][:complain_id])
-       @auxPatrolUnit = PatrolUnit.where(:code =>(params[:patrolUnitAux])).pluck(:id).first.to_i
-          puts "fdafafnna"
-       puts @auxPatrolUnit
-                 puts "fdafafnna"
-       @complain.update_attribute(:patrol_unit_id,  params[:complain][:patrol_unit_id])
-   if @complain.save!
-    redirect_to complains_path, :flash => { :success => "Your message was closed." }
-   else
-    redirect_to show_path, :flash => { :error => "Error closing message." }
-   end
+
     end
 
     def update
-      puts "asddasd"
-      puts params[:patrolUnitAux]
-      puts "CZXVZV"
+  
+      @caseReport= params[:complain][:caseReport]
       @patrolUnitAux=  check_box_params[:patrolUnitAux]
+     puts params
+      @observationsAux=params[:observationsAux]
+      respond_to do |format|
 
-      if @patrolUnitAux!=nil
-
-      puts "fdafafnna"
-           puts check_box_params[:patrolUnitAux]
-           puts "sdfdf"
-            flash[:notice] = "Debe regtamente"
-         else 
-          puts"ff"
-          puts params
-          puts "fasdssdqeweqew"
-           flash[:notice] = "Debe registrar o una contraversion correctamente"
+      if @caseReport!=nil
+        flash[:error] =""
+       @complain = Complain.find(params[:complain][:complain_id])
+       @patrol_unit_params= params[:complain][:patrolUnitAux]
+       @complain.crime_id = @complain.crime_id
+       @complain.contravertion_id= @complain.contravertion_id
+       @complain.observations= @complain.observations
+       @protagonists=params[:complain][:protagonists]
+       @shortReport=params[:complain][:shortReport]
+       @derivationCase=params[:complain][:derivationCase]
+      if @caseReport=='yes'
+       
+        if params[:complain][:protagonists]==""
+         #redirect_to action: "show", notice: 'Falta llenar el campo protagosistas' }
+         flash[:error]  = "Debe registrar el campo protagonistas" + '\n\n'
+              format.html { redirect_to action: "show", error: 'Debe registrar el campo protagonistas' ,:caseReport => true, :protagonists =>  @protagonists}
+           #redirect_to show_path, :flash => { :error => "Error no existe unidad" }
+        elsif  params[:complain][:shortReport]==""
+          flash[:error]+= 'Debe registrar el campo breve informe'+ '\n\n'
+           format.html { redirect_to action: "show", error: 'Debe registrar el campo breve informe' ,:caseReport => true, :protagonists =>  @protagonists}
+          elsif  @derivationCase==""
+           flash[:error]+= 'Debe registrar el campo derivacion del caso '+ '\n\n'
+           format.html { redirect_to action: "show", error: 'Debe registrar el campo derivacion del caso' ,:caseReport => true, :protagonists =>  @protagonists}
+           
+        end
+        if @protagonists!=""&& @shortReport!=""&&@derivationCase!=""
+           @complain.update_attributes(:caseReport=> true, :shortReport =>@shortReport,:protagonists=>@protagonists,:derivationCase=>@derivationCase )
+           @complain.save!
+        end
+      elsif @caseReport=='no'
+         @complain.update_attribute(:caseReport, false)
+          @complain.save!
+           format.html { redirect_to action: "index"}
+      
       end
+
+      end
+
+      if params[:observationsAux]=="true"
+        @complain = Complain.find(params[:id])
+        @complain.observations = params[:observations]
+        @complain.crime_id = @complain.crime_id
+        @complain.contravertion_id= @complain.contravertion_id
+      end
+   
       if @observationsAux==nil
       @complain = Complain.find(params[:id])
 
@@ -717,11 +827,12 @@ puts "msmdmkkkkmm"
         end
 
       if check_box_params[:crime]=='1'
-        @auxCrime_id = Crime.where(:code =>(params[:auxCrime]).split[0...2].join(' ')).pluck(:id).first.to_i
-        puts Crime.where(:code =>(params[:auxCrime]).split[0...2].join(' ')).pluck(:id).first.to_i
+              
+        @auxCrime_id = Crime.where(:code =>(params[:auxCrime]).gsub('"', '').split[0...2].join(' ')).pluck(:id).first.to_i
+        puts Crime.where(:code =>(params[:auxCrime]).gsub('"', '').split[0...2].join(' ')).pluck(:id).first.to_i
       end
       if check_box_params[:contravertion]=='1'
-        @auxContravertion_id = Contravertion.where(:code =>(params[:auxContravertion]).split[0...2].join(' ')).pluck(:id).first.to_i
+        @auxContravertion_id = Contravertion.where(:code =>(params[:auxContravertion]).gsub('"', '').split[0...2].join(' ')).pluck(:id).first.to_i
       end
       if @auxCrime_id!=0
         @complain.crime_id = @auxCrime_id
@@ -730,10 +841,9 @@ puts "msmdmkkkkmm"
         @complain.contravertion_id = @auxContravertion_id
       end
     end
-    if params[:caseReport]=="yes"
-     end 
-      respond_to do |format|
-      @auxCrime= @complain.crime_id.code + ' ' + @complain.crime_id.name 
+  
+      
+
       @crime_id= @complain.crime_id
       @contravertion_id=@complain.contravertion_id
 
@@ -751,8 +861,8 @@ puts "msmdmkkkkmm"
                 @complain.save!
                 @complainant.complain_id= @complain.id
                 @complainant.save!
-                flash[:notice] = "Denuncia registrada exitosamente UPDATE"
-                format.html { redirect_to @complain }
+                
+                format.html { redirect_to action: "show", notice: 'Denuncia registrada exitosamente up' }
                 format.json { render :show, status: :created, location: @complain }
               end
         else

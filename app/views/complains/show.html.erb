@@ -46,8 +46,8 @@
       </tr>
 
   </table>  <hr>
-  <div class="field"   <% if @observationsAux=="true" %>style ="display:block"  <%else%> style ="display:none" <%end%>>
-    <%if ( current_user.role==1 || current_user.role==2 )&& @complain.observations==nil%>
+  <div class="field"   <% if @observationsAux=="true" || params[:observationsAux]=="true"%>style ="display:block"  <%else%> style ="display:none" <%end%>>
+    <%if ( current_user.role==1 || current_user.role==2 )&& ( @observationsAux=="true" || params[:observationsAux]=="true")%>
     <label>Observaciones <i class="fa fa-asterisk"></i></label><br>
 
     <%= form_for(@complain) do|f| %>
@@ -59,13 +59,17 @@
   <%end%>
   </div><br>
 
-  <div class="field"   <% if @caseReportAux=="true" %>style ="display:block"  <%else%> style ="display:none" <%end%>>
+  <div class="field"   <% if @caseReportAux=="true" || params[:caseReport]=="true"%>style ="display:block"  <%else%> style ="display:none" <%end%>>
     <%if ( current_user.role==1  && @complain.caseReport==nil)%>
+
     <label>Reporte del caso </label><br>
-    <%= form_for(@complain ) do|f| %>
+
+
+ <%= form_for(@complain) do|f| %>
+  <%= f.hidden_field :complain_id, :value => @complain.id %>
 
     <div class="field">
-        <%= f.radio_button  :caseReport, 'yes', :checked=>false,:id=>'caseReportA'%>
+        <%= f.radio_button  :caseReport, 'yes', :checked=> if (@caseReportAux=="true" || params[:caseReport]=="true" )then true  else false end,:id=>'caseReportA'%>
       <label ><span></span></label><sup>(marcar si el caso fue positivo  )</sup>
     </div>
     <div class="field">
@@ -74,13 +78,20 @@
       <label ><span></span></label><sup>(marcar si el caso fue negativo  )</sup>
     </div><br>
 
-      <div class="field" id="case_report"  style="display:none" >
+      <div class="field" id="case_report"  <% if (@caseReportAux=="true" || params[:caseReport]=="true" )
+ %> style ="display:block"  <%else%> style ="display:none" <%end%> >
          <label>Protagonistas <i class="fa fa-asterisk"></i></label>
-            <%= f.text_area( :protagonists,  :class => 'form-control small-text-area' ) %><br>
+            <%= f.text_area( :protagonists,  :value => if  params[:protagonists] != "" 
+       params[:protagonists]  else ""
+    end ,  :class => 'form-control small-text-area' ) %><br>
          <label>Breve Informe <i class="fa fa-asterisk"></i></label>
-         <%= f.text_area( :shortReport,  :class => 'form-control small-text-area' ) %><br>
+         <%= f.text_area( :shortReport,  :value => if  params[:shortReport] != "" 
+       params[:shortReport]  else ""
+    end ,:class => 'form-control small-text-area' ) %><br>
         <label>Remision del caso<i class="fa fa-asterisk"></i></label>
-         <%= f.text_area( :derivationCase,  :class => 'form-control small-text-area' ) %><br>
+         <%= f.text_area( :derivationCase, :value => if  params[:derivationCase] != "" 
+       params[:derivationCase]  else ""
+    end , :class => 'form-control small-text-area' ) %><br>
       </div><br>
 
 
@@ -94,14 +105,14 @@
 
     </div><br>
     <div class="field" <%if @asign_patrol_unit=="true"%>style ="display:block"<%else%>style="display:none" <%end%>>
-   
+    <%if @patrol_units!=nil%>
         <%= form_for(@complain, :url => { :action => "patrol_unit_asign" }, :html => { :method => :put } ) do |f| %>
                   <%= f.hidden_field :complain_id, :value => @complain.id %>
-            
-                   <%= f.awesomplete_field( :patrolUnitAux, collection: @patrol_units.map{|v| v.to_s}) %>
+                 <%= text_field_tag :patrolUnitAux,nil, class: 'awesomplete', data: { list:  @patrol_units.map{|v| v.to_s.encode("UTF-8").gsub!(/[^a-z0-9.\s]/i, '')}} %>
+                   
                 <%= f.submit 'Asignar', :class => 'btn btn-default'%> </td>
             <%end%>
-
+  <%end%>
     </div>
   <div style="padding-left:15px;">
     <strong>Ubicacion:</strong>

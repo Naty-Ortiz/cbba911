@@ -7,6 +7,7 @@ class Complain < ActiveRecord::Base
   before_validation :uppercase
 	attr_accessor :auxValue
 	 attr_accessor :patrolUnitAux
+	 attr_accessor :turnHour
 #	validates :description, :presence => {:message => ' no debe dejarse en blanco.'}
 #	validates :protagonists, :presence => {:message => ' no debe dejarse en blanco.'}
 

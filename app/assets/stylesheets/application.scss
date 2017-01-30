@@ -13,6 +13,8 @@
  *= require_tree
  *= require_styles.css
  *= require toastr
+ *= require bootstrap
+ *= require bootstrap-datetimepicker
  *= require bootstrap-timepicker
  *= require bootstrap-typeahead-rails
 
@@ -24,9 +26,10 @@
 @import 'selectivity'
 @import 'selectivity_bootstrap'
 
+
+@import 'bootstrap-sprockets';
+@import 'bootstrap';
 @import 'bootstrap-datetimepicker';
-@import "bootstrap-sprockets";
-@import "bootstrap";
 import $ from 'jquery';
 
  */

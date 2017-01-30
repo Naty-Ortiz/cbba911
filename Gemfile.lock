@@ -223,7 +223,7 @@ DEPENDENCIES
   bootstrap-sass
   bootstrap-timepicker-rails
   bootstrap-typeahead-rails
-  bootstrap3-datetimepicker-rails (~> 4.17.37)
+  bootstrap3-datetimepicker-rails (~> 4.17.43)
   bootstrap3_autocomplete_input
   carmen-rails
   chartkick

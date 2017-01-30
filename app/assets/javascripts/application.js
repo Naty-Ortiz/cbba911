@@ -10,11 +10,13 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 
+//= require jquery
+//= require jquery-ui
+//= require jquery_ujs
 
-
-
-//= require jQuery-2.1.4.min
 //= require bootstrap
+//= require bootstrap3-typeahead.min
+//= require bootstrap3-autocomplete-input.min
 //= require gmaps/google
 //= require underscore
 //= require markerclusterer
@@ -26,14 +28,10 @@
 //= require bootstrap-datetimepicker
 //= require bootstrap-timepicker
 //= require bootstrap-typeahead-rails
-//= require jquery2
 
-//= require bootstrap
-//= require bootstrap3-typeahead.min
-//= require bootstrap3-autocomplete-input.min
-//= require jquery
-//= require jquery-ui
-//= require jquery_ujs
+
+
+
 //= require toastr
 //= require turbolinks
 //= require Chart.bundle

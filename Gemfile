@@ -41,7 +41,7 @@ gem 'bootstrap-sass'
 
 gem 'will_paginate-bootstrap'
 gem 'momentjs-rails', '>= 2.9.0'
-gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
+gem 'bootstrap3-datetimepicker-rails', '~> 4.17.43'
 
 gem 'simple_form'
 gem 'bootstrap3_autocomplete_input'

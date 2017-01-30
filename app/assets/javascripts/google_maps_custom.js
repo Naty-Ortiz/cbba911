@@ -1,4 +1,4 @@
-
+;
 
 function gmap_show(project) {
     if ((project.latitude === null) || (project.longitude === null) ) {
@@ -143,36 +143,38 @@ handler.getMap().setZoom(38);
 
 }
 function getColorBorder (prob){
-        if (prob>=0.0 && prob<=0.30){
-       return "#1B592B"
+        if (prob>=0.0 && prob<=30){
+       return "#1B592B";
        }
-        if  (prob>=0.31 && prob<=0.49)
-        {  return "#1231C8"
+        if  (prob>=31 && prob<=49)
+        {  return "#1231C8";
         }
-      if (prob>=0.50 && prob<=0.79)
+      if (prob>=50 && prob<=79)
          {
-         return "#E8F853"
+         return "#E8F853";
        }
-        if (prob>=0.80 && prob<=1.0)
+        if (prob>=80 && prob<=100.0)
         {      
-          return"#FFFFFF"  
+          return"#FFFFFF"  ;
         }
 }
 
  
 
-function gmap_show_polygons(list,turn) {
+function gmap_show_polygons(list) {
   
 var todayDate = new Date();
 var todayHours = todayDate.getHours();
 var todayMinutes =todayDate.getMinutes();
-console.log( list)
-console.log( "ist")
-console.log( turn)
+console.log( list);
+console.log( "ist");
+console.log(list[0]);
+console.log(list[2]);
+console.log(list[3]);
+console.log(list[4]);
+console.log(list[5]);
 
-
-  
-  
+ 
  var handler = Gmaps.build('Google');
      handler.buildMap({ internal: {id: 'map'},provider: { scrollwheel: false, zoomControl: false , draggable: false}}, function(){
     
@@ -191,7 +193,7 @@ console.log( turn)
          ]
        ],
         {
-        "strokeColor": getColorBorder(list[1]),
+        "strokeColor": getColorBorder(list[0]),
 
       
         }
@@ -228,7 +230,7 @@ console.log( turn)
           ]
        ],
         {
-        "strokeColor": getColorBorder(list[1]),
+        "strokeColor": getColorBorder(list[2]),
         } 
 
      );
@@ -241,7 +243,7 @@ var polyCS = handler.addPolygons(
        ]
        ],
         {
-        "strokeColor": getColorBorder(list[1]),
+        "strokeColor": getColorBorder(list[3]),
         } 
 
      );
@@ -255,7 +257,7 @@ var polySW = handler.addPolygons(
        ]
        ],
         {
-        "strokeColor": getColorBorder(list[1]),
+        "strokeColor": getColorBorder(list[4]),
         } 
 
      );
@@ -269,11 +271,10 @@ var polySE = handler.addPolygons(
        ]
        ],
         {
-        "strokeColor": getColorBorder(list[1]),
+        "strokeColor": getColorBorder(list[5]),
         } 
 
      );
-function initialize() {
 
 
 var i;
@@ -281,41 +282,41 @@ var i;
  {
       lat: -17.284131, 
       lon:  -66.165636 ,
-      title: "probabilidad" +"es" +  list[1], 
+      title: "probabilidad" +"es" +  list[0], 
       description:"probabilidad" +"es" +  list[0]
     },
     {
       lat: -17.253969,  
       lon: -66.122377,
-      title: "probabilidad" +"es" +  list[0], 
-      description:"probabilidad" +"es" +  list[0]
+      title: "probabilidad" +"es" +  list[1], 
+      description:"probabilidad" +"es" +  list[1]
     },
      {
       lat: -17.365412,
       lon:  -66.147783, 
 
-      title: "probabilidad" +"es" +  list[0], 
-      description: "probabilidad" +"es" +  list[0]
+      title: "probabilidad" +"es" +  list[2], 
+      description: "probabilidad" +"es" +  list[2]
     },
      {
       lat: -17.415341,
       lon:  -66.142593, 
 
-      title: "probabilidad" + "es" +  list[2], 
-      description: "probabilidad" +"es" +  list[2]
+      title: "probabilidad" + "es" +  list[3], 
+      description: "probabilidad" +"es" +  list[3]
     },
      {
       lat: -17.468273,
       lon:   -66.211986, 
 
-      title: "probabilidad" +"es" +  list[0], 
-      description: "probabilidad" +"es" +  list[0]
+      title: "probabilidad" +"es" +  list[4], 
+      description: "probabilidad" +"es" +  list[4]
     }, {
       lat:-17.453208,
       lon:  -66.131990 , 
 
-      title: "probabilidad" +"es" +  list[1], 
-      description: "probabilidad" +"es" +  list[1]
+      title: "probabilidad" +"es" +  list[5], 
+      description: "probabilidad" +"es" +  list[5]
     }
   ];
   
@@ -324,8 +325,8 @@ var i;
   var myOptions = {
     zoom: 15,
     center: homeLatlng,
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-    scrollwheel:  false
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+    
   };
 
  
@@ -351,7 +352,10 @@ var i;
     infowindow.setContent( "<p>" + arrDestinations[i].description + "</p>"); 
     
   }
-}
+
+
+  
+ 
 
 function bindInfoWindow(marker, map, infowindow, html) { 
   google.maps.event.addListener(marker, 'click', function() { 
@@ -360,7 +364,6 @@ function bindInfoWindow(marker, map, infowindow, html) {
   }); 
 } 
 
-google.maps.event.addDomListener(window, 'load', initialize);
 
  
      handler.map.centerOn([-17.3941855, -66.1585695]);
@@ -376,3 +379,4 @@ google.maps.event.addDomListener(window, 'load', initialize);
   
    });
 }
+
