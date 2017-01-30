@@ -18,8 +18,18 @@
 
         <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
             <p style="color:red;">
-              <% if alert == 'Invalid login or password.' %>
+              <% if alert == 'Invalid Login or password.' %>
                   Usuario o contrase&ntilde;a invalidos.
+              <% end %>
+              <% if alert == 'Nombre de usuario o contrasenha invalida' %>
+                  Usuario o contrase&ntilde;a invalidos.
+                  <%User.find_by_username(params[:user][:login]).update_attribute(:numberWrongTries, User.find_by_username(params[:user][:login]).numberWrongTries.to_i+1)%>
+                  <%if User.find_by_username(params[:user][:login]).numberWrongTries>=5 %>
+                    <%User.find_by_username(params[:user][:login]).update_attribute(:active, false)%>
+                    <%if  User.find_by_username(params[:user][:login]).active==false%>
+                    <%flash[:error] = "Su cuenta ha sido deshabilitada, por favor pongase en contacto con su administrador"%>
+                  <%end%>
+                  <%end%>
               <% end %>
             </p>
             <p style="color:red;" id="error-box">  </p>

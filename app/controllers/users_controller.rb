@@ -63,7 +63,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        format.html { redirect_to @user, notice: 'El usuario fue creado ' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -77,10 +77,15 @@ class UsersController < ApplicationController
     @user.update_attribute(:active, false)
     redirect_to @user
   end
-
+  def addCounterWrongAttemps(name)
+    @user= User.find_by_username(name)
+    @count= User.find_by_username(name).numberWrongTries+1
+    @user.update_attribute(:numberWrongTries, @count)
+  end
   def activate
     @user = User.find(params[:id])
     @user.update_attribute(:active, true)
+    @user.update_attribute(:numberWrongTries, 0)
     redirect_to @user
   end
 

@@ -1,4 +1,4 @@
-;
+
 
 function gmap_show(project) {
     if ((project.latitude === null) || (project.longitude === null) ) {
@@ -154,15 +154,15 @@ function getColorBorder (prob){
          return "#E8F853";
        }
         if (prob>=80 && prob<=100.0)
-        {      
+        {
           return"#FFFFFF"  ;
         }
 }
 
- 
+
 
 function gmap_show_polygons(list) {
-  
+
 var todayDate = new Date();
 var todayHours = todayDate.getHours();
 var todayMinutes =todayDate.getMinutes();
@@ -174,28 +174,28 @@ console.log(list[3]);
 console.log(list[4]);
 console.log(list[5]);
 
- 
+
  var handler = Gmaps.build('Google');
      handler.buildMap({ internal: {id: 'map'},provider: { scrollwheel: false, zoomControl: false , draggable: false}}, function(){
-    
+
      var polyNW = handler.addPolygons(
        [
          [
-           {lat: -17.185103, lng: -66.161516}, 
+           {lat: -17.185103, lng: -66.161516},
            {lat: -17.186415, lng: -66.150529},
-           {lat:-17.187727,  lng: -66.145723},  
+           {lat:-17.187727,  lng: -66.145723},
            {lat: -17.200846, lng: -66.147783},
-           {lat: -17.210029, lng: -66.149843}, 
+           {lat: -17.210029, lng: -66.149843},
            {lat: -17.282164, lng: -66.145036},
-           {lat:-17.303144,  lng: -66.143663}, 
+           {lat:-17.303144,  lng: -66.143663},
            {lat:-17.349028,  lng: -66.141603},
-           {lat: -17.344440, lng: -66.210268},  
+           {lat: -17.344440, lng: -66.210268},
          ]
        ],
         {
         "strokeColor": getColorBorder(list[0]),
 
-      
+
         }
      );
 
@@ -204,16 +204,16 @@ console.log(list[5]);
        [
       [
        {lat:-17.246756,lng:-66.107957},
-       {lat:-17.187727,lng:-66.145723},     
+       {lat:-17.187727,lng:-66.145723},
        {lat:-17.282164,lng:-66.145036},
-       {lat:-17.303144,lng:-66.143663}, 
+       {lat:-17.303144,lng:-66.143663},
        {lat:-17.349028,lng:-66.141603},
-       {lat:-17.307733,lng:-66.061265 }, 
+       {lat:-17.307733,lng:-66.061265 },
          ]
        ],
         {
         "strokeColor": getColorBorder(list[1]),
-        } 
+        }
 
      );
 
@@ -223,15 +223,15 @@ console.log(list[5]);
        [
          [
          { lat:-17.392279,lng:-66.062984},
-         { lat:-17.307733,lng:-66.061265}, 
+         { lat:-17.307733,lng:-66.061265},
          { lat:-17.349028,lng:-66.141603},
          { lat:-17.344440,lng:-66.210268},
-         { lat:-17.425039,lng:-66.243572},      
+         { lat:-17.425039,lng:-66.243572},
           ]
        ],
         {
         "strokeColor": getColorBorder(list[2]),
-        } 
+        }
 
      );
 var polyCS = handler.addPolygons(
@@ -244,7 +244,7 @@ var polyCS = handler.addPolygons(
        ],
         {
         "strokeColor": getColorBorder(list[3]),
-        } 
+        }
 
      );
 var polySW = handler.addPolygons(
@@ -253,26 +253,26 @@ var polySW = handler.addPolygons(
          {lat:-17.425039,lng: -66.243572},
          {lat: -17.442072, lng:-66.207866},
          {lat: -17.483238,  lng:-66.177096},
-         {lat:-17.471953, lng:-66.216448},         
+         {lat:-17.471953, lng:-66.216448},
        ]
        ],
         {
         "strokeColor": getColorBorder(list[4]),
-        } 
+        }
 
      );
 var polySE = handler.addPolygons(
        [
-         [     
+         [
           {lat: -17.442072, lng:-66.207866},
           {lat:-17.392279, lng:-66.062984},
           {lat: -17.433432, lng:-66.072673 },
-          {lat: -17.483238,  lng:-66.177096},   
+          {lat: -17.483238,  lng:-66.177096},
        ]
        ],
         {
         "strokeColor": getColorBorder(list[5]),
-        } 
+        }
 
      );
 
@@ -280,58 +280,58 @@ var polySE = handler.addPolygons(
 var i;
   var arrDestinations = [
  {
-      lat: -17.284131, 
+      lat: -17.284131,
       lon:  -66.165636 ,
-      title: "probabilidad" +"es" +  list[0], 
+      title: "probabilidad" +"es" +  list[0],
       description:"probabilidad" +"es" +  list[0]
     },
     {
-      lat: -17.253969,  
+      lat: -17.253969,
       lon: -66.122377,
-      title: "probabilidad" +"es" +  list[1], 
+      title: "probabilidad" +"es" +  list[1],
       description:"probabilidad" +"es" +  list[1]
     },
      {
       lat: -17.365412,
-      lon:  -66.147783, 
+      lon:  -66.147783,
 
-      title: "probabilidad" +"es" +  list[2], 
+      title: "probabilidad" +"es" +  list[2],
       description: "probabilidad" +"es" +  list[2]
     },
      {
       lat: -17.415341,
-      lon:  -66.142593, 
+      lon:  -66.142593,
 
-      title: "probabilidad" + "es" +  list[3], 
+      title: "probabilidad" + "es" +  list[3],
       description: "probabilidad" +"es" +  list[3]
     },
      {
       lat: -17.468273,
-      lon:   -66.211986, 
+      lon:   -66.211986,
 
-      title: "probabilidad" +"es" +  list[4], 
+      title: "probabilidad" +"es" +  list[4],
       description: "probabilidad" +"es" +  list[4]
     }, {
       lat:-17.453208,
-      lon:  -66.131990 , 
+      lon:  -66.131990 ,
 
-      title: "probabilidad" +"es" +  list[5], 
+      title: "probabilidad" +"es" +  list[5],
       description: "probabilidad" +"es" +  list[5]
     }
   ];
-  
+
     var homeLatlng = new google.maps.LatLng(-17.442072, -66.207866);
 
   var myOptions = {
     zoom: 15,
     center: homeLatlng,
     mapTypeId: google.maps.MapTypeId.ROADMAP
-    
+
   };
 
- 
 
-  
+
+
 
   var infowindow =  new google.maps.InfoWindow({
     content: ''
@@ -345,30 +345,30 @@ var i;
       position: new google.maps.LatLng(arrDestinations[i].lat, arrDestinations[i].lon),
       map: handler.getMap()
     });
-    
+
     // add an event listener for this marker
     bindInfoWindow(marker, map, infowindow, "<p>" + arrDestinations[i].description + "</p>");
-    
-    infowindow.setContent( "<p>" + arrDestinations[i].description + "</p>"); 
-    
+
+    infowindow.setContent( "<p>" + arrDestinations[i].description + "</p>");
+
   }
 
 
-  
- 
-
-function bindInfoWindow(marker, map, infowindow, html) { 
-  google.maps.event.addListener(marker, 'click', function() { 
-    infowindow.setContent(html); 
-    infowindow.open(map, marker); 
-  }); 
-} 
 
 
- 
+
+function bindInfoWindow(marker, map, infowindow, html) {
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.setContent(html);
+    infowindow.open(map, marker);
+  });
+}
+
+
+
      handler.map.centerOn([-17.3941855, -66.1585695]);
      handler.bounds.extendWith(polyNW);
-    
+
      handler.bounds.extendWith(polyNE);
      handler.bounds.extendWith(polyCN);
      handler.bounds.extendWith(polyCS);
@@ -376,7 +376,6 @@ function bindInfoWindow(marker, map, infowindow, html) {
      handler.bounds.extendWith(polySE);
      handler.fitMapToBounds();
      handler.getMap().setZoom(12);
-  
+
    });
 }
-

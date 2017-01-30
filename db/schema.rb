@@ -11,10 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170114133026) do
+ActiveRecord::Schema.define(version: 20170130193958) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "activity_logs", force: :cascade do |t|
+    t.string   "user_id"
+    t.string   "browser"
+    t.string   "ip_address"
+    t.string   "controller"
+    t.string   "action"
+    t.string   "params"
+    t.string   "note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "announcements", force: :cascade do |t|
     t.string   "title"
@@ -236,6 +248,7 @@ ActiveRecord::Schema.define(version: 20170114133026) do
     t.boolean  "active"
     t.string   "username",               default: "",    null: false
     t.boolean  "password_alteration",    default: false
+    t.integer  "numberWrongTries",       default: 0,     null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

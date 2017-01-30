@@ -44,13 +44,13 @@ $(function(){
     }
 });
 function updateComplains(){
-    $.getScript("/complains.js")
+    $.getScript("/complains.js");
     setTimeout(updateComplains,10000);
 }
 
     $(document).ready(function() {
-    
-    
+
+
      toastr.options = {
                       "closeButton": false,
                       "debug": false,
@@ -64,8 +64,8 @@ function updateComplains(){
                       "hideEasing": "linear",
                       "showMethod": "fadeIn",
                       "hideMethod": "fadeOut"
-                  }
-    
+                  };
+
     });
 var ready = function(){
 
@@ -199,6 +199,3 @@ $('#complain_form').on('keyup keypress', function(e) {
     return false;
   }
 });
-
-
-

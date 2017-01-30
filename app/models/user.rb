@@ -27,7 +27,11 @@ class User < ActiveRecord::Base
 
       super and self.active?
     end
-
+    def addCounterWrongAttemps(name)
+      @user= User.find_by_username(name)
+      @count= User.find_by_username(name).numberWrongTries+1
+      @user.update_attribute(:numberWrongTries, @count)
+    end
   def verify_password
     if changed.include?('encrypted_password') && self.sign_in_count != 0
       self.password_alteration = 1
