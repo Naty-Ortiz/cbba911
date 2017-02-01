@@ -5,8 +5,7 @@ class User < ActiveRecord::Base
   has_many :complains
 
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
-         #,  :timeoutable
+         :recoverable, :rememberable, :trackable, :validatable,  :timeoutable
 
   attr_accessor :login
 

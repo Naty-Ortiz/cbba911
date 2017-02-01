@@ -81,16 +81,25 @@ class ComplainsController < ApplicationController
     def index2
     @complain= Complain.new
     record_activity("visalizacion de probabilidad de delitos")
+    @aux3=0
     @dateStart =  params[:startdate]
      if @dateStart!=nil
+       @aux=@dateStart
         @aux=@aux.split(' ')[1..-1].join(' ')
         @aux=@aux.chomp(' AM')
+        @aux2=@dateStart
         @aux= DateTime.new( (@aux2.split("/")[2]).partition(" ").first.to_i,(@aux2.split("/")[0]).to_i,(@aux2.split("/")[1]).to_i,  (@aux.split(":")[0]).to_i, ( @aux.split(":")[1]).to_i, 0,0)
+        @aux3=@aux
+        @aux=@aux.to_s
+        
         else
            @dateStart=Time.now.to_s
+           @aux3=Time.now
+           @aux=@dateStart
+           @aux2=@aux
+        
      end
-    @aux=@dateStart
-    @aux2=@dateStart
+   
     puts "sdfds"
     puts @aux
     puts "sdfdf"
@@ -357,6 +366,7 @@ class ComplainsController < ApplicationController
     record_activity("visalizacion de probabilidad de contraverciones")
     @dateStart =  params[:startdate]
      if @dateStart!=nil
+      @aux=@dateStart
         @aux=@aux.split(' ')[1..-1].join(' ')
         @aux=@aux.chomp(' AM')
         @aux= DateTime.new( (@aux2.split("/")[2]).partition(" ").first.to_i,(@aux2.split("/")[0]).to_i,(@aux2.split("/")[1]).to_i,  (@aux.split(":")[0]).to_i, ( @aux.split(":")[1]).to_i, 0,0)
