@@ -5,7 +5,7 @@ function gmap_show(project) {
         return 0;
     }
 
-    handler = Gmaps.build('Google');
+    var handler = Gmaps.build('Google');
     handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
         markers = handler.addMarkers([
             {
@@ -23,7 +23,6 @@ function gmap_show(project) {
         handler.getMap().setZoom(17);
     });
 }
-
 
 function gmap_form(project) {
     handler = Gmaps.build('Google');
@@ -81,11 +80,17 @@ function gmap_form(project) {
  handler.getMap().controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
  // Bias the SearchBox results towards current map's viewport.
+ var southWest = new google.maps.LatLng( -17.465455, -66.160446);
+var northEast = new google.maps.LatLng( -17.321628, -66.194778 );
+var east = new google.maps.LatLng( -17.407151, -66.006637);
+var west = new google.maps.LatLng( -17.394047, -66.285758 );
+var defaultBounds = new google.maps.LatLngBounds( east,west );
+var options = {
+    bounds:defaultBounds,
+   
+    componentRestrictions:  {region: "CB" ,country: "BO"}
+};
 
- var options = {
-
-  componentRestrictions: {country: "bol"}
- };
 
 
  var autocomplete = new google.maps.places.Autocomplete(input, options);
@@ -124,7 +129,7 @@ handler.getMap().setZoom(38);
 
      // Create a marker for each place.
      markers.push(new google.maps.Marker({
-       map: map,
+       map: handler.getMap(),
        icon: icon,
        title: place.name,
        position: place.geometry.location
@@ -142,6 +147,7 @@ handler.getMap().setZoom(38);
  handler.getMap().setZoom(18);
 
 }
+
 function getColorBorder (prob){
         if (prob>=0.0 && prob<=30){
        return "#1B592B";

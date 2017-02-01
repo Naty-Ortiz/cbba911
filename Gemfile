@@ -9,6 +9,9 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 
 gem 'jquery-rails'
+
+gem 'gmaps-autocomplete-rails', '~> 0.2.0'
+
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -42,7 +45,7 @@ gem 'bootstrap-sass'
 gem 'will_paginate-bootstrap'
 gem 'momentjs-rails', '>= 2.9.0'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.17.43'
-
+gem 'geocoder'
 gem 'simple_form'
 gem 'bootstrap3_autocomplete_input'
 
@@ -75,5 +78,4 @@ gem 'font-awesome-rails'
 
 
 gem 'toastr-rails'
-gem 'gmaps-autocomplete-rails'
 gem 'rails_12factor', group: :production

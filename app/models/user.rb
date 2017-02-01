@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+         #,  :timeoutable
+
   attr_accessor :login
 
   validates :username, :uniqueness => {:message => 'ya fue registrado, no debe repetirse'}

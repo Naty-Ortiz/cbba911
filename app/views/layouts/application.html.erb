@@ -3,6 +3,10 @@
 <head>
   <title>Sistema de Registro de Denuncias 911</title>
 
+<script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOQXCYjFFpBjDbJm_YX1BfBCxJNgMXYxA&libraries=places">
+    </script>
+
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= yield :javascript_includes %>
@@ -11,13 +15,8 @@
 
 
 
-
 <%= javascript_include_tag "bootstrap" if Rails.env.development? %>
 
-
-<script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOQXCYjFFpBjDbJm_YX1BfBCxJNgMXYxA">
-    </script>
 
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 

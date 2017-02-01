@@ -58,6 +58,9 @@ class ComplainsController < ApplicationController
     def index_oficial
 
     end
+     def index_logs
+
+    end
 
     def getColor(prob)
       if prob>=0.0 && prob<=0.30
@@ -715,7 +718,7 @@ puts @aux22
       if @patrol_unit_params==nil
         @patrol_unit_params=params[:patrolUnitAux].delete("\n")
        @patrol_unit_params=@patrol_unit_params.gsub(/^A-Za-z0-9-,/, '')
-       @patrol_unit_params=@comp.strip
+       @patrol_unit_params=@patrol_unit_params.strip
       end
 
 
@@ -748,6 +751,16 @@ end
     def case_report
       @complain = Complain.find(params[:complain][:complain_id])
 
+    end
+    def index_logs
+       if user_signed_in?
+         
+            @role_current_user = current_user.role
+          
+          if   @role_current_user==1
+            @activities= ActivityLog.all
+          end
+        end   
     end
 
     def update
