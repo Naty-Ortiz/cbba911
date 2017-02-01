@@ -12,3 +12,4 @@ Rails.application.config.assets.version = '1.0'
 Rails.application.config.assets.precompile += %w( bootstrap.min.js )
 Rails.application.config.assets.precompile += %w( jquery-3.1.0.min.js )
 Rails.application.config.assets.precompile += %w( bootstrap.js )
+Rails.application.config.assets.precompile += %w( google_maps_custom.js )
