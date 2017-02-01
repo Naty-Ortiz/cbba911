@@ -56,12 +56,7 @@ class ComplainsController < ApplicationController
 
     end
 
-    def index_oficial
-
-    end
-     def index_logs
-
-    end
+    
 
     def getColor(prob)
       if prob>=0.0 && prob<=0.30
