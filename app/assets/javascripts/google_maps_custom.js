@@ -87,8 +87,8 @@ var west = new google.maps.LatLng( -17.394047, -66.285758 );
 var defaultBounds = new google.maps.LatLngBounds( east,west );
 var options = {
     bounds:defaultBounds,
-   
-    componentRestrictions:  {region: "CB" ,country: "BO"}
+    type:['establishment'],
+    componentRestrictions:  {country: "BO",city: "BO.CB" }
 };
 
 

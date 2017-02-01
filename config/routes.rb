@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     put '/complains'=>'complains#patrol_unit_asign'
     put '/complains?:id'=>'complains#case_report'
     get '/index_logs'=> 'complains#index_logs'
+    get '/index_contravertions'=> 'complains#index_contravertions'
 
   resources :patrol_units
     resources :reports, except: [:new,:index]

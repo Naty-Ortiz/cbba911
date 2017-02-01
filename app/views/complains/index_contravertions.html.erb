@@ -1,0 +1,142 @@
+<div class="center"><h2><b>Probabilidad de ocurrencia de contraverciones  para el <%=Time.parse(@aux).strftime("%d/%m/%y")%></b></h2>
+</div><br><br>
+
+ <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>
+        <div style="padding:12px;background-color:#B80202;line-height:1.4;">
+         <font color="#F8F5F5">100% a 80% probabilidad muy alta</font>
+        </div></th>
+        <th>
+        <div style="padding:12px;background-color:#F4F00C;line-height:1.4;">
+          <font color="">79% a 50% probabilidad alta</font>
+        </div>
+        </th>
+        <th>
+        <div style="padding:12px;background-color:#0431B4;line-height:1.4;">
+         <font color="#F8F8F9">31% a 49% probabilidad media</font>
+        </div></th>
+        <th>
+        <div style="padding:12px;background-color:#047702;line-height:1.4;">
+          <font color="#F8F8F9">0% a 30% probabilidad baja</font>
+      </div> </th>
+      </tr>
+    </thead>
+    </table>  <br>
+ <div class="form-inline">
+
+        <%= form_tag('/index2', :method => 'get', :id =>"eventForm"  ) do |f|%>
+           <div class="col-md-14 col-md-offset-3">
+              <label>Seleccione la fecha</label>
+               <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' id ="startdate" name ="startdate"class="form-control" />
+                       
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                     <script type="text/javascript">
+                  $(function () {
+                    $('#datetimepicker1').datetimepicker();
+                  });
+                </script>
+                </div>
+              <%= submit_tag 'Buscar', class: 'btn btn-default' %>
+            </div>
+        <% end %>
+  </div><br>
+
+<div class="jumbotron">
+  <table class="table">
+    <thead>
+    <tr>
+    <th>Zona</th>
+    <th>Turno ma&#241;ana </th>
+    <th >Turno tarde</th>
+    <th >Turno noche</th>
+    </tr>
+  </thead>
+ <tbody class="cream-pixels">
+     <tr><td>Nor Oeste</td>
+     <td><b><font color=<%=getColor(@probNO8to16)%>><%=(@probNO8to16*100).round(2)%></font></b></td> 
+     <td><b><font color=<%=getColor(@probNO8to16)%>> <%=(@probNO16to0*100).round(2)%></font></b></td> 
+     <td><b><font color=<%=getColor(@probNO0to8)%>> <%=(@probNO0to8*100).round(2)%></font></b></td> 
+     </tr>
+     <tr> <td>Nor Este</td>
+     <td><b><font color=<%=getColor(@probNE8to16)%>><%=(@probNE8to16*100).round(2)%></font></b></td> 
+     <td><b><font color=<%=getColor(@probNE16to0)%>><%=(@probNE16to0*100).round(2)%></font></b></td> 
+     <td><b><font color=<%=getColor(@probNE0to8)%>> <%=(@probNE0to8*100).round(2)%></font></b></td> 
+    </tr>
+     <tr><td>Central norte</td> 
+     <td><b><font color= <%=getColor(@probCN8to16)%>><%=(@probCN8to16*100).round(2)%></font></b></td> 
+     <td><b><font color=<%=getColor(@probCN16to0)%>> <%=(@probCN16to0*100).round(2)%></font></b></td> 
+     <td><b><font color=<%=getColor(@probCN0to8)%>>   <%=(@probCN0to8*100).round(2)%></font></b></td> 
+     </tr>
+     <tr><td>Central Sud</td>
+     <td><b><font color=<%=getColor(@probCS8to16)%>> <%=(@probCS8to16*100).round(2)%></font></b></td> 
+     <td><b><font color=<%=getColor(@probCS16to0)%>> <%=(@probCS16to0*100).round(2)%></font></b></td> 
+     <td><b><font color=<%=getColor(@probCS0to8)%>> <%=(@probCS0to8*100).round(2)%></font></b></td> 
+     </tr>
+     <tr><td>Sud Oeste</td> 
+     <td><b><font color=<%=getColor(@probSO8to16)%>> <%=(@probSO8to16 * 100).round(2)%></font></b></td> 
+     <td><b><font color=<%=getColor(@probSO16to0)%>> <%=(@probSO16to0 * 100).round(2)%></font></b></td> 
+     <td><b><font color=<%=getColor(@probSO0to8)%>> <%=(@probSO0to8*100).round(2)%></font></b></td> 
+    </tr>
+     <tr> <td>Sud Este</td>
+     <td><b><font color=<%=getColor(@probSE8to16)%>> <%=(@probSE8to16*100).round(2)%></font></b></td> 
+     <td><b><font color=<%=getColor(@probSE16to0)%>> <%=(@probSE16to0*100).round(2)%></font></b></td> 
+     <td><b><font color=<%=getColor(@probSE0to8)%>> <%=(@probSE0to8*100).round(2)%></font></b></td> 
+     </tr>
+  </tbody>
+  </table>
+ </div>
+   <%= form_for(@complain, :url => { :action => "index2" }, :html => { :method => :get } ) do |f| %>
+    <div class="form-inline">
+    <div class="col-md-8 col-md-offset-3">      
+        <label>Seleccione el turno</label> 
+         <div class="form-group">
+          <%= f.hidden_field :startdate, :value => @aux %>
+        <%= f.select   :turnHour,  ['8:00-16:00','16:00-00:00','00:00-08:00'] ,{},:class => 'form-control'  %>              
+        <%= f.submit 'Seleccionar ', :class => 'btn btn-default'%> </td>
+        <%end%>
+    </div>
+</div></div>
+ <div class="field" <%if @turnHour=="Turno manhana" || @turnHour=="Turno noche"|| @turnHour=="Turno tarde"|| params[:turnHour]%>style ="display:block"<%else%>style="display:none" <%end%>>
+
+<br><br><label><%=@turnHour%></label>
+<div style='width: 800px;'> 
+  <div id="map" style='width: 800px; height: 1000px;'></div>
+</div>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+               
+               gmap_show_polygons( <%=raw @items%>);
+               $(function () {
+                $('#datetimepicke1').datetimepicker({
+                   });
+             $('#datetimepicker6').datetimepicker({
+                   });
+             $('#datetimepicker7').datetimepicker({
+               format: 'DD-MM-YYYY HH:mm:ss',
+                 useCurrent: false //Important! See issue #1075
+ 
+             });
+             $("#datetimepicker6").on("dp.change", function (e) {
+ 
+                 $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+             });
+             $("#datetimepicker7").on("dp.change", function (e) {
+                 $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+             });
+         });
+          });
+    </script>
+
+
+ 
+    </div>
+
+ 

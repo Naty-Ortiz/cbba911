@@ -4,7 +4,7 @@
   <title>Sistema de Registro de Denuncias 911</title>
 
 <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOQXCYjFFpBjDbJm_YX1BfBCxJNgMXYxA&libraries=places">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOQXCYjFFpBjDbJm_YX1BfBCxJNgMXYxA&input=Cochabamba&location=-17.3895000,-66.1568000&radius=500&types=geocode&language=es&libraries=places">
     </script>
 
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
@@ -64,7 +64,8 @@
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#"><b>Estadistica </b><span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="/index2">Ver probabilidad por fecha</a></li>
+            <li><a href="/index2">Ver probabilidad de delitos por fecha</a></li>
+             <li><a href="/index_contravertions">Ver probabilidad de contraverciones por fecha</a></li>
             <li><a href="/index_aux">Promedio de delitos vs delitos registrados</a></li>
           </ul>
         </li>
@@ -72,7 +73,7 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#"><b>Usuarios </b><span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="/users">Ver usuarios</a></li>
-
+            <li><a href="/index_logs">Actividad de los usuarios dentro el sistema</a></li>
           </ul>
         </li>
          <li class="dropdown">

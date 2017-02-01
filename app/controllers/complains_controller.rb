@@ -6,6 +6,7 @@ class ComplainsController < ApplicationController
 
      helper_method :getColor
     def index
+      record_activity("Visualizacion de denuncias")
         if user_signed_in?
           @patrol_units = Array.new
             @role_current_user = current_user.role
@@ -79,15 +80,20 @@ class ComplainsController < ApplicationController
 
     def index2
     @complain= Complain.new
+    record_activity("visalizacion de probabilidad de delitos")
     @dateStart =  params[:startdate]
      if @dateStart!=nil
         @aux=@aux.split(' ')[1..-1].join(' ')
         @aux=@aux.chomp(' AM')
         @aux= DateTime.new( (@aux2.split("/")[2]).partition(" ").first.to_i,(@aux2.split("/")[0]).to_i,(@aux2.split("/")[1]).to_i,  (@aux.split(":")[0]).to_i, ( @aux.split(":")[1]).to_i, 0,0)
-
+        else
+           @dateStart=Time.now.to_s
      end
     @aux=@dateStart
     @aux2=@dateStart
+    puts "sdfds"
+    puts @aux
+    puts "sdfdf"
      if params[:complain]!=nil
     @turn=params[:complain][:turnHour]
       if params[:complain][:startdate]!=nil
@@ -344,6 +350,278 @@ class ComplainsController < ApplicationController
          @probSO=@probSO.to_f*100
         #  end
     end
+
+    def index_contravertions
+
+    @complain= Complain.new
+    record_activity("visalizacion de probabilidad de contraverciones")
+    @dateStart =  params[:startdate]
+     if @dateStart!=nil
+        @aux=@aux.split(' ')[1..-1].join(' ')
+        @aux=@aux.chomp(' AM')
+        @aux= DateTime.new( (@aux2.split("/")[2]).partition(" ").first.to_i,(@aux2.split("/")[0]).to_i,(@aux2.split("/")[1]).to_i,  (@aux.split(":")[0]).to_i, ( @aux.split(":")[1]).to_i, 0,0)
+      else
+       
+           @dateStart=Time.now.to_s
+     end
+    @aux=@dateStart
+    @aux2=@dateStart
+     if params[:complain]!=nil
+    @turn=params[:complain][:turnHour]
+      if params[:complain][:startdate]!=nil
+        @dateStart = params[:complain][:startdate]
+        @aux=@dateStart
+        @aux2=@dateStart
+      end
+    end
+
+    @dateEnd=params[:enddate]
+
+    @totalTodayDays = Complain.group("date_trunc('day',complains.created_at)").where('EXTRACT(DOW FROM complains.created_at) = ? and complains.created_at BETWEEN ? AND ? ', Time.parse(@aux).wday , @dateBegin,@dateFinal).count.size
+
+    @aux1 = Complain.joins(:crime).last
+    @dateStartToTime =Time.now
+    @probOfDay=1
+    @dateBegin = Complain.first.created_at
+    @dateFinal =Complain.last.created_at
+    @totalDaysDB = Complain.group("date_trunc('day',complains.created_at)").where('  complains.created_at BETWEEN ? AND ? ', @dateBegin,@dateFinal).count.size
+    @thereIsRecordsInDB = true
+    @turnHour=""
+
+    if @dateStart!=nil && @dateStart!=""
+    if ((@aux.to_i>=@dateBegin.to_i )&&(@aux.to_i <=@dateFinal.to_i) )
+       @dateStartToTime=  @aux
+    elsif (@aux.to_i<@dateBegin.to_i)
+         @thereIsRecordsInDB = false
+    elsif  (@aux.to_i>=Time.now.to_i)
+           @dateStartToTime=  @aux
+           puts "nnnn"
+           puts @totalTodayDays
+           puts"nnnnnnn"
+           puts @totalDaysDB
+           @probOfDay=@totalTodayDays/@totalDaysDB.to_f
+     end
+     end
+
+         # @dateStart = DateTime.new params[:startdate]["{:ampm=>true}(1i)"].to_i,params[:startdate] ["{:ampm=>true}(2i)"].to_i, params[:startdate]["{:ampm=>true}(3i)"].to_i, params[:startdate]["{:ampm=>true}(4i)"].to_i,  params[:startdate]["{:ampm=>true}(5i)"].to_i
+          #@dateEnd = DateTime.new params[:enddate]["{:ampm=>true}(1i)"].to_i, params[:enddate]["{:ampm=>true}(2i)"].to_i, params[:enddate]["{:ampm=>true}(3i)"].to_i, params[:enddate]["{:ampm=>true}(4i)"].to_i, params[:enddate]["{:ampm=>true}(5i)"].to_i
+
+         #@dateS=@dateStart.strftime("%d/%m/%Y")
+        # @dateE=@dateEnd.strftime("%d/%m/%Y")
+        # @hourE= @dateEnd.strftime("%H:%M")
+         #@hourS =@dateStart.strftime("%H:%M")
+         # @aux= Complain.joins(:crime).group("date_trunc('day',complains.created_at)").where('EXTRACT(DOW FROM complains.created_at) = ? and complains.created_at BETWEEN ? AND ? ', 5, '2014-11-09 09:00','2014-11-17 09:00').count
+
+
+    puts @totalDaysDB
+    @totalHoursDB = 24 * @totalDaysDB
+   @dateBegin = Complain.first.created_at
+         @dateFinal =Complain.last.created_at
+    @totalTodayDays = Complain.group("date_trunc('day',complains.created_at)").where('EXTRACT(DOW FROM complains.created_at) = ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , @dateBegin,@dateFinal).count.size
+    if @dateStart!=nil && @dateStart!=""
+     if ( @aux.to_i>Time.now.to_i)
+      @probOfDay= @totalTodayDays.to_f/@totalDaysDB
+     end
+    end
+       @totalHoursTodayDays = @totalTodayDays *8
+
+       @totalCrimes = Complain.joins("JOIN contravertions ON contravertions.id = complains.contravertion_id " ).count
+       @totalContravertions = Contravertion.includes(:complains).count
+        @totalHoursDB = @totalDaysDB*24
+        @totalCrimesDayToday = Complain.where( ' EXTRACT(DOW FROM complains.created_at) = ? and complains.created_at BETWEEN ? AND ? ',@dateStartToTime.wday , @dateBegin,@dateFinal).includes(:crimes).count
+        @totalCrimesDayTodayBetween8to16 =  Complain.joins("JOIN contravertions ON contravertions.id = complains.contravertion_id " ).where( ' EXTRACT(DOW FROM complains.created_at) = ?  and complains.created_at::time BETWEEN ? AND ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , '08:00:00','15:59:59' , @dateBegin,@dateFinal).count
+        @totalCrimesDayTodayBetween16to0 =  Complain.joins("JOIN contravertions ON contravertions.id = complains.contravertion_id " ).where( 'EXTRACT(DOW FROM complains.created_at) = ?  and   complains.created_at::time BETWEEN ? AND ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , '16:00:00','23:59:59' , @dateBegin,@dateFinal).count
+            puts "total"
+        @totalCrimesDayTodayBetween0to8 =  Complain.joins("JOIN contravertions ON contravertions.id = complains.contravertion_id " ).where( ' EXTRACT(DOW FROM complains.created_at) = ?  and  complains.created_at::time BETWEEN ? AND ? and complains.created_at BETWEEN ? AND ? ', @dateStartToTime.wday , '00:00:00','07:59:59'  , @dateBegin,@dateFinal).count
+        @totalCrimesZoneNorEste=  Complain.joins("JOIN contravertions ON contravertions.id = complains.contravertion_id " ).where( ' complains.zone = ? ', 'Nor Este').count
+        @totalContravertionsZoneNorEste=  Complain.includes(:crimes).where( '  complains.zone = ? ', 'Nor Este').count
+        @probDay = @totalTodayDays/@totalDaysDB.to_f
+
+        @probDayCrime=@totalCrimesDayToday.to_f/(@totalCrimes+@totalContravertions)
+
+        @probCrime =( @totalCrimesDayTodayBetween8to16/(@totalDaysDB+@totalHoursDB.to_f)) + (@totalCrimesDayTodayBetween16to0/(@totalDaysDB+@totalHoursDB.to_f))+(  @totalCrimesDayTodayBetween0to8/(@totalDaysDB+@totalHoursDB.to_f) )
+    #NOR ESTE INI
+        @probZoneNE =( @totalCrimesZoneNorEste.to_f+@totalContravertionsZoneNorEste)/ (@totalCrimes+@totalContravertions)
+        @probDayAndHourRange8to16 =( @totalCrimesDayTodayBetween8to16/(@totalHoursDB+@totalDaysDB.to_f))/@probCrime
+        @probDayAndHourRange16to0 =( @totalCrimesDayTodayBetween16to0 /(@totalHoursDB+@totalDaysDB.to_f))/@probCrime
+        @probDayAndHourRange0to8 =( @totalCrimesDayTodayBetween0to8/(@totalHoursDB+@totalDaysDB.to_f))/@probCrime
+
+        @probNE8to16 =( @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneNE.to_f
+        @probNE16to0 =( @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange16to0.to_f ) / @probZoneNE.to_f
+
+        @probNE0to8 =( @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange0to8.to_f ) / @probZoneNE.to_f
+
+      #FIN NOR ESTE
+      #ini no oeste
+      @totalCrimesZoneNorOeste=   Complain.joins("JOIN contravertions ON contravertions.id = complains.contravertion_id " ).where( ' complains.zone = ? ', 'Nor Oeste').count
+      @totalContravertionsZoneNorOeste=   Complain.includes(:crimes).where( ' complains.zone = ? ', 'Nor Oeste').count
+      @probZoneNO= ( @totalCrimesZoneNorOeste.to_f+@totalContravertionsZoneNorOeste)/ (@totalCrimes+@totalContravertions)
+      @probNO8to16 =(  @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneNO.to_f
+      @probNO16to0 =(  @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange16to0.to_f ) / @probZoneNO.to_f
+      @probNO16to0=@probNO16to0.round(1)
+      @probNO0to8 =(  @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange0to8.to_f ) / @probZoneNO.to_f
+       @probNO0to8 = @probNO0to8.round(1)
+      #fin nor oeste
+      #CENTRAL NORTE
+      @totalCrimesZoneCentralNorte=   Complain.joins("JOIN contravertions ON contravertions.id = complains.contravertion_id " ).where( '  complains.zone = ? ', 'Nor Oeste').count
+      @totalContravertionsZoneCentralNorte=  Complain.includes(:crimes).where( '  complains.zone = ? ', 'Central Norte').count
+      @probZoneCN= ( @totalCrimesZoneCentralNorte.to_f+@totalContravertionsZoneCentralNorte)/ (@totalCrimes+@totalContravertions)
+      @probCN8to16 =( @probOfDay*  @probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneCN.to_f
+      @probCN16to0 =( @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange16to0.to_f ) / @probZoneCN.to_f
+      @probCN0to8 =(  @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange0to8.to_f ) / @probZoneCN.to_f
+      # FIN CN
+      #ini cs
+       @totalCrimesZoneCentralSud=  Complain.joins("JOIN contravertions ON contravertions.id = complains.contravertion_id " ).where( ' complains.zone = ? ', 'Nor Oeste').count
+      @totalContravertionsZoneCentralSud=  Complain.includes(:crimes).where( '  complains.zone = ? ', 'Central Sud').count
+      @probZoneCS= ( @totalCrimesZoneCentralSud.to_f+@totalContravertionsZoneCentralSud)/ (@totalCrimes+@totalContravertions)
+      @probCS8to16 =(  @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneCS.to_f
+      @probCS16to0 =( @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange16to0.to_f ) / @probZoneCS.to_f
+      @probCS0to8 =(  @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange0to8.to_f ) / @probZoneCS.to_f
+     #fin cs
+     #ini sud este
+      @totalCrimesZoneSudEste=   Complain.joins("JOIN contravertions ON contravertions.id = complains.contravertion_id " ).where(   'complains.zone = ? ', 'Nor Oeste').count
+      @totalContravertionsZoneSudEste=  Complain.includes(:crimes).where( ' complains.zone = ? ', 'Sud Este').count
+      @probZoneSE= ( @totalCrimesZoneSudEste.to_f+@totalContravertionsZoneSudEste)/ (@totalCrimes+@totalContravertions)
+      @probSE8to16 =( @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneSE.to_f
+      @probSE16to0 =( @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange16to0.to_f ) / @probZoneSE.to_f
+      @probSE0to8 =(  @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange0to8.to_f ) / @probZoneSE.to_f
+
+    #fin sud este
+     #ini sud oeste
+     @totalCrimesZoneSudEste=   Complain.joins("JOIN contravertions ON contravertions.id = complains.contravertion_id " ).where( ' complains.zone = ? ', 'Nor Oeste').count
+      @totalContravertionsZoneSudEste=  Complain.includes(:crimes).where( '  complains.zone = ? ', 'Sud Oeste').count
+      @probZoneSO= ( @totalCrimesZoneSudEste.to_f+@totalContravertionsZoneSudEste)/ (@totalCrimes+@totalContravertions)
+      @probSO8to16 =(  @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange8to16.to_f ) / @probZoneSO.to_f
+      @probSO16to0 =(  @probOfDay* @probDayCrime.to_f *  @probDayAndHourRange16to0.to_f ) / @probZoneSO.to_f
+      @probSO0to8 =(   @probOfDay*@probDayCrime.to_f *  @probDayAndHourRange0to8.to_f ) / @probZoneSO.to_f
+
+    #fin sdoeste
+
+
+        @listProb =Array.new()
+        @listProb <<(@probNO8to16*100).round(2)
+        @listProb <<(@probNE8to16*100).round(2)
+        @listProb <<(@probCN8to16*100).round(2)
+        @listProb <<(@probCS8to16*100).round(2)
+        @listProb <<(@probSO8to16*100).round(2)
+        @listProb <<(@probSE8to16*100).round(2)
+
+        @listProb <<(@probNO16to0*100).round(2)
+        @listProb <<(@probNE16to0*100).round(2)
+        @listProb <<(@probCN16to0*100).round(2)
+        @listProb <<(@probCS16to0*100).round(2)
+        @listProb <<(@probSO16to0*100).round(2)
+        @listProb <<(@probSE16to0*100).round(2)
+
+        @listProb <<(@probNO0to8*100).round(2)
+        @listProb <<(@probNE0to8*100).round(2)
+        @listProb <<(@probCN0to8*100).round(2)
+        @listProb <<(@probCS0to8*100).round(2)
+        @listProb <<(@probSO0to8*100).round(2)
+        @listProb <<(@probSE0to8*100).round(2)
+
+         @averageCrimesPerDay=@totalCrimes/@totalDaysDB.to_f
+         @items= Array.new()
+         if @turn!=nil
+
+      puts case @turn
+
+      when '8:00-16:00'
+        @turnHour="Turno manhana"
+         @items= @items.clear()
+        @items <<(@probNO8to16*100).round(2)
+        @items <<(@probNE8to16*100).round(2)
+        @items <<(@probCN8to16*100).round(2)
+        @items <<(@probCS8to16*100).round(2)
+        @items <<(@probSO8to16*100).round(2)
+        @items <<(@probSE8to16*100).round(2)
+        puts"sad"
+        puts@turnHour
+      when '16:00-00:00'
+        @items= @items.clear()
+         @turnHour="Turno tarde"
+        @items <<(@probNO16to0*100).round(2)
+        @items <<(@probNE16to0*100).round(2)
+        @items <<(@probCN16to0*100).round(2)
+        @items <<(@probCS16to0*100).round(2)
+        @items <<(@probSO16to0*100).round(2)
+        @items <<(@probSE16to0*100).round(2)
+
+          puts"sad2"
+        puts@turnHour
+      when '00:00-08:00'
+         @items= @items.clear()
+         @turnHour="Turno noche"
+        @items <<(@probNO0to8*100).round(2)
+        @items <<(@probNE0to8*100).round(2)
+        @items <<(@probCN0to8*100).round(2)
+        @items <<(@probCS0to8*100).round(2)
+        @items <<(@probSO0to8*100).round(2)
+        @items <<(@probSE0to8*100).round(2)
+
+          puts"sad3"
+        puts@turnHour
+      end
+    end
+
+
+        @norE= ComplainsAuxiliar.where( "delito  is NOT NULL  and 'complains_auxiliars.ZonaUrbana'  like ? ",'Nor Este').count
+        puts "nore"
+        puts @norE
+        @norO = ComplainsAuxiliar.where( "delito  is NOT NULL AND  'complains_auxiliars.ZonaUrbana'  like ? ",'Nor Oeste').count
+        @centralN = ComplainsAuxiliar.where( "delito  is NOT NULL AND 'complains_auxiliars.ZonaUrbana'  like ?","Central Norte").count
+
+         @centralS= ComplainsAuxiliar.where( "complains_auxiliars.delito  is NOT NULL AND  'complains_auxiliars.ZonaUrbana'  like ? ","Central Sud").count
+         @surE= ComplainsAuxiliar.where( "delito  is NOT NULL AND  'complains_auxiliars.ZonaUrbana'  like ? ","Sud Este").count
+         @surO = ComplainsAuxiliar.where( "delito  is NOT NULL AND  'complains_auxiliars.ZonaUrbana'  like ? ","Sud Oeste").count
+
+        # @errorNE =   ((( @probNE * (1-  @probNE )) / @averageCrimesPerDay)**0.5)*1.96
+        # @espNE= @averageCrimesPerDay *  @probNE
+         #@inINE =  (@probNE.to_f-@errorNE ) *100
+         #@inSNE =  (@probNE.to_f+@errorNE ) *100
+
+
+         @probNO= @norO.to_f/ @totalCrimes.to_f
+         puts @nor0.to_f.to_s + "nor|"
+         puts  @totalCrime
+         puts   @probN0.to_s    + "pron"
+
+         @errorNO =   ((( @probNO * (1-  @probNO )) / @averageCrimesPerDay)**0.5)*1.96
+         @espNO= @averageCrimesPerDay *  @probNO
+         @inINO =  (@probNO.to_f-@errorNO) *100
+         @inSNO =  (@probNO.to_f+@errorNO ) *100
+         @probN0=@probN0.to_f*100
+
+         @probCN= @centralN.to_f/ @totalCrime.to_f
+         @errorCN =   ((( @probCN * (1-  @probCN )) / @averageCrimesPerDay)**0.5)*1.96
+         @espCN= @averageCrimesPerDay *  @probCN
+         @inICN =  (@probCN.to_f-@errorCN ) *100
+         @inSCN =  (@probCN.to_f+@errorCN ) *100
+         @probCN=@probCN.to_f*100
+
+         @probCS= @centralS.to_f/ @totalCrime.to_f
+         @errorCS =   ((( @probCS * (1-  @probCS )) / @averageCrimesPerDay)**0.5)*1.96
+
+         @espCS= @averageCrimesPerDay *  @probCS
+         @inICS =  (@probCS.to_f-@errorCS ) *100
+         @inSCS =  (@probCS.to_f+@errorCS ) *100
+         @probCS=@probCS.to_f*100
+
+        @probSE= @surE.to_f/ @totalCrime.to_f
+         @errorSE =   ((( @probSE * (1-  @probSE )) / @averageCrimesPerDay)**0.5)*1.96
+         @espSE= @averageCrimesPerDay *  @probSE.to_f
+         @inISE =  (@probSE.to_f-@errorSE ) *100
+         @inSSE =  (@probSE.to_f+@errorSE ) *100
+         @probSE=@probSE.to_f*100
+
+         @probSO= @surO.to_f/ @totalCrime.to_f
+         @errorSO =   ((( @probSO * (1-  @probSO )) / @averageCrimesPerDay)**0.5)*1.96
+         @espSO= @averageCrimesPerDay *  @probSO
+         @inISO =  (@probSO.to_f-@errorSO ) *100
+         @inSSO =  (@probSO.to_f+@errorSO ) *100
+         @probSO=@probSO.to_f*100
+        #  end
+    end
     def index3
      #@differenceHour=(((strftime('%s', '2011-11-10 11:46') - strftime('%s', '2011-11-09 09:00')) % (60 * 60 * 24)) / (60 * 60)
 
@@ -433,6 +711,7 @@ class ComplainsController < ApplicationController
     end
 
     def index_aux
+      record_activity("visalizacion de grafica de promedios vs delitos registrados")
           @dateStartToTime =Time.now
     @dateBegin = Complain.order("complains.created_at ASC").first.created_at
     @dateFinal =Complain.order("complains.created_at ASC").last.created_at
@@ -525,6 +804,7 @@ puts "msmdmkkkkmm"
   end
 
     def new
+      record_activity("Registro de nueva Denuncia ")
         if current_user.role==2 ||current_user.role==1
           @complain = Complain.new
           @complainant = Complainant.new
@@ -618,6 +898,7 @@ puts "msmdmkkkkmm"
 =end
    end
     def edit
+      record_activity("Denuncia editada")
         @complain = Complain.find(params[:id])
         @complainant = Complainant.where(:complain_id => @complain.id).first
 
@@ -643,70 +924,109 @@ puts "msmdmkkkkmm"
     end
 
 
-
-    def create
-      @complain = Complain.new(complain_params)
-      @complainant = Complainant.new(complainant_params)
-      @crimes = Array.new
-      @complain.user_id= current_user.id
-      @auxCrime= ''
-      @auxContravertion=''
-      Crime.all.each do |comp|
-        @crimes << [comp.code + ' ' + comp.name]
-      end
-      @contravertions = Array.new
-      Contravertion.all.each do |comp|
-        @contravertions << [comp.code + ' ' + comp.name]
-      end
-
-      if check_box_params[:crime]=='1'
-             puts"<zx<x"
-        @aux22=params[:auxCrime]
-puts @aux22
- puts"<zx<xc"
-        @aux22=@aux22.split[0...2].join(' ')
-        puts @aux22
-        @aux22=@aux22 [4..-1]
-         puts"<zx<xvv"
+   def create
+        @complain = Complain.new(complain_params)
+       @complainant = Complainant.new(complainant_params)
+       @crimes = Array.new
+       @complain.user_id= current_user.id
+       @auxCrime= ''
+       @auxContravertion=''
+       Crime.all.each do |comp|
+         @crimes << [comp.code + ' ' + comp.name]
+       end
+       @contravertions = Array.new
+       Contravertion.all.each do |comp|
+         @contravertions << [comp.code + ' ' + comp.name]
+       end
+ 
+       if check_box_params[:crime]=='1'
+              puts"<zx<x"
+         @aux22=params[:auxCrime]
+ puts @aux22
+  puts"<zx<xc"
+         @aux22=@aux22.split[0...2].join(' ')
          puts @aux22
-         puts"asddadas"
-        @auxCrime_id = Crime.where(:code =>(params[:auxCrime]).split[0...2].join(' ')).pluck(:id).first.to_i
-      end
-      if check_box_params[:contravertion]=='1'
-        @auxContravertion_id = Contravertion.where(:code =>(params[:auxContravertion]).split[0...2].join(' ')).pluck(:id).first.to_i
-      end
-      if @auxCrime_id!=0
-        @complain.crime_id = @auxCrime_id
-      end
-      if @auxContravertion_id!=0
-          @complain.contravertion_id = @auxContravertion_id
-      end
-
-      respond_to do |format|
-        if (check_box_params[:crime]=='0'&& check_box_params[:contravertion]=='0')|| ( @auxCrime_id== 0 && @auxContravertion_id==0 ) || (check_box_params[:crime]=='1' && @auxCrime_id == 0)|| (check_box_params[:contravertion]=='1' && @auxContravertion_id == 0)
-          flash[:notice] = "Debe registrar un delito o una contraversion correctamente"
-          format.html { render :new }
-          format.json { render json: @complain.errors, status: :unprocessable_entity }
-        end
-        if  @complain.valid?
-              if !@complainant.valid?
-                format.html { render :new}
-                format.json { render json: @complainant.errors, status: :unprocessable_entity }
-              else
-                @complain.save!
-                 record_activity("Denucia registrada")
-                @complainant.complain_id= @complain.id
-                @complainant.save!
-                flash[:notice] = "Denuncia registrada exitosamente"
-                format.html { redirect_to @complain }
-                format.json { render :show, status: :created, location: @complain }
-              end
-        else
-           format.html { render :new}
+         @aux22=@aux22 [4..-1]
+          puts"<zx<xvv"
+          puts @aux22
+          puts"asddadas"
+         @auxCrime_id = Crime.where(:code =>(params[:auxCrime]).split[0...2].join(' ')).pluck(:id).first.to_i
+       end
+       if check_box_params[:contravertion]=='1'
+         @auxContravertion_id = Contravertion.where(:code =>(params[:auxContravertion]).split[0...2].join(' ')).pluck(:id).first.to_i
+       end
+       if @auxCrime_id!=0
+         @complain.crime_id = @auxCrime_id
+       end
+       if @auxContravertion_id!=0
+           @complain.contravertion_id = @auxContravertion_id
+       end
+ 
+       respond_to do |format|
+         if (check_box_params[:crime]=='0'&& check_box_params[:contravertion]=='0')|| ( @auxCrime_id== 0 && @auxContravertion_id==0 ) || (check_box_params[:crime]=='1' && @auxCrime_id == 0)|| (check_box_params[:contravertion]=='1' && @auxContravertion_id == 0)
+           flash[:notice] = "Debe registrar un delito o una contraversion correctamente"
+           format.html { render :new }
            format.json { render json: @complain.errors, status: :unprocessable_entity }
          end
-      end
-    end
+         if  @complain.valid?
+               if !@complainant.valid?
+                 format.html { render :new}
+                  format.json { render json: @complainant.errors, status: :unprocessable_entity }
+                else
+                  @complain.save!
+                  record_activity("Denuncia registrada")
+                  @complainant.complain_id= @complain.id
+                  @complainant.save!
+                  flash[:notice] = "Denuncia registrada exitosamente"
+                 format.html { redirect_to action: "index" }
+                 format.json { render :show, status: :created, location: @complain }
+               end
+         else
+            format.html { render :new}
+            format.json { render json: @complain.errors, status: :unprocessable_entity }
+          end
+       end
+     end
+      def patrol_unit_asign
+         @complain = Complain.find(params[:complain][:complain_id])
+         @patrol_unit_params= params[:complain][:patrolUnitAux]
+
+         @caseReport= params[:complain][:caseReport]
+         @protagonists=params[:complain][:protagonists]
+         @shortReport=params[:complain][:shortReport]
+        @derivationCase=params[:complain][:derivationCase]
+       if @patrol_unit_params==nil
+         @patrol_unit_params=params[:patrolUnitAux].delete("\n")
+         @patrol_unit_params=@patrol_unit_params.gsub(/^A-Za-z0-9-,/, '')
+         @patrol_unit_params=@comp.strip
+        end
+
+       if @patrol_unit_params!=nil
+         @auxPatrolUnit = PatrolUnit.where(:code =>(@patrol_unit_params)).pluck(:id).first.to_i
+           if @auxPatrolUnit==0
+           @newPatrolUnit= PatrolUnit.new
+           @newPatrolUnit.code = params[:patrolUnitAux]
+           @newPatrolUnit.save!
+             @complain.update_attribute(:patrol_unit_id, @newPatrolUnit.id )
+          else
+            @complain.update_attribute(:patrol_unit_id,  params[:complain][:patrol_unit_id])
+ 
+          end
+       respond_to do |format|
+         if @complain.save!
+  
+          record_activity("Asignacion de unidad")
+         flash[:notice]  = "Se asigno la unidad seleccionada"
+          format.html { redirect_to action: "index", notice: 'Se asigno la unidad seleccionada'}
+
+         else
+            flash[:error]+= 'Error al asignar unidad'+ '\n\n'
+            format.html { redirect_to action: "show", error: 'Error al asignar unidad' ,:patrolUnitAsign => true, :patrolUnitAux =>  @patrol_unit_params}
+        end
+       end
+ 
+     end
+ end
     def patrol_unit_asign
        @complain = Complain.find(params[:complain][:complain_id])
        @patrol_unit_params= params[:complain][:patrolUnitAux]
@@ -758,7 +1078,8 @@ end
             @role_current_user = current_user.role
           
           if   @role_current_user==1
-            @activities= ActivityLog.all
+            record_activity("Visualizacion de logs")
+            @activities= ActivityLog.all.paginate(:page => params[:page], :per_page => 10).order("created_at DESC")
           end
         end   
     end
@@ -798,6 +1119,7 @@ end
         end
         if @protagonists!=""&& @shortReport!=""&&@derivationCase!=""
            @complain.update_attributes(:caseReport=> true, :shortReport =>@shortReport,:protagonists=>@protagonists,:derivationCase=>@derivationCase )
+           record_activity("Registro de reporte de caso")
            @complain.save!
         end
       elsif @caseReport=='no'
@@ -809,7 +1131,7 @@ end
 
       end
 
-      if params[:observationsAux]=="true"
+      if params[:complain][:observations]!=""
         @complain = Complain.find(params[:id])
         @complain.observations = params[:observations]
         @complain.crime_id = @complain.crime_id
@@ -848,7 +1170,7 @@ end
       if @auxContravertion_id!=0
         @complain.contravertion_id = @auxContravertion_id
       end
-    end
+ 
 
 
 
@@ -869,7 +1191,7 @@ end
                 @complain.save!
                 @complainant.complain_id= @complain.id
                 @complainant.save!
-
+                record_activity("denuncia modificada")
                 format.html { redirect_to action: "show", notice: 'Denuncia registrada exitosamente up' }
                 format.json { render :show, status: :created, location: @complain }
               end
@@ -878,12 +1200,13 @@ end
            format.json { render json: @complain.errors, status: :unprocessable_entity }
          end
       end
-
+   end
   end
 
     def destroy
       @complain.destroy
       respond_to do |format|
+        record_activity("Denuncia eliminada")
         format.html { redirect_to complains_url, notice: 'denuncia eliminado exitosamente.' }
         format.json { head :no_content }
       end
