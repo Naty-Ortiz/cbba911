@@ -59,16 +59,16 @@ class ComplainsController < ApplicationController
     
 
     def getColor(prob)
-      if prob>=0.0 && prob<=30
+      if prob>=0.0 && prob<=0.30
        return "#1B592B"
       end
-      if  prob>=31 && prob<=49
+      if  prob>=0.31 && prob<=0.49
          return "#0431B4"
       end
-      if prob>=50 && prob<=79
+      if prob>=0.50 && prob<=0.79
          return "#E8F853"
       end
-        if prob>=80 && prob<=100
+        if prob>=0.80 && prob<=1.00
           return"#FFFFFF"
         end
       end

@@ -13,7 +13,7 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
-
+//= require google_maps_custom
 
 //= require bootstrap
 //= require bootstrap3-typeahead.min
