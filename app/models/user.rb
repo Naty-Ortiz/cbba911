@@ -18,11 +18,11 @@ class User < ActiveRecord::Base
   end
 
   def self.search(search)
-    where("username LIKE ?", "%#{search}%")
+    where("username ILIKE ?", "%#{search}%")
   end
 
   search = 'admin'
-  User.where('username LIKE ?', "#{search}[0-9][0-9][0-9][0-9]")
+  User.where('username ILIKE ?', "#{search}[0-9][0-9][0-9][0-9]")
 
   def active_for_authentication?
 

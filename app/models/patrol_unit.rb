@@ -10,7 +10,7 @@ class PatrolUnit < ActiveRecord::Base
 
 
 	def self.search(search)
-		where("code LIKE :search OR name LIKE :search ", search:"%#{search}%")
+		where("code ILIKE :search OR name ILIKE :search ", search:"%#{search}%")
 	end
 
 

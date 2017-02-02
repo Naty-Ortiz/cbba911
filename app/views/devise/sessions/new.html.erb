@@ -29,7 +29,7 @@
                     <%if  User.find_by_username(params[:user][:login]).active==false%>
                     <%flash[:error] = "Su cuenta ha sido deshabilitada, por favor pongase en contacto con su administrador"%>
                      <p style="color:red;">
-                    <% if alert == "Su cuenta ha sido deshabilitada, por favor pongase en contacto con su administrador" %>
+                    <% if flash[:error]  == "Su cuenta ha sido deshabilitada, por favor pongase en contacto con su administrador" %>
                        Su cuenta ha sido deshabilitada, por favor pongase en contacto con su administrador
                     <% end %>
                   <%end%>

@@ -30,7 +30,7 @@ end
     @activity.controller = controller_name
     @activity.action = action_name
     @activity.params = params.inspect
-    @activity.save!
+    #@activity.save!
 end
 
   before_filter do

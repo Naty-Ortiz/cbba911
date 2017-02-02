@@ -43,6 +43,10 @@ GEM
       execjs
     awesomplete (0.0.6)
       rails (~> 4.0)
+    axlsx (2.0.1)
+      htmlentities (~> 4.3.1)
+      nokogiri (>= 1.4.1)
+      rubyzip (~> 1.0.0)
     bcrypt (3.1.11)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
@@ -87,6 +91,7 @@ GEM
     gmaps4rails (2.1.2)
     groupdate (3.1.1)
       activesupport (>= 3)
+    htmlentities (4.3.4)
     i18n (0.7.0)
     jbuilder (2.6.1)
       activesupport (>= 3.0.0, < 5.1)
@@ -152,6 +157,7 @@ GEM
       railties (>= 4.2.0, < 5.1)
     rest-client (1.6.9)
       mime-types (~> 1.16)
+    rubyzip (1.0.0)
     sass (3.4.23)
     sass-rails (5.0.6)
       railties (>= 4.0.0, < 6)
@@ -206,9 +212,11 @@ GEM
       execjs (>= 0.3.0, < 3)
     warden (1.2.6)
       rack (>= 1.0)
+    wicked_pdf (1.1.0)
     will_paginate (3.1.5)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
+    wkhtmltopdf-binary (0.12.3.1)
     yaml2env (0.2.1)
       activesupport
     yaml_db (0.4.2)
@@ -221,6 +229,7 @@ PLATFORMS
 DEPENDENCIES
   adminlte-rails
   awesomplete
+  axlsx
   bootstrap-sass
   bootstrap-timepicker-rails
   bootstrap-typeahead-rails
@@ -258,7 +267,9 @@ DEPENDENCIES
   turbolinks
   tzinfo-data
   uglifier (>= 1.3.0)
+  wicked_pdf
   will_paginate-bootstrap
+  wkhtmltopdf-binary
   yaml2env
   yaml_db
 

@@ -14,7 +14,7 @@ class Complainant < ActiveRecord::Base
 	# validates :longitude, numericality: { message: ' debe ser un numero' }
 
 	def self.search(search)
-		where("name LIKE :search ", search:"%#{search}%")
+		where("name ILIKE :search ", search:"%#{search}%")
 	end
 
 

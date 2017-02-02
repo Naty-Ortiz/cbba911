@@ -4,8 +4,8 @@
  <script src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.1/awesomplete.js"></script>
  
  <%= form_for(@complain, id:'complain_form', controller:'complains') do |f|%>
- 
- <%if ( @complain.errors.any? ||  @complainant.errors.any? || flash[:notice].to_s== "Debe registrar un delito o una contraversion correctamente")%>
+ <%if  @complain == nil %><%puts "com nul"%><%end%>  <%if  @complainant == nil %><%puts "comtt nul"%><%end%>
+ <%if ( @complain.errors.any? || flash[:notice].to_s== "Debe registrar un delito o una contraversion correctamente")%>
  <div class="row">
      <div class="col-md-4 col-md-offset-4">
      <div class="panel panel-danger">
@@ -17,12 +17,14 @@
         <% end %>
        </ul>
    <%end%>
+   <%if @complainant!=nil%>
    <% if @complainant.errors.any?  %>
        <ul class="list-group">
        <% @complainant.errors.full_messages.each do |message| %>
              <li class='list-group-item'><%= message %></li>
        <% end %>
        </ul>
+     <%end%>  
    <%end%>
    <% if flash[:notice] %>
  
@@ -116,7 +118,7 @@
       </div><br>
    </div>
      <div class="actions center">
-       <%= f.submit 'Registrar', :class => 'btn btn-default'  %>
+       <%= f.submit 'Registrar denuncia', :class => 'btn btn-default'  %>
      </div>
  <%end%>
  <script type="text/javascript">

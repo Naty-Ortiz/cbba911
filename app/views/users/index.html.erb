@@ -1,24 +1,37 @@
 <% if current_user.role != 1 %>
     <h1> No se tiene permiso para ver esta pagina </h1>
 <% else %>
-    <%= render :partial => 'static_pages/notice_panel' %>
 
-    <div class="row">
-      <div class="col-md-7">
-        <h1>Buscar Usuarios</h1>
-        <br>
-      </div>
-      <div class="col-md-5">
+<%= render :partial => 'static_pages/notice_panel' %>
 
-        <div class="form-inline">
-          <br>
-          <%= form_tag(users_path, :method => 'get', id: 'search-form') do %>
+<div class="row">
+  <div class="col-md-7">
+    <h1>Buscar Usuarios</h1>
+    <br>
+  </div>
+  <div class="col-md-5">
+      <%= render :partial => 'users/search' %>
+    <div class="form-inline">
+      <br>
+      <%= form_tag(users_path, :method => 'get', id: 'search-form') do %>
               <%= text_field_tag :search, params[:search], placeholder: 'Nombre de usuario', :class=>'form-control' %>
               <%= submit_tag 'Buscar' ,:class=>'btn btn-default'%>
-          <% end %>
-        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<%if @users.empty? %>
+    <div class="row center actions panel panel-danger">
+      <div class="panel-heading">
+      <%if params[:search]%>
+         <h4>Su busqueda no generó resultados</h4>
+      <%else%>
+         <h4>No existen usuarios en este momento</h4>
+      <%end%>
       </div>
     </div>
+
+<%else%>
 
     <h1>Lista de Usuarios</h1>
       <div class="col-md-6 col-md-offset-3">
@@ -65,4 +78,5 @@
         <%= will_paginate @users,  :previous_label => 'Atras', :next_label => 'Siguiente', :container => true ,renderer: BootstrapPagination::Rails%>
       </div>
     </div><br>
+<% end %>
 <% end %>

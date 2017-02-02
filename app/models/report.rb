@@ -9,6 +9,6 @@ class Report < ActiveRecord::Base
   validates :regulatory_framework, presence: {:message => 'no debe dejarse en blanco'}
 
     def self.search(search)
-      where("title LIKE :search ", search:"%#{search}%")
+      where("title ILIKE :search ", search:"%#{search}%")
     end
 end

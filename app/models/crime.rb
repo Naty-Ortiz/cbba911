@@ -11,7 +11,7 @@ class Crime< ActiveRecord::Base
 
 
 	def self.search(search)
-		where("name LIKE :search ", search:"%#{search}%")
+		where("name ILIKE :search ", search:"%#{search}%")
 	end
 
 

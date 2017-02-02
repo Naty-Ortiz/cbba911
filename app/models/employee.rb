@@ -8,6 +8,6 @@ class Employee < ActiveRecord::Base
 #  validates :agent_id, presence: {:message => ' no debe dejarse en blanco.'}
 #  validates :agent_id, uniqueness: {:message => '  no debe repetirse.'}
   def self.search(search)
-			where('first_name LIKE :search OR last_name LIKE :search', search:"%#{search}%")
+			where('first_name ILIKE :search OR last_name ILIKE :search', search:"%#{search}%")
 		end
 end

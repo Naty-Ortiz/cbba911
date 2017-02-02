@@ -21,6 +21,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'bootstrap-typeahead-rails'
 gem 'rails4-autocomplete'
 gem 'jquery-ui-rails'
+gem 'axlsx'
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 # Use postgresql as the database for Active Record
 

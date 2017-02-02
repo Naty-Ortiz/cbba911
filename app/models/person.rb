@@ -17,7 +17,7 @@ class Person < ActiveRecord::Base
   validates :address, presence: {:message => 'no debe dejarse en blanco'}
 
   def self.search(search)
-    where('first_name LIKE :search OR last_name LIKE :search', search:"%#{search}%")
+    where('first_name ILIKE :search OR last_name ILIKE :search', search:"%#{search}%")
   end
 
   def get_username

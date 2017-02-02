@@ -907,24 +907,24 @@ puts "msmdmkkkkmm"
         @complain = Complain.find(params[:id])
         @complainant = Complainant.where(:complain_id => @complain.id).first
 
-        if current_user.role==2 ||current_user.role==1
+    if current_user.role==2 ||current_user.role==1
       #  check_box_params[:auxCrime]= @complain.crie.code+ ' ' +@complain.crime.name
-      if @complain.crime_id!=nil
-       @auxCrime= @complain.crime.code + ' ' + @complain.crime.name
-     end
-     if @complain.contravertion_id!=nil
-       @auxContravertion= @complain.contravertion.code + ' ' + @complain.contravertion.name
-     end
-          @crimes = Array.new
-          Crime.all.each do |comp|
-            @crimes << [comp.code + ' ' + comp.name]
-          end
-          @contravertions = Array.new
-          Contravertion.all.each do |comp|
-            @contravertions << [comp.code + ' ' + comp.name]
-          end
-        else
-          redirect_to root_url
+         if @complain.crime_id!=nil
+           @auxCrime= @complain.crime.code + ' ' + @complain.crime.name
+         end
+         if @complain.contravertion_id!=nil
+           @auxContravertion= @complain.contravertion.code + ' ' + @complain.contravertion.name
+         end
+         @crimes = Array.new
+         Crime.all.each do |comp|
+         @crimes << [comp.code + ' ' + comp.name]
+         end
+         @contravertions = Array.new
+         Contravertion.all.each do |comp|
+         @contravertions << [comp.code + ' ' + comp.name]
+         end
+    else
+       redirect_to root_url
         end
     end
 
@@ -992,85 +992,55 @@ puts "msmdmkkkkmm"
           end
        end
      end
-      def patrol_unit_asign
-         @complain = Complain.find(params[:complain][:complain_id])
-         @patrol_unit_params= params[:complain][:patrolUnitAux]
-
-         @caseReport= params[:complain][:caseReport]
-         @protagonists=params[:complain][:protagonists]
-         @shortReport=params[:complain][:shortReport]
-        @derivationCase=params[:complain][:derivationCase]
-       if @patrol_unit_params==nil
-         @patrol_unit_params=params[:patrolUnitAux].delete("\n")
-         @patrol_unit_params=@patrol_unit_params.gsub(/^A-Za-z0-9-,/, '')
-         @patrol_unit_params=@comp.strip
-        end
-
-       if @patrol_unit_params!=nil
-         @auxPatrolUnit = PatrolUnit.where(:code =>(@patrol_unit_params)).pluck(:id).first.to_i
-           if @auxPatrolUnit==0
-           @newPatrolUnit= PatrolUnit.new
-           @newPatrolUnit.code = params[:patrolUnitAux]
-           @newPatrolUnit.save!
-             @complain.update_attribute(:patrol_unit_id, @newPatrolUnit.id )
-          else
-            @complain.update_attribute(:patrol_unit_id,  params[:complain][:patrol_unit_id])
- 
-          end
-       respond_to do |format|
-         if @complain.save!
   
-          record_activity("Asignacion de unidad")
-         flash[:notice]  = "Se asigno la unidad seleccionada"
-          format.html { redirect_to action: "index", notice: 'Se asigno la unidad seleccionada'}
-
-         else
-            flash[:error]+= 'Error al asignar unidad'+ '\n\n'
-            format.html { redirect_to action: "show", error: 'Error al asignar unidad' ,:patrolUnitAsign => true, :patrolUnitAux =>  @patrol_unit_params}
-        end
-       end
- 
-     end
- end
     def patrol_unit_asign
+      @aux=false
+       respond_to do |format|
        @complain = Complain.find(params[:complain][:complain_id])
-       @patrol_unit_params= params[:complain][:patrolUnitAux]
-
-       @caseReport= params[:complain][:caseReport]
-       @protagonists=params[:complain][:protagonists]
-       @shortReport=params[:complain][:shortReport]
-       @derivationCase=params[:complain][:derivationCase]
-      if @patrol_unit_params==nil
-        @patrol_unit_params=params[:patrolUnitAux].delete("\n")
-       @patrol_unit_params=@patrol_unit_params.gsub(/^A-Za-z0-9-,/, '')
-       @patrol_unit_params=@patrol_unit_params.strip
+       @patrol_unit_params= params[:patrolUnitAux]
+       @newPatrolUnit= PatrolUnit.new
+      puts "asdasd c"
+      puts @complain
+      puts "SDFSFA pa"
+      puts @patrol_unit_params
+       puts "SDFSFA"
+      if @patrol_unit_params!=nil
+        @auxPatrolUnit = PatrolUnit.where(:code =>(@patrol_unit_params)).pluck(:id).first.to_i
+        if @auxPatrolUnit==0
+       
+            @patrol_unit_params= @patrol_unit_params.delete("\n")
+            @patrol_unit_params=@patrol_unit_params.gsub(/^A-Za-z0-9-,/, '')
+            @patrol_unit_params=@patrol_unit_params.strip
+            @auxPatrolUnit = PatrolUnit.where(:code =>(@patrol_unit_params)).pluck(:id).first.to_i
+          if  @auxPatrolUnit==0
+             @newPatrolUnit.code = @patrol_unit_params
+             @newPatrolUnit.name= ""
+             if @newPatrolUnit.valid?
+              @aux=true
+              @newPatrolUnit.save!
+              @complain.update_attribute(:patrol_unit_id, @newPatrolUnit.id )
+             else
+              @aux=false
+             end  
+          else
+             @complain.update_attribute(:patrol_unit_id, @auxPatrolUnit )
+             @aux=true
+          end
+        else
+          @complain.update_attribute(:patrol_unit_id,  @auxPatrolUnit)
+          @aux=true
+        end
       end
 
-
-     if @patrol_unit_params!=nil
-       @auxPatrolUnit = PatrolUnit.where(:code =>(@patrol_unit_params)).pluck(:id).first.to_i
-         if @auxPatrolUnit==0
-          @newPatrolUnit= PatrolUnit.new
-          @newPatrolUnit.code = params[:patrolUnitAux]
-          @newPatrolUnit.save!
-           @complain.update_attribute(:patrol_unit_id, @newPatrolUnit.id )
-        else
-          @complain.update_attribute(:patrol_unit_id,  params[:complain][:patrol_unit_id])
-
-        end
-     respond_to do |format|
-       if @complain.save!
-
+       if @aux==true
 
         flash[:notice]  = "Se asigno la unidad seleccionada"
         format.html { redirect_to action: "index", notice: 'Se asigno la unidad seleccionada'}
 
        else
-          flash[:error]+= 'Error al asignar unidad'+ '\n\n'
+          flash[:error]= 'Error al asignar unidad'+ '\n\n'
           format.html { redirect_to action: "show", error: 'Error al asignar unidad' ,:patrolUnitAsign => true, :patrolUnitAux =>  @patrol_unit_params}
        end
-      end
-
     end
 end
     def case_report
@@ -1091,24 +1061,30 @@ end
 
     def update
 
-      @caseReport= params[:complain][:caseReport]
+     @caseReport= params[:complain][:caseReport]
       @patrolUnitAux=  check_box_params[:patrolUnitAux]
      puts params
+     @commit= params[:complain][:commit]
+      if @commit==nil
+        @commit=params[:commit]
+      end
+      puts "commit"
+      puts @commit
       @observationsAux=params[:observationsAux]
+      @observations_params=params[:complain][:observations]
       respond_to do |format|
 
       if @caseReport!=nil
+        puts "entra a reporte"
         flash[:error] =""
        @complain = Complain.find(params[:complain][:complain_id])
        @patrol_unit_params= params[:complain][:patrolUnitAux]
-       @complain.crime_id = @complain.crime_id
-       @complain.contravertion_id= @complain.contravertion_id
-       @complain.observations= @complain.observations
+
        @protagonists=params[:complain][:protagonists]
        @shortReport=params[:complain][:shortReport]
        @derivationCase=params[:complain][:derivationCase]
       if @caseReport=='yes'
-
+        puts "entra1"
         if params[:complain][:protagonists]==""
          #redirect_to action: "show", notice: 'Falta llenar el campo protagosistas' }
          flash[:error]  = "Debe registrar el campo protagonistas" + '\n\n'
@@ -1117,7 +1093,7 @@ end
         elsif  params[:complain][:shortReport]==""
           flash[:error]+= 'Debe registrar el campo breve informe'+ '\n\n'
            format.html { redirect_to action: "show", error: 'Debe registrar el campo breve informe' ,:caseReport => true, :protagonists =>  @protagonists}
-          elsif  @derivationCase==""
+        elsif  @derivationCase==""
            flash[:error]+= 'Debe registrar el campo derivacion del caso '+ '\n\n'
            format.html { redirect_to action: "show", error: 'Debe registrar el campo derivacion del caso' ,:caseReport => true, :protagonists =>  @protagonists}
 
@@ -1125,28 +1101,36 @@ end
         if @protagonists!=""&& @shortReport!=""&&@derivationCase!=""
            @complain.update_attributes(:caseReport=> true, :shortReport =>@shortReport,:protagonists=>@protagonists,:derivationCase=>@derivationCase )
            record_activity("Registro de reporte de caso")
-           @complain.save!
+          format.html { redirect_to action: "index", notice: 'Reporte del caso registardo' }
         end
       elsif @caseReport=='no'
          @complain.update_attribute(:caseReport, false)
-          @complain.save!
-           format.html { redirect_to action: "index"}
+         
+           format.html { redirect_to action: "index", notice: 'Reporte del caso registardo' }
 
       end
-
+    else
+      puts "entra aqui tam"
       end
 
-      if params[:complain][:observations]!=""
+      if @commit == "Registrar observaciones"
+      if @observations_params!=""
         @complain = Complain.find(params[:id])
-        @complain.observations = params[:observations]
-        @complain.crime_id = @complain.crime_id
-        @complain.contravertion_id= @complain.contravertion_id
-      end
+       
+         @complain.update_attribute(:observations, params[:observations] )
+          format.html { redirect_to action: "index", notice: 'Observaciones registradas' }
 
-      if @observationsAux==nil
+      elsif  @observations_params==""|| @observations_params==nil
+         flash[:error]= 'Debe registrar el campo observaciones no se debe dejar en blanco'+ '\n\n'
+           format.html { redirect_to action: "show", error: 'Debe registrar el  campo observaciones no se debe dejar en blanco' ,:observationsAux => true, :observations=>  @observations_params}
+
+      end
+    
+      end
+      if  @commit== "Registar denuncia"
       @complain = Complain.find(params[:id])
 
-      @complain.observations = params[:observations]
+      
       @complainant = Complainant.where(:complain_id => @complain.id).first
       if @complainant==nil
           @complainant = Complainant.new(complainant_params)

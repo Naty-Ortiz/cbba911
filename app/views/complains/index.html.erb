@@ -76,7 +76,7 @@
           <%else%>
           <td><%=complain.observations%></td>
        <%end%>
-        <%if current_user.role == 1 %><%=current_user.role%><%=complain.patrol_unit_id%>
+        <%if current_user.role == 1 %>
           <%if complain.patrol_unit_id==nil %>
           
               <td><%=link_to 'Asignar unidad', {:action =>'show', :id =>complain.id, :asign_patrol_unit =>true}, class: 'btn btn-primary'%></td>
