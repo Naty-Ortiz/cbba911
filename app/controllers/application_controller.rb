@@ -16,7 +16,7 @@ end
 
       if current_user.password_alteration == false
 
-      #  redirect_to '/users/edit'
+        #redirect_to '/users/edit'
 
       end
     end
