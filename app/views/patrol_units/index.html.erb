@@ -10,7 +10,7 @@
       <div class="form-inline">
         <br>
         <%= form_tag(patrol_units_path, :method => "get", id: "search-form") do %>
-            <%= text_field_tag :search, params[:search], placeholder: "Nombre de la patrol_unitn", :class => 'form-control'%>
+            <%= text_field_tag :search, params[:search], placeholder: "Codigo de la unidad de patrulla", :class => 'form-control'%>
             <%= submit_tag 'Buscar', :class=>'btn btn-default' %>
         <% end %>
       </div>
@@ -19,7 +19,7 @@
 <h1>Lista de  unidades de patrulla</h1>
 <br>
 <% if @patrol_units.present? %>
-<div class="col-md-4 col-md-offset-4">
+<div class="col-md-8 col-md-offset-3">
   <div class="digg_pagination">
     <%= will_paginate @patrol_units,  :previous_label => 'Atras', :next_label => 'Siguiente', :container => true ,renderer: BootstrapPagination::Rails%>
   </div>
@@ -33,7 +33,7 @@
         <th>VER</th>
         <th>EDITAR</th>
 
-        <th colspan="3">ELIMINAR</th>
+        <th></th>
       </tr>
     </thead>
 
@@ -48,7 +48,7 @@
           <td><%= link_to 'Ver', patrol_unit , class:'btn btn-default'%></td>
 
             <td><%= link_to :Editar, edit_patrol_unit_path(patrol_unit), class:'btn btn-primary'%></td>
-            <td><%= link_to 'Eliminar', patrol_unit, method: :delete, data: { confirm: 'Esta seguro?' }, class:'btn btn-danger' %></td>
+            <td><%#= link_to 'Eliminar', patrol_unit, method: :delete, data: { confirm: 'Esta seguro?' }, class:'btn btn-danger' %></td>
         </tr>
       <% end %>
     </tbody>
