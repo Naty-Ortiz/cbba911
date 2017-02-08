@@ -148,9 +148,10 @@
          <div class="col-md-1"></div>
          <div class="col-md-10">
            <%= yield %>
-           <% if  user_signed_in? && current_user.role == 1%>
-
-
+           <% if  user_signed_in? %>
+              <%if alert=="Sesión iniciada exitosamente."%>
+              <%User.find_by_username(current_user.name).update_attribute(:numberWrongTries, 0)%>
+              <%end%>
             <% end%>
      <% unless flash.empty? %>
     <script type="text/javascript">

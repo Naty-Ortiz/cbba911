@@ -8,10 +8,10 @@ class Complain < ActiveRecord::Base
 	attr_accessor :auxValue
 	 attr_accessor :patrolUnitAux
 	 attr_accessor :turnHour
-#	validates :description, :presence => {:message => ' no debe dejarse en blanco.'}
+	validates :description, :presence => {:message => ' no debe dejarse en blanco.'}
 #	validates :protagonists, :presence => {:message => ' no debe dejarse en blanco.'}
 
- # validates :latitude, :presence => {:message => ' y Longitud deben definirse en el mapa'}
+  validates :latitude, :presence => {:message => ' y Longitud deben definirse en el mapa'}
 
 
 	def self.search(search)

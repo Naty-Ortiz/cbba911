@@ -790,7 +790,7 @@ puts "msmdmkkkkmm"
 
     def new
       record_activity("Registro de nueva Denuncia ")
-        if current_user.role==2 ||current_user.role==1
+        #if current_user.role==2 ||current_user.role==1
           @complain = Complain.new
           @complainant = Complainant.new
           @crimes = Array.new
@@ -803,9 +803,9 @@ puts "msmdmkkkkmm"
           end
 
 
-        else
-          redirect_to root_url
-        end
+        #else
+         # redirect_to root_url
+        #end
   end
    def index4
       #Complain.all.each do |comp|
@@ -832,7 +832,7 @@ puts "msmdmkkkkmm"
 
       @id=comp.id
       @comp=comp.code.delete("\n")
-      @comp=@comp.gsub(/^A-Za-z0-9-,/, '')
+      @comp=@comp.gsub(/^A-Za-z0-9-,/, '').gsub('"', '')
       @comp=@comp.strip
       if PatrolUnit.where("id <= ?",@aux).exists?(code: @comp)
         puts "asada"
@@ -909,37 +909,34 @@ puts "msmdmkkkkmm"
     end
 
 
-   def create
-        @complain = Complain.new(complain_params)
-       @complainant = Complainant.new(complainant_params)
-       @crimes = Array.new
-       @complain.user_id= current_user.id
-       @auxCrime= ''
-       @auxContravertion=''
-       Crime.all.each do |comp|
-         @crimes << [comp.code + ' ' + comp.name]
-       end
+
+     
+ 
+     def create
+       @complain = Complain.new(complain_params)
+        @complainant = Complainant.new(complainant_params)
+        @crimes = Array.new
+        @complain.user_id= current_user.id
+ 
+       @auxCrime= ' '
+        Crime.all.each do |comp|
+          @crimes << [comp.code + ' ' + comp.name]
+        end
        @contravertions = Array.new
        Contravertion.all.each do |comp|
          @contravertions << [comp.code + ' ' + comp.name]
        end
  
-       if check_box_params[:crime]=='1'
-              puts"<zx<x"
-         @aux22=params[:auxCrime]
- puts @aux22
-  puts"<zx<xc"
-         @aux22=@aux22.split[0...2].join(' ')
-         puts @aux22
-         @aux22=@aux22 [4..-1]
-          puts"<zx<xvv"
-          puts @aux22
-          puts"asddadas"
-         @auxCrime_id = Crime.where(:code =>(params[:auxCrime]).split[0...2].join(' ')).pluck(:id).first.to_i
-       end
-       if check_box_params[:contravertion]=='1'
-         @auxContravertion_id = Contravertion.where(:code =>(params[:auxContravertion]).split[0...2].join(' ')).pluck(:id).first.to_i
-       end
+      if check_box_params[:crime]=='1'
+          @aux22=params[:auxCrime]
+          @aux22= @aux22.gsub(/^A-Za-z0-9-, /, '').gsub("\"", "")
+          @aux22=@aux22.split[0...2].join(' ')    
+          @auxCrime_id = Crime.where(:code =>@aux22).pluck(:id).first.to_i
+
+        end
+        if check_box_params[:contravertion]=='1'
+          @auxContravertion_id = Contravertion.where(:code =>(params[:auxContravertion]).gsub(/^A-Za-z0-9-, /, '').gsub("\"", "").split[0...2].join(' ')).pluck(:id).first.to_i
+        end
        if @auxCrime_id!=0
          @complain.crime_id = @auxCrime_id
        end
@@ -956,23 +953,23 @@ puts "msmdmkkkkmm"
          if  @complain.valid?
                if !@complainant.valid?
                  format.html { render :new}
-                  format.json { render json: @complainant.errors, status: :unprocessable_entity }
-                else
-                  @complain.save!
-                  record_activity("Denuncia registrada")
-                  @complainant.complain_id= @complain.id
-                  @complainant.save!
-                  flash[:notice] = "Denuncia registrada exitosamente"
-                 format.html { redirect_to action: "index" }
+                 format.json { render json: @complainant.errors, status: :unprocessable_entity }
+               else
+                 @complain.save!
+                 @complainant.complain_id= @complain.id
+                 @complainant.save!
+                 flash[:notice] = "Denuncia registrada exitosamente"
+                 record_activity("Denuncia registrada exitosamente")
+                 format.html { redirect_to @complain }
                  format.json { render :show, status: :created, location: @complain }
                end
          else
+             record_activity("Denuncia con errores")
             format.html { render :new}
             format.json { render json: @complain.errors, status: :unprocessable_entity }
           end
        end
      end
-  
     def patrol_unit_asign
       @aux=false
        respond_to do |format|
@@ -1001,14 +998,21 @@ puts "msmdmkkkkmm"
               @complain.update_attribute(:patrol_unit_id, @newPatrolUnit.id )
              else
               @aux=false
+              flash[:error]= 'Error al asignar unidad'+ '\n\n'
+             format.html { redirect_to action: "show", error: 'Error al asignar unidad' ,:patrolUnitAsign => true, :patrolUnitAux =>  @patrol_unit_params}
+      
              end  
           else
              @complain.update_attribute(:patrol_unit_id, @auxPatrolUnit )
              @aux=true
+             flash[:notice]  = "Se asigno la unidad seleccionada"
+        format.html { redirect_to action: "index", notice: 'Se asigno la unidad seleccionada'}
           end
         else
           @complain.update_attribute(:patrol_unit_id,  @auxPatrolUnit)
           @aux=true
+          flash[:notice]  = "Se asigno la unidad seleccionada"
+        format.html { redirect_to action: "index", notice: 'Se asigno la unidad seleccionada'}
         end
       end
 
@@ -1048,6 +1052,9 @@ end
       if @commit==nil
         @commit=params[:commit]
       end
+      @commit=@commit.delete("\n")
+      @commit=@commit.gsub(/^A-Za-z0-9-,/, '')
+      @commit=@commit.strip
       puts "commit"
       puts @commit
       @observationsAux=params[:observationsAux]
@@ -1089,8 +1096,7 @@ end
            format.html { redirect_to action: "index", notice: 'Reporte del caso registardo' }
 
       end
-    else
-      puts "entra aqui tam"
+     
       end
 
       if @commit == "Registrar observaciones"
@@ -1107,7 +1113,8 @@ end
       end
     
       end
-      if  @commit== "Registar denuncia"
+      if  @commit.eql?'Registrar denuncia'
+        puts "entra up"
       @complain = Complain.find(params[:id])
 
       
@@ -1168,7 +1175,23 @@ end
            format.html { render :new}
            format.json { render json: @complain.errors, status: :unprocessable_entity }
          end
-      end
+          else 
+      puts "entra aqui 3"
+      puts @commit
+      puts "ADadsd"
+      puts @commit.eql?"Registar denuncia"
+      puts "SDSFfffffffff"
+      puts @commit.eql?'Registar denuncia '
+      @commit.each_byte do |c|
+        puts c
+    end
+    puts "hola"
+    "Registar denuncia".each_byte do |c|
+    puts c
+end
+puts "hola"
+          end
+
    end
   end
 

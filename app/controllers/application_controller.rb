@@ -21,6 +21,13 @@ end
       end
     end
   end
+  def record_average 
+   
+    @crimes=  Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where( '  complains.created_at::time BETWEEN ? AND ? and complains.created_at BETWEEN ? AND ? ' , '00:00:01','11:59:59' , DateTime.now,DateTime.now).count
+    puts "record aver"
+    puts @crimes 
+    puts"record"
+  end 
   def record_activity(note)
     @activity = ActivityLog.new
     @activity.user_id = current_user.id
@@ -30,7 +37,7 @@ end
     @activity.controller = controller_name
     @activity.action = action_name
     @activity.params = params.inspect
-    #@activity.save!
+    @activity.save!
 end
 
   before_filter do
