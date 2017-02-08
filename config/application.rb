@@ -21,6 +21,7 @@ module ProyectoTallerInfo
     # config.i18n.default_locale = :de
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
+    config.secret_key_base = 'cd8e044428fc7789f9e18e64584481f3b78355de68374165731a3bcee16ffb878d3688edcb3e4080ea02d44f8ead58178ee10d948824dbd64f94c676d6ebc679'
     config.active_record.raise_in_transactional_callbacks = true
     config.assets.initialize_on_precompile = false
     config.assets.precompile += %w( index_oficial.js )
