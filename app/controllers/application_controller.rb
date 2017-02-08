@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   respond_to :html, :json
+  helper_method :record_average
+  helper_method :record_activity
 def new_complain
 
     flash[:notice] = "Nuevo delito"
@@ -30,7 +32,11 @@ end
   end 
   def record_activity(note)
     @activity = ActivityLog.new
+    if current_user !=nil
     @activity.user_id = current_user.id
+    else
+    @activity.user_id=0
+    end
     @activity.note = note
     @activity.browser = request.env['HTTP_USER_AGENT']
     @activity.ip_address = request.env['REMOTE_ADDR']

@@ -25,7 +25,11 @@
                   Usuario o contrase&ntilde;a invalidos.
                   <%User.find_by_username(params[:user][:login]).update_attribute(:numberWrongTries, User.find_by_username(params[:user][:login]).numberWrongTries.to_i+1)%>
                   <%if User.find_by_username(params[:user][:login]).numberWrongTries>=5 %>
+                  <%if User.find_by_username(params[:user][:login]).role !=1%>
                     <%User.find_by_username(params[:user][:login]).update_attribute(:active, false)%>
+                    <%else%>
+                    <% record_activity("Intento de ingreso a cuenta de admin")%>
+                    <%end%>
                     <%if  User.find_by_username(params[:user][:login]).active==false%>
                     <%flash[:error] = "Su cuenta ha sido deshabilitada, por favor pongase en contacto con su administrador"%>
                      <p style="color:red;">

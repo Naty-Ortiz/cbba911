@@ -26,8 +26,9 @@
       <tbody class="cream-pixels">
       <% @activities.each do |activity| %>
           <tr>
-            <td><%=  Person.where("user_id = ?",activity.user_id).pluck(:first_name)[0].gsub(/[^a-z0-9.\s]/i, '')  %></td>
-              <td><%=  Person.where("user_id = ?",activity.user_id).pluck(:last_name)[0].gsub(/[^a-z0-9.\s]/i, '')  %></td>
+
+            <td><%if Person.where("user_id = ?",activity.user_id).pluck(:first_name)[0] !=nil%><%=  Person.where("user_id = ?",activity.user_id).pluck(:first_name)[0].gsub(/[^a-z0-9.\s]/i, '')  %><%else%>Usuario administrador<%end%></td>
+              <td><%if Person.where("user_id = ?",activity.user_id).pluck(:last_name)[0]!=nil%><%=  Person.where("user_id = ?",activity.user_id).pluck(:last_name)[0].gsub(/[^a-z0-9.\s]/i, '')  %><%else%> Usuario administrador<%end%> </td>
             <td><%= activity.note %></td>
             <td><%= activity.created_at%></td>
             <td><%=activity.controller %></td>
