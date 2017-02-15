@@ -16,6 +16,8 @@ Rails.application.routes.draw do
     put '/complains'=>'complains#patrol_unit_asign'
     put '/complains?:id'=>'complains#case_report'
     get '/index_logs'=> 'complains#index_logs'
+     get '/report'=> 'complains#report'
+      get '/graph_report'=> 'complains#graph_report'
     get '/index_contravertions'=> 'complains#index_contravertions'
 
   resources :patrol_units

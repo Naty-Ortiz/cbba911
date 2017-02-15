@@ -26,3 +26,97 @@
 
 
   
+@dateStart =  params[:startdate]
+@dateEnd=params[:enddate]
+@zone=params[:zone]
+@total_crimes_per_zone = []
+respond_to do |format|
+if params[:commit]!=nil
+    if (@dateStart==nil || @dateStart=="") 
+      flash[:error]= 'Debe ingresar la fecha inicial correctamente'+ '\n\n'
+     format.html { redirect_to action: "graph_report", error: 'Debe ingresar la fecha inicial correctamente' }         
+    else
+      @aux=@dateStart
+      @aux2=@aux
+        @aux2=@aux.split(' ')[1..-1].join(' ')
+        @aux2=@aux.chomp(' AM')
+        @aux= DateTime.new( (@aux2.split("/")[2]).partition(" ").first.to_i,(@aux2.split("/")[0]).to_i,(@aux2.split("/")[1]).to_i,  (@aux.split(":")[0]).to_i, ( @aux.split(":")[1]).to_i, 0,0)
+      @dateBegin = @aux
+    end
+    if @dateEnd==nil||@dateEnd=="" 
+        flash[:error]+= 'Debe ingresar la fecha final correctamente'+ '\n\n'
+       format.html { redirect_to action: "graph_report", error: 'Debe ingresar la fecha  final correctamente' }
+    else
+      @auxEnd=@dateEnd
+          @auxEnd2=@auxEnd.split(' ')[1..-1].join(' ')
+          @auxEnd2=@auxEnd.chomp(' AM')
+          @auxEnd= DateTime.new( (@auxEnd2.split("/")[2]).partition(" ").first.to_i,(@auxEnd2.split("/")[0]).to_i,(@auxEnd2.split("/")[1]).to_i,  (@auxEnd.split(":")[0]).to_i, ( @auxEnd.split(":")[1]).to_i, 0,0)
+          @dateFinal= @auxEnd
+    end
+else
+  @dateBegin = Complain.first.created_at
+  @dateFinal =Complain.last.created_at
+end
+@totalCrimes= Complain.where( ' "caseReport" = ?  and complains.created_at BETWEEN ? AND ?',true,  @dateBegin,@dateFinal).joins(:crime).count
+@crimes= Crime.select('DISTINCT code')
+@contravertions= Contravertion.select('DISTINCT code')
+if @zone !="TODAS LAS ZONAS"
+  
+  @crimes.each do |crime|
+      @crimeAux= Crime.all.where("code =?", crime.code).first
+@total_crimes_per_zone.push({
+    :crime => @crimeAux.code + ' '+@crimeAux.name,
+    :label => @zone, 
+    :value => Complain.where( ' complains.zone = ? and "caseReport" = ? and complains.crime_id = ? and complains.created_at BETWEEN ? AND ?', @zone, true, @crimeAux.id, @dateBegin,@dateFinal).joins(:crime).count
+})
+end
+ @contravertions.each do |crime|
+      @crimeAux= Contravertion.all.where("code =?", crime.code).first
+@total_crimes_per_zone.push({
+    :crime => @crimeAux.code + ' '+@crimeAux.name,
+    :label => @zone, 
+    :value => Complain.where( ' complains.zone = ? and "caseReport" = ? and complains.crime_id = ? and complains.created_at BETWEEN ? AND ?', @zone, true, @crimeAux.id, @dateBegin,@dateFinal).joins(:crime).count
+})
+end
+ format.html
+  format.xlsx {
+    response.headers['Content-Disposition'] = 'attachment; filename="delitos por zona.xlsx"'
+  }
+elsif @zone=="TODAS LAS ZONAS"
+
+
+@zones =  Complain.select('DISTINCT zone')
+  @zones.each do |zone |
+  if zone.zone!=nil
+    @crimes.each do |crime|
+      @crimeAux= Crime.all.where("code =?", crime.code).first
+@total_crimes_per_zone.push({
+    :crime => @crimeAux.code + ' '+@crimeAux.name,
+    :label => zone.zone, 
+    :value => Complain.where( ' complains.zone = ? and "caseReport" = ? and complains.crime_id = ? and complains.created_at BETWEEN ? AND ?', zone.zone, true, @crimeAux.id, @dateBegin,@dateFinal).joins(:crime).count
+})
+end
+end
+end
+ @zones.each do |zone |
+  if zone.zone!=nil
+    @contravertions.each do |crime|
+      @crimeAux= Contravertion.all.where("code =?", crime.code).first
+@total_crimes_per_zone.push({
+    :crime => @crimeAux.code + ' '+@crimeAux.name,
+    :label => zone.zone, 
+    :value => Complain.where( ' complains.zone = ? and "caseReport" = ? and complains.crime_id = ? and complains.created_at BETWEEN ? AND ?', zone.zone, true, @crimeAux.id, @dateBegin,@dateFinal).joins(:crime).count
+})
+
+end
+end
+end
+
+end
+    format.html
+   format.xlsx {
+    response.headers['Content-Disposition'] = 'attachment; filename="delitos por zona.xlsx"'
+  }
+
+ 
+ end

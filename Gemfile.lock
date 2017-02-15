@@ -47,6 +47,9 @@ GEM
       htmlentities (~> 4.3.1)
       nokogiri (>= 1.4.1)
       rubyzip (~> 1.0.0)
+    axlsx_rails (0.5.0)
+      actionpack (>= 3.1)
+      axlsx (>= 2.0.1)
     bcrypt (3.1.11)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
@@ -83,6 +86,7 @@ GEM
     execjs (2.7.0)
     font-awesome-rails (4.7.0.1)
       railties (>= 3.2, < 5.1)
+    fusioncharts-rails (0.0.2)
     geocoder (1.4.1)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
@@ -116,7 +120,11 @@ GEM
     nokogiri (1.7.0.1)
       mini_portile2 (~> 2.1.0)
     orm_adapter (0.5.0)
+    pdf-core (0.6.1)
     pg (0.19.0)
+    prawn (2.1.0)
+      pdf-core (~> 0.6.1)
+      ttfunk (~> 1.4.0)
     rack (1.6.5)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -203,6 +211,7 @@ GEM
     tilt (2.0.5)
     toastr-rails (1.0.3)
       railties (>= 3.1.0)
+    ttfunk (1.4.0)
     turbolinks (5.0.1)
       turbolinks-source (~> 5)
     turbolinks-source (5.0.0)
@@ -230,6 +239,7 @@ DEPENDENCIES
   adminlte-rails
   awesomplete
   axlsx
+  axlsx_rails
   bootstrap-sass
   bootstrap-timepicker-rails
   bootstrap-typeahead-rails
@@ -240,6 +250,7 @@ DEPENDENCIES
   coffee-rails
   devise
   font-awesome-rails
+  fusioncharts-rails
   geocoder
   gmaps-autocomplete-rails (~> 0.2.0)
   gmaps4rails
@@ -249,6 +260,7 @@ DEPENDENCIES
   jquery-ui-rails
   momentjs-rails (>= 2.9.0)
   pg
+  prawn (~> 2.1)
   rack (= 1.6.5)
   rails (= 4.2.4)
   rails4-autocomplete

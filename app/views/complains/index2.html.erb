@@ -94,9 +94,10 @@
  </div>
    <%= form_for(@complain, :url => { :action => "index2" }, :html => { :method => :get } ) do |f| %>
     <div class="form-inline">
-    <div class="col-md-8 col-md-offset-3">      
-        <label>Seleccione el turno</label> 
+    <div class="col-md-10 col-md-offset-2">      
+        
          <div class="form-group">
+         <label>Seleccione el turno para poder visualizar la probabilidad en el mapa</label> 
           <%= f.hidden_field :startdate, :value => @aux %>
         <%= f.select   :turnHour,  ['8:00-16:00','16:00-00:00','00:00-08:00'] ,{},:class => 'form-control'  %>              
         <%= f.submit 'Seleccionar ', :class => 'btn btn-default'%> </td>

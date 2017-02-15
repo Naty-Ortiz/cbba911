@@ -149,6 +149,7 @@ handler.getMap().setZoom(38);
 }
 
 function getColorBorder (prob){
+  prob=prob.toFixed(0);
         if (prob>=0.0 && prob<=30){
        return "#1B592B";
        }
@@ -288,48 +289,48 @@ var i;
  {
       lat: -17.284131,
       lon:  -66.165636 ,
-      title: "probabilidad" +"es" +  list[0],
-      description:"probabilidad" +"es" +  list[0]
+      title: "la probabilidad" +" "+"es" +  " "+list[0]+"%",
+      description:"la probabilidad" +" "+"es" +  " "+list[0]+"%"
     },
     {
       lat: -17.253969,
       lon: -66.122377,
-      title: "probabilidad" +"es" +  list[1],
-      description:"probabilidad" +"es" +  list[1]
+      title: "la probabilidad" +" "+"es" +  " "+list[1]+"%",
+      description:"la probabilidad" +" "+"es" + " "+ list[1]+"%"
     },
      {
       lat: -17.365412,
       lon:  -66.147783,
 
-      title: "probabilidad" +"es" +  list[2],
-      description: "probabilidad" +"es" +  list[2]
+      title: "la probabilidad" +" "+"es" +  list[2]+"%",
+      description: "la probabilidad" +" "+"es" +  list[2]+"%"
     },
      {
       lat: -17.415341,
       lon:  -66.142593,
 
-      title: "probabilidad" + "es" +  list[3],
-      description: "probabilidad" +"es" +  list[3]
+      title: "la probabilidad"+" " + "es" +" "+  list[3]+"%",
+      description: "la probabilidad"+" " +"es" + " "+ list[3]+"%"
     },
      {
       lat: -17.468273,
       lon:   -66.211986,
 
-      title: "probabilidad" +"es" +  list[4],
-      description: "probabilidad" +"es" +  list[4]
+      title: "la probabilidad"+" " +"es" + " "+ list[4]+"%",
+      description: "la probabilidad"+" " +"es" + " "+ list[4]+"%"
     }, {
       lat:-17.453208,
       lon:  -66.131990 ,
 
-      title: "probabilidad" +"es" +  list[5],
-      description: "probabilidad" +"es" +  list[5]
+      title: "la probabilidad"+" " +"es" + " "+ list[5]+"%",
+      description: "la probabilidad"+" " +"es" + " "+ list[5]+"%"
     }
   ];
 
     var homeLatlng = new google.maps.LatLng(-17.442072, -66.207866);
 
   var myOptions = {
-    zoom: 15,
+   
     center: homeLatlng,
     mapTypeId: google.maps.MapTypeId.ROADMAP
 

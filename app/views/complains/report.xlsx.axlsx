@@ -1,0 +1,14 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Delitos por zonas") do |sheet|
+
+sheet.add_row ["Delitos/Contravenciones","Zona", "Cantidad de delitos"]
+  
+@total_crimes_per_zone.each do |key, value|
+
+
+  sheet.add_row [key[:crime],key[:label],key[:value]]
+ 
+
+
+  end
+end

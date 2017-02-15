@@ -11,7 +11,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
 
 gem 'gmaps-autocomplete-rails', '~> 0.2.0'
-
+gem 'fusioncharts-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -24,6 +24,8 @@ gem 'jquery-ui-rails'
 gem 'axlsx'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
+gem 'axlsx_rails'
+gem 'prawn', '~> 2.1'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 # Use postgresql as the database for Active Record
 
@@ -70,6 +72,8 @@ gem 'carmen-rails'
 
 gem 'adminlte-rails'
 gem 'selectivity-rails'
+
+gem 'toastr-rails'
 gem 'awesomplete'
 gem 'devise'
 gem 'coffee-rails'
@@ -81,5 +85,4 @@ gem 'font-awesome-rails'
 
 
 
-gem 'toastr-rails'
 gem 'rails_12factor', group: :production
