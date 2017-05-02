@@ -4,7 +4,7 @@ class ContravertionsController < ApplicationController
   before_action :verify_password_change
   before_action :verify_role
   autocomplete :contravertion, :name
-  
+
   # GET /contravertions
   # GET /contravertions.json
   def index

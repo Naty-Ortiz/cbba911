@@ -1,0 +1,107 @@
+<%= render :partial => 'static_pages/notice_panel' %>
+
+
+<div class="row">
+  <div class="col-md-7">
+    <h1>Buscar Denuncia </h1>
+    <br>
+  </div>
+  <div class="col-md-5">
+    <%= render :partial => 'complains/search' %>
+    <div class="form-inline">
+      <br>
+      <%= form_tag(complains_path, :method => 'get', id: 'search-form') do %>
+          <%= text_field_tag :search, params[:search], placeholder: 'Descripcion de denuncia', class: 'form-control' %>
+          <%= submit_tag 'Buscar', class: 'btn btn-default' %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<%if not @complains.present? %>
+
+    <div class="row center actions panel panel-danger">
+      <div class="panel-heading">
+        <% if params[:search] %>
+            <p>Su busqueda no generó resultados</p>
+        <%else%>
+            <p>No existen denuncias registrados este momento</p>
+        <%end%>
+      </div>
+    </div>
+<%else%>
+
+    <h1>Lista de denuncias</h1><br/>
+     <div class="col-md-20 col-md-offset-2">
+      <div class="digg_pagination">
+        <%= will_paginate @complains,  :previous_label => 'Atras', :next_label => 'Siguiente', :container => true ,renderer: BootstrapPagination::Rails%>
+      </div>
+    </div><br>
+ <div >
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+
+      <th>Delito o contravencion</th>
+
+
+      <th>Zona</th>
+      <th>Descripcion</th>
+      <th style="width: 10%">ver</th>
+      <th style="max-width: 5%">observacion</th>
+      <th style="width: 5%">unidad</th>
+   
+      <th style="width: 15%">Editar</th>
+       <th>Delito o contravencion</th>
+    </tr>
+  </thead>
+
+  <tbody class="cream-pixels">
+    <% @complains.each do |complain| %>
+
+    <tr>
+      <% if  complain.crime_id?%>
+        <td><%= complain.crime.code%><%=complain.crime.name%></td>
+        <%@auxCrime=true%>
+      <%end %>
+      <%if@auxCrime==false %>
+      <% if  complain.contravertion_id?%>
+        <td><%= complain.contravertion.code%><%=complain.contravertion.name%></td>
+      <%end %>
+       <%end %>
+      <td><%= complain.zone %></td>
+      <td><%= complain.description %></td>
+      <td><%= link_to 'Ver', complain, class: 'btn btn-default' %></td>
+      <%if complain.observations==nil ||complain.observations=="" %>
+           <td><%= link_to "Observacion", {:action => 'show', :id => complain.id,:observationsAux => true } , class: 'btn btn-primary' %></td>
+          <%else%>
+          <td><%=complain.observations%></td>
+       <%end%>
+        <%if current_user.role == 1 %>
+          <%if complain.patrol_unit_id==nil %>
+          
+              <td><%=link_to 'Asignar unidad', {:action =>'show', :id =>complain.id, :asign_patrol_unit =>true}, class: 'btn btn-primary'%></td>
+        <%else%>
+          <td><div><%if complain.patrol_unit!=nil %><%if complain.patrol_unit.code!=nil %><%=complain.patrol_unit.code%> <%end%><%if complain.patrol_unit.name!=nil %> <%=complain.patrol_unit.name%><%end%><%end%></div></td>
+        <%end%>
+        <%if complain.caseReport == nil%>
+          <td><%= link_to "Reporte Caso", {:action => 'show', :id => complain.id,:caseReportAux => true } , class: 'btn btn-primary' %></td>
+            
+        <%end%>
+      <td><%= link_to 'Editar', edit_complain_path(complain) , class:'btn btn-primary'%></td>
+            
+        <% end %>
+        <td><%if@auxCrime==true %>
+      <% if  complain.contravertion_id?%>
+        <td><%= complain.contravertion.code%><%=complain.contravertion.name%></td>
+      <%end %>
+       <%end %></td>
+      </tr>
+      <%@auxCrime=false %>
+    <% end %>
+  </tbody>
+</table>
+</div>
+<br>
+<%end%>
+
+<br>

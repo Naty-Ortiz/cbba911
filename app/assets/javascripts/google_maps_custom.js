@@ -1,6 +1,7 @@
 
 
 function gmap_show(project) {
+  var polyNE, polyNW,polyCN,polyCS,polySW,polySE;
     if ((project.latitude === null) || (project.longitude === null) ) {
         return 0;
     }
@@ -18,10 +19,119 @@ function gmap_show(project) {
                 }
             }
         ]);
-        handler.bounds.extendWith(markers);
-        handler.fitMapToBounds();
-        handler.getMap().setZoom(17);
+
+      polyNW = handler.addPolygons(
+       [
+         [
+           {lat: -17.185103, lng: -66.161516},
+           {lat: -17.186415, lng: -66.150529},
+           {lat:-17.187727,  lng: -66.145723},
+           {lat: -17.200846, lng: -66.147783},
+           {lat: -17.210029, lng: -66.149843},
+           {lat: -17.282164, lng: -66.145036},
+           {lat:-17.303144,  lng: -66.143663},
+           {lat:-17.349028,  lng: -66.141603},
+           {lat: -17.344440, lng: -66.210268},
+         ]
+       ],
+        {
+        "strokeColor": "#1B592B",
+
+
+        }
+     );
+
+
+      polyNE = handler.addPolygons(
+       [
+      [
+       {lat:-17.246756,lng:-66.107957},
+       {lat:-17.187727,lng:-66.145723},
+       {lat:-17.282164,lng:-66.145036},
+       {lat:-17.303144,lng:-66.143663},
+       {lat:-17.349028,lng:-66.141603},
+       {lat:-17.307733,lng:-66.061265 },
+         ]
+       ],
+        {
+        "strokeColor": "#1B592B",
+        }
+
+     );
+
+
+
+      polyCN = handler.addPolygons(
+       [
+         [
+         { lat:-17.392279,lng:-66.062984},
+         { lat:-17.307733,lng:-66.061265},
+         { lat:-17.349028,lng:-66.141603},
+         { lat:-17.344440,lng:-66.210268},
+         { lat:-17.425039,lng:-66.243572},
+          ]
+       ],
+        {
+        "strokeColor": "#1B592B",
+        }
+
+     );
+   polyCS = handler.addPolygons(
+       [
+         [
+         {lat:-17.392279, lng:-66.062984},
+         {lat:-17.425039,lng: -66.243572},
+         {lat: -17.442072, lng:-66.207866},
+       ]
+       ],
+        {
+        "strokeColor": "#1B592B",
+        }
+
+     );
+     polySW = handler.addPolygons(
+       [
+         [
+         {lat:-17.425039,lng: -66.243572},
+         {lat: -17.442072, lng:-66.207866},
+         {lat: -17.483238,  lng:-66.177096},
+         {lat:-17.471953, lng:-66.216448},
+       ]
+       ],
+        {
+        "strokeColor": "#1B592B",
+        }
+
+     );
+     polySE = handler.addPolygons(
+       [
+         [
+          {lat: -17.442072, lng:-66.207866},
+          {lat:-17.392279, lng:-66.062984},
+          {lat: -17.433432, lng:-66.072673 },
+          {lat: -17.483238,  lng:-66.177096},
+       ]
+       ],
+        {
+        "strokeColor": "#1B592B",
+        }
+
+     );
+       
+        handler.getMap().setZoom(13);
+
+
+    
     });
+
+   
+    var coordinate = new google.maps.LatLng(project.latitude, project.longitude);                                                                                                                                                                                                       
+
+     var isWithinPolygon =  handler.containsLocation(coordinate, polyCN);
+    console.log("poli");
+    console.log(isWithinPolygon);
+ 
+
 }
 
 function gmap_form(project) {

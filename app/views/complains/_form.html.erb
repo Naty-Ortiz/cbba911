@@ -118,7 +118,8 @@
       </div><br>
    </div>
      <div class="actions center">
-       <%= f.submit 'Registrar denuncia', :class => 'btn btn-default'  %>
+       <%= f.submit 'Registrar denuncia', :class => 'btn btn-default' , :onclick => "notifyMe()"%>
+
      </div>
  <%end%>
  <script type="text/javascript">
@@ -141,4 +142,32 @@
  
     }
  };
+
+
+ document.addEventListener('DOMContentLoaded', function () {
+  if (!Notification) {
+    alert('Desktop notifications not available in your browser. Try Chromium.'); 
+    return;
+  }
+
+  if (Notification.permission !== "granted")
+    Notification.requestPermission();
+});
+
+function notifyMe() {
+  if (Notification.permission !== "granted")
+    Notification.requestPermission();
+  else {
+    var notification = new Notification('Denuncia', {
+     
+      body: "Nueva denuncia registrada",
+    });
+
+    notification.onclick = function () {
+      window.open("http://stackoverflow.com/a/13328397/1269037");      
+    };
+
+  }
+
+}
  </script>

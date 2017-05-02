@@ -7,7 +7,7 @@ class CrimesController < ApplicationController
   # GET /crimes
   # GET /crimes.json
   def index
-  
+
        if params[:search]
           @crimes = Crime.search(params[:search]).order("created_at DESC").paginate(:page => params[:page], :per_page => 10)
        else

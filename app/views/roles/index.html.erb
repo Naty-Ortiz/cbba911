@@ -18,7 +18,7 @@
       <% @roles.each_with_index do |role, index| %>
           <tr>
             <td><%= role.typename%></td>
-            <%if current_user.role==1 or current_user.role==4 %>
+            <%if current_user.role==1 %>
 
                 <td><%= link_to 'Editar', edit_role_path(role) , class: 'btn btn-primary'%></td>
               <!--  <td><%= link_to 'Eliminar', role, method: :delete, data: { confirm: 'Confirmacion' },class:'btn btn-danger' %></td>

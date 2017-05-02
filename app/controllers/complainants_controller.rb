@@ -7,7 +7,7 @@ class ComplainantsController < ApplicationController
       if user_signed_in?
           @role_current_user = current_user.role
         puts current_user.role
-        if    @role_current_user==2 ||   @role_current_user==3||   @role_current_user==1 || @role_current_user==5
+        if    @role_current_user==0 ||   @role_current_user==1
            @complainants = Complainant.all
               if params[:search]
                 @complainants = Complainant.search(params[:search]).order("created_at DESC")

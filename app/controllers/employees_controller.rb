@@ -73,12 +73,16 @@ class EmployeesController < ApplicationController
       @employee.agent_id = 1
       @person.identification_type= '1'
       @user = User.new(user_params)
+      puts ",m,m,m,"
+      puts params
+      puts "kljkj"
+
     respond_to do |format|
       if @person.valid?
         if  @employee.valid?
                 @user.username = @person.get_username
                 @user.password = @person.get_password
-                @user.role = Role.where(:typename => employee_params[:position]).pluck(:id).first.to_i
+                @user.role = Role.where(:typename => params[:employee][:position]).pluck(:id).first.to_i
                
                 @user.active = true
              if @user.valid?
@@ -123,8 +127,9 @@ class EmployeesController < ApplicationController
         if @person.update_attributes(person_params)
           @user.username = @person.get_username
            @user.password = @person.get_password 
-           @user.role = Role.where(:typename => employee_params[:position]).pluck(:id).first.to_i
-               
+           @user.role = Role.where(:typename => params[:employee][:position]).pluck(:id).first.to_i
+           user_params[:role] = Role.where(:typename => params[:employee][:position]).pluck(:id).first.to_i
+            
           if  @employee.update_attributes(employee_params)
 
               if @user.update_attributes(user_params)

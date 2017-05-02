@@ -7,7 +7,7 @@ test_user.email = 'capitan@gmail.com'
 test_user.username = 'capitan'
 test_user.active = true
 test_user.password = 'Admin1234.'
-test_user.role = 1
+test_user.role = 0
 test_user.save!
 Person.create(first_name:'Capitan',last_name:'Capitan',identification_number:'5246352521',
               identification_type:'1',country:'BO',city:'C',address:'Por alla',
@@ -18,7 +18,7 @@ test_user.email = 'oficialDeTurno@gmail.com'
 test_user.username = 'oficialDeTurno'
 test_user.active = true
 test_user.password = 'Admin1234.'
-test_user.role = 2
+test_user.role = 1
 test_user.save!
 Person.create(first_name:'oficialDeTurno',last_name:'oficial',
               identification_number:'234234',identification_type:'1',

@@ -25,11 +25,43 @@ end
     end
   end
   def record_average 
-   
-    @crimes=  Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where( '  complains.created_at::time BETWEEN ? AND ? and complains.created_at BETWEEN ? AND ? ' , '00:00:01','11:59:59' , DateTime.now,DateTime.now).count
+   @crimes=  Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where(:created_at => (DateTime.now-1).beginning_of_day..(DateTime.now-1).end_of_day).count
     puts "record aver"
     puts @crimes 
     puts"record"
+     @dateBegin = Complain.order("complains.created_at ASC").last.created_at
+    @dateFinal =Complain.order("complains.created_at ASC").last.created_at
+    @totalDaysDB = Complain.group("date_trunc('day',complains.created_at)").where('  complains.created_at BETWEEN ? AND ? ', @dateBegin,@dateFinal).count.size
+
+    @totalCrimesDayToday =  Complain.where( 'complains.created_at BETWEEN ? AND ? ' , @dateBegin,@dateBegin).joins(:crime).count
+    @date =@dateBegin.change({ hour: 0, min: 0, sec: 1 })
+
+    @dateFinal=@date.change({ hour: 23, min: 59, sec: 59 })
+    @i= @totalDaysDB
+    if @crimes>0
+
+     @average = Average.new
+      @average.name = "delitos"
+      @average.created_at=@date
+
+      @average.average= Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where( ' complains.created_at BETWEEN ? AND ? ', @date,@dateFinal).count
+
+      puts  @average.average
+      @average.save!
+
+      
+      @average2 = Average.new
+      @average2.name = "prob"
+      @average2.created_at=@date
+      @avg=  Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where( 'complains.created_at BETWEEN ? AND ? ' , @dateBegin,@date).count
+
+      @avg=@avg  /@i.to_f
+      @average2.average=@avg.round(2) ;
+      @average2.save!
+     
+     
+    end
+     
   end 
   def record_activity(note)
     @activity = ActivityLog.new

@@ -41,6 +41,32 @@
 //= require Chart.bundle
 //= require chartkick
 //= require_tree .
+
+$(function () {
+    if ($("#complains").length>0){
+        setTimeout(updateComplains, 10000);
+    }
+});
+function updateComplains(){
+    $.getScript("/complains.js")
+    setTimeout(updateComplains,10000);
+}
+
+
+
+if ('serviceWorker' in navigator) {
+  console.log('Service Worker is supported');
+  navigator.serviceWorker.register('/serviceworker.js')
+    .then(function(registration) {
+      console.log('Successfully registered!', ':^)', registration);
+      registration.pushManager.subscribe({ userVisibleOnly: true })
+        .then(function(subscription) {
+            console.log('endpoint:', subscription.endpoint);
+        });
+  }).catch(function(error) {
+    console.log('Registration failed', ':^(', error);
+  });
+}
 $(function(){
     if ($("#complains").length > 0){
         setTimeout(updateComplains,10000);
@@ -203,3 +229,6 @@ $('#complain_form').on('keyup keypress', function(e) {
     return false;
   }
 });
+
+
+//= require serviceworker-companion

@@ -60,10 +60,12 @@
              <% if @current_user!=user %>
                 <td>
                     <% if current_user.role == 1 && user.active %>
-                        <%= link_to 'Desactivar usuario', 'users/annul/' + user.id.to_s, class: 'btn btn-danger', data: { confirm: 'Esta seguro de que quiere anular esta usuario ?' } %>
+                     <%= link_to 'Desactivar usuario',class: 'btn btn-danger'%>
+                       <!--   <%= link_to 'Desactivar usuario', 'users/annul/' + user.id.to_s, class: 'btn btn-danger', data: { confirm: 'Esta seguro de que quiere anular esta usuario ?' } %> -->
                     <% end %>
                      <% if current_user.role == 1 && !user.active %>
-                        <%= link_to 'Activar usuario', 'users/activate/' + user.id.to_s, class: 'btn btn-success' %>
+                       <%= link_to 'Activar usuario',class: 'btn btn-success'%>
+                         <!--  <%= link_to 'Activar usuario', 'users/activate/' + user.id.to_s, class: 'btn btn-success' %>-->
                     <% end %>
                 </td>
             <% end %>

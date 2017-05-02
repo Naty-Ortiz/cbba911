@@ -26,6 +26,9 @@ gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 gem 'axlsx_rails'
 gem 'prawn', '~> 2.1'
+
+gem 'serviceworker-rails'
+gem 'webpush'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 # Use postgresql as the database for Active Record
 

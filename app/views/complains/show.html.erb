@@ -47,7 +47,7 @@
 
   </table>  <hr>
   <div class="field"   <% if @observationsAux=="true" || params[:observationsAux]=="true"%>style ="display:block"  <%else%> style ="display:none" <%end%>>
-    <%if ( current_user.role==1 || current_user.role==2 )&& ( @observationsAux=="true" || params[:observationsAux]=="true")%>
+    <%if ( current_user.role==2 || current_user.role==1 )&& ( @observationsAux=="true" || params[:observationsAux]=="true")%>
     <label>Observaciones <i class="fa fa-asterisk"></i></label><br>
 
     <%= form_for(@complain) do|f| %>
@@ -81,15 +81,15 @@
       <div class="field" id="case_report"  <% if (@caseReportAux=="true" || params[:caseReport]=="true" )
  %> style ="display:block"  <%else%> style ="display:none" <%end%> >
          <label>Protagonistas <i class="fa fa-asterisk"></i></label>
-            <%= f.text_area( :protagonists,  :value => if  params[:protagonists] != "" 
+            <%= f.text_area( :protagonists,  :value => if  params[:protagonists] != ""
        params[:protagonists]  else ""
     end ,  :class => 'form-control small-text-area' ) %><br>
          <label>Breve Informe <i class="fa fa-asterisk"></i></label>
-         <%= f.text_area( :shortReport,  :value => if  params[:shortReport] != "" 
+         <%= f.text_area( :shortReport,  :value => if  params[:shortReport] != ""
        params[:shortReport]  else ""
     end ,:class => 'form-control small-text-area' ) %><br>
         <label>Remision del caso<i class="fa fa-asterisk"></i></label>
-         <%= f.text_area( :derivationCase, :value => if  params[:derivationCase] != "" 
+         <%= f.text_area( :derivationCase, :value => if  params[:derivationCase] != ""
        params[:derivationCase]  else ""
     end , :class => 'form-control small-text-area' ) %><br>
       </div><br>
@@ -109,14 +109,14 @@
         <%= form_for(@complain, :url => { :action => "patrol_unit_asign" }, :html => { :method => :put } ) do |f| %>
                   <%= f.hidden_field :complain_id, :value => @complain.id %>
                  <%= text_field_tag :patrolUnitAux,nil, class: 'awesomplete', data: { list:  @patrol_units.map{|v| v.to_s.encode("UTF-8").gsub!(/[^a-z0-9.\s]/i, '')}} %>
-                   
+
                 <%= f.submit 'Asignar', :class => 'btn btn-default'%> </td>
             <%end%>
   <%end%>
     </div>
-  <div style="padding-left:15px;">
+ <div style='width: 800px;'> 
     <strong>Ubicacion:</strong>
-    <div id="map" style="width: 100%; height: 250px;"></div>
+    <div id="map" style='width: 800px; height: 1000px;'></div>
   </div>
 </div>
 

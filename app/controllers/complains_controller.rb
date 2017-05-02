@@ -7,7 +7,7 @@ class ComplainsController < ApplicationController
      helper_method :getColor
     def index
       record_activity("Visualizacion de denuncias")
-        if user_signed_in?
+       if user_signed_in?
           @patrol_units = Array.new
             @role_current_user = current_user.role
             @auxCrime=false
@@ -39,6 +39,37 @@ class ComplainsController < ApplicationController
     end
     # GET /complains/1
     # GET /complains/1.json
+    def all_complains
+      if user_signed_in?
+          @patrol_units = Array.new
+            @role_current_user = current_user.role
+            @auxCrime=false
+          if      @role_current_user==1
+
+            PatrolUnit.all.each do |comp|
+              if comp.name == nil
+                comp.name=""
+              end
+              @patrol_units << [comp.code + ' ' + comp.name]
+
+             end
+
+
+                if params[:search]
+                  @complains = Complain.search(params[:search]).order("created_at DESC")
+                else
+                 @complains=Complain.where("created_at <?",DateTime.now ).paginate(:page => params[:page], :per_page => 10).order("created_at DESC")
+                end
+          elsif  @role_current_user==2
+                if params[:search]
+                  @complains = Complain.search(params[:search]).order("created_at DESC")
+                else
+                   @complains=Complain.where("created_at <?",DateTime.now ).paginate(:page => params[:page], :per_page => 10).order("created_at DESC")
+
+                end
+          end
+        end
+    end 
     def show
        @patrol_units = Array.new
             PatrolUnit.all.each do |comp|
@@ -59,19 +90,22 @@ class ComplainsController < ApplicationController
 
 
     def getColor(prob)
-    
-      prob=prob.round(2)      
+
+      prob=prob.round(2)
+      puts "prob"
+      puts prob
+      puts "prob"
       if prob>=0.0 && prob<=0.30
        return "#1B592B"
       end
       if  prob>=0.31 && prob<=0.499999
          return "#0431B4"
       end
-      if prob>=0.50 && prob<=0.799999
+      if prob>=0.50 && prob<=0.79
          return "#E8F853"
       end
         if prob>=0.80 && prob<=1
-          return"#FFFFFF"
+          return"#DF0101"
         end
       end
 
@@ -83,11 +117,17 @@ class ComplainsController < ApplicationController
     puts "params"
     puts params
     puts "params"
-     if @dateStart!=nil
+     if @dateStart!=nil&&@dateStart!=""
       @aux=@dateStart
         @aux2=@aux.split(' ')[1..-1].join(' ')
         @aux2=@aux.chomp(' AM')
-        @aux= DateTime.new( (@aux2.split("/")[2]).partition(" ").first.to_i,(@aux2.split("/")[0]).to_i,(@aux2.split("/")[1]).to_i,  (@aux.split(":")[0]).to_i, ( @aux.split(":")[1]).to_i, 0,0)
+        puts @aux2
+        puts "sdfsdfdsfdsfdfssdf"
+        puts (@aux2.split("/")[2]).partition(" ").first.to_i
+        puts "sfsdfsdfsdfsdf"
+        puts (@aux.split(":")[0]).to_i
+puts "sdsdas"
+        @aux= DateTime.new( (@aux2.split("/")[2]).partition(" ").first.to_i,(@aux2.split("/")[0]).to_i,(@aux2.split("/")[1]).to_i,  (@aux.split(":")[0]).to_i+12, ( @aux.split(":")[1]).to_i, 0,0)
       @dateStartToTime = @aux
       @aux= @aux.to_s
       else
@@ -126,6 +166,7 @@ class ComplainsController < ApplicationController
     @dateBegin = Complain.first.created_at
     @dateFinal =Complain.last.created_at
     @totalDaysDB = Complain.group("date_trunc('day',complains.created_at)").where('  complains.created_at BETWEEN ? AND ? ', @dateBegin,@dateFinal).count.size
+    puts  @totalDaysDB
     @thereIsRecordsInDB = true
     @turnHour=""
 
@@ -272,24 +313,24 @@ class ComplainsController < ApplicationController
       when '16:00-00:00'
         @items= @items.clear()
          @turnHour="Turno tarde"
+      
+      @items <<(@probNO0to8*100).round(2)
+        @items <<(@probNE0to8*100).round(2)
+        @items <<(@probCN0to8*100).round(2)
+        @items <<(@probCS0to8*100).round(2)
+        @items <<(@probSO0to8*100).round(2)
+        @items <<(@probSE0to8*100).round(2)
+          puts"sad2"
+        puts@turnHour
+      when '00:00-08:00'
+         @items= @items.clear()
+         @turnHour="Turno noche"
         @items <<(@probNO16to0*100).round(2)
         @items <<(@probNE16to0*100).round(2)
         @items <<(@probCN16to0*100).round(2)
         @items <<(@probCS16to0*100).round(2)
         @items <<(@probSO16to0*100).round(2)
         @items <<(@probSE16to0*100).round(2)
-
-          puts"sad2"
-        puts@turnHour
-      when '00:00-08:00'
-         @items= @items.clear()
-         @turnHour="Turno noche"
-        @items <<(@probNO0to8*100).round(2)
-        @items <<(@probNE0to8*100).round(2)
-        @items <<(@probCN0to8*100).round(2)
-        @items <<(@probCS0to8*100).round(2)
-        @items <<(@probSO0to8*100).round(2)
-        @items <<(@probSE0to8*100).round(2)
 
           puts"sad3"
         puts@turnHour
@@ -360,7 +401,7 @@ class ComplainsController < ApplicationController
     @complain= Complain.new
     record_activity("visualizacion de probabilidad de contraverciones")
     @dateStart =  params[:startdate]
-     if @dateStart!=nil
+     if @dateStart!=nil&&@dateStart!=""
       @aux=@dateStart
         @aux2=@aux.split(' ')[1..-1].join(' ')
         @aux2=@aux.chomp(' AM')
@@ -627,41 +668,35 @@ class ComplainsController < ApplicationController
     end
     def index3
      #@differenceHour=(((strftime('%s', '2011-11-10 11:46') - strftime('%s', '2011-11-09 09:00')) % (60 * 60 * 24)) / (60 * 60)
-
-          ComplainsAuxiliar.all.where("id >= 9999999").each do |comp|
+@newPatrolUnit= PatrolUnit.new
+          ComplainsAuxiliar.all.where("id > 65479").each do |comp|
      # if @complainAux.contravencion=="380.3" || @complainAux.contravencion=="380.2" || @complainAux.contravencion=="380.4" || @complainAux.contravencion="380.10"
 
        @complainAux = comp
        if @complainAux.hora!=nil
        @complain = Complain.new
-
        puts "faasdaas"
-        puts @complainAux.fecha
-
+       puts @complainAux.fecha
        puts "faasdaas"
-        puts @complainAux.hora
-
-
-
+       puts @complainAux.hora
       # @complain.created_at=  @complainAux.fecha.change({ hour: @complainAux.hora.hour, min: @complainAux.hora.min, sec: @complainAux.hora.sec })
       @complain.created_at=  Time.parse(@complainAux.fecha).change({ hour:   Time.at((@complainAux.hora.split(':').map { |a| a.to_i }.inject(0) { |a, b| a * 60 + b})).hour, min: Time.at((@complainAux.hora.split(':').map { |a| a.to_i }.inject(0) { |a, b| a * 60 + b})).min, sec: Time.at((@complainAux.hora.split(':').map { |a| a.to_i }.inject(0) { |a, b| a * 60 + b})).sec })
-
         puts "@complain.created_at"
         puts @complain.created_at
 
        @complain.complainNumber = @complainAux.numeroDenuncia
       if @complainAux.lugarDenuncia=="AREA URBANA"
           @complain.ruralArea=false
-       else
+      else
           @complain.ruralArea=true
-        end
-       if @complainAux.nombreOperador==""
-          @complain.operatorNameFromMigrateData="DE OFICIO"
-       else
+      end
+      if @complainAux.nombreOperador==""
+         @complain.operatorNameFromMigrateData="DE OFICIO"
+      else
           @complain.operatorNameFromMigrateData=@complainAux.nombreOperador
 
-       end
-        if@complainAux.nroTelefono!=nil && ( @complainAux.nroTelefono <= "79999999" && @complainAux.nroTelefono>"60000000" )
+      end
+      if@complainAux.nroTelefono!=nil && ( @complainAux.nroTelefono <= "79999999" && @complainAux.nroTelefono>"60000000" )
           if  ( @complainAux.nroTelefono.is_a? Integer)|| @complainAux.nroTelefono!=0
            @complain.telephoneNumberComplainantFromMigrateData = @complainAux.nroTelefono
         end
@@ -669,18 +704,18 @@ class ComplainsController < ApplicationController
         @complain.complainantNameFromMigrateData=@complainAux.denunciante
         #  @complain.crime_id= Crime.where(:code =>(@complainAux.delito).split[0...2].join(' ')).pluck(:id).first.to_i
       if @complainAux.contravencion!=nil
-      if @complainAux.contravencion=='380.3' ||  @complainAux.contravencion=='380.2' || @complainAux.contravencion=='380.4'||@complainAux.contravencion=='380.10'
-        @complain.contravertion_id = Contravertion.where(:code =>@complainAux.contravencion).pluck(:id).first.to_i
-       puts "adaasdaa11111111"
-      puts @complain.contravertion_id
-      else
-       @complain.contravertion_id = Contravertion.where(:code =>(@complainAux.contravencion).split[0...2].join(' ')).pluck(:id).first.to_i
+        if @complainAux.contravencion=='380.3' ||  @complainAux.contravencion=='380.2' || @complainAux.contravencion=='380.4'||@complainAux.contravencion=='380.10'
+          @complain.contravertion_id = Contravertion.where(:code =>@complainAux.contravencion).pluck(:id).first.to_i
+         puts "adaasdaa11111111"
+        puts @complain.contravertion_id
+        else
+         @complain.contravertion_id = Contravertion.where(:code =>(@complainAux.contravencion).split[0...2].join(' ')).pluck(:id).first.to_i
 
-      puts "adaasdaa"
-      puts @complain.contravertion_id
+        puts "adaasdaa"
+        puts @complain.contravertion_id
 
+        end
       end
-       end
        if @complainAux.delito!=nil
         @complain.crime_id = Crime.where(:code =>(@complainAux.delito).split[0...2].join(' ')).pluck(:id).first.to_i
        end
@@ -694,15 +729,53 @@ class ComplainsController < ApplicationController
           @complain.caseReport = false
         end
 
-       if @complainAux.unidadAsignada!=nil
-        @complain.patrol_unit_id = PatrolUnit.where(:code =>(@complainAux.unidadAsignada.upcase+"\n")).pluck(:id).first.to_i
-      if  @complain.patrol_unit_id ==0
-        @complain.patrol_unit_id = PatrolUnit.where(:code =>(@complainAux.unidadAsignada.upcase)).pluck(:id).first.to_i
-     end
-      puts "complain.patrol_unit_id "
+        if @complainAux.unidadAsignada==nil
+           @complainAux.unidadAsignada="MP-33"
 
+        end
+
+        @complain.patrol_unit_id = PatrolUnit.where(:code =>(@complainAux.unidadAsignada.upcase)).pluck(:id).first.to_i
+        puts "entra 1"
+      if  @complain.patrol_unit_id ==0
+            puts "entra 2"
+        @complain.patrol_unit_id = PatrolUnit.where(:code =>(@complainAux.unidadAsignada.upcase)).pluck(:id).first.to_i
+
+
+
+            @patrol_unit_params= @complainAux.unidadAsignada.delete("\n")
+            @patrol_unit_params=@complainAux.unidadAsignada.gsub(/^A-Za-z0-9-,/, '')
+            @patrol_unit_params=@complainAux.unidadAsignada.strip
+            @auxPatrolUnit = PatrolUnit.where(:code =>(@patrol_unit_params)).pluck(:id).first.to_i
+            puts "sdfsdssdfzzzzzzzzz"
+            puts @auxPatrolUnit
+            puts "ASD"
+          if  @auxPatrolUnit==0
+
+             @newPatrolUnit.code = @patrol_unit_params
+             puts "otri"
+             puts  @newPatrolUnit.code
+             puts "iiui"
+             @newPatrolUnit.name= ""
+             if @newPatrolUnit.valid?
+              puts "mbnmnmmmm"
+              @aux=true
+              @newPatrolUnit.save!
+             puts "@newPatrolUnit.id"
+               @complain.patrol_unit_id =  @newPatrolUnit.id
+
+             else
+
+              flash[:error]= 'Error al asignar unidad'+ '\n\n'
+             format.html { redirect_to action: "show", error: 'Error al asignar unidad' ,:patrolUnitAsign => true, :patrolUnitAux =>  @patrol_unit_params}
+
+             end
+        else
+          puts "eerwreeer"
+         @complain.patrol_unit_id =  @auxPatrolUnit
+        end
+      end
+      puts "complain.patrol_unit_id "
       puts @complain.patrol_unit_id
-     end.change({ hour:   Time.at((@complainAux.hora.split(':').map { |a| a.to_i }.inject(0) { |a, b| a * 60 + b})).hour, min: Time.at((@complainAux.hora.split(':').map { |a| a.to_i }.inject(0) { |a, b| a * 60 + b})).min, sec: Time.at((@complainAux.hora.split(':').map { |a| a.to_i }.inject(0) { |a, b| a * 60 + b})).sec })
 
       @complain.derivationCase=@complainAux.remisionCaso
       @complain.shortReport =@complainAux.breveInforme
@@ -714,6 +787,7 @@ class ComplainsController < ApplicationController
     end
 
 def graph_report
+   record_average
   @dateStart =  params[:startdate]
   @dateEnd=params[:enddate]
   puts "para"
@@ -730,7 +804,7 @@ def graph_report
      if (@dateStart==nil || @dateStart=="") then
       flash[:error]= 'Debe ingresar la fecha inicial correctamente'+ '\n\n'
      format.html { redirect_to action: "graph_report", error: 'Debe ingresar la fecha inicial correctamente' }
-           
+
     else
       @aux=@dateStart
       @aux2=@aux
@@ -763,7 +837,7 @@ end
   if zone.zone!=nil
 @total_crimes_per_zone.push({
     :label => zone.zone,
- 
+
     :value => Complain.where( ' complains.zone = ? and "caseReport" = ?  and complains.created_at BETWEEN ? AND ?', zone.zone, true,  @dateBegin,@dateFinal).joins(:crime).count
 })
 end
@@ -848,7 +922,7 @@ end
    format.xlsx {
     response.headers['Content-Disposition'] = 'attachment; filename="all_products.xlsx"'
   }
- 
+
 
 end
 end
@@ -867,7 +941,7 @@ if params[:commit]!=nil
      if (@dateStart==nil || @dateStart=="") then
       flash[:error]= 'Debe ingresar la fecha inicial correctamente'+ '\n\n'
      format.html { redirect_to action: "graph_report", error: 'Debe ingresar la fecha inicial correctamente' }
-           
+
     else
       @aux=@dateStart
       @aux2=@aux
@@ -904,7 +978,7 @@ puts @zone
       @crimeAux= Crime.all.where("code =?", crime.code).first
 @total_crimes_per_zone.push({
     :crime => @crimeAux.code + ' '+@crimeAux.name,
-    :label => zone.zone, 
+    :label => zone.zone,
     :value => Complain.where( ' complains.zone = ? and "caseReport" = ? and complains.crime_id = ? and complains.created_at BETWEEN ? AND ?', zone.zone, true, @crimeAux.id, @dateBegin,@dateFinal).joins(:crime).count
 })
 
@@ -918,7 +992,7 @@ end
       @crimeAux= Contravertion.all.where("code =?", crime.code).first
 @total_crimes_per_zone.push({
     :crime => @crimeAux.code + ' '+@crimeAux.name,
-    :label => zone.zone, 
+    :label => zone.zone,
     :value => Complain.where( ' complains.zone = ? and "caseReport" = ? and complains.crime_id = ? and complains.created_at BETWEEN ? AND ?', zone.zone, true, @crimeAux.id, @dateBegin,@dateFinal).joins(:crime).count
 })
 
@@ -935,7 +1009,7 @@ end
 
 
     def index_aux
-      record_activity("visalizacion de grafica de promedios vs delitos registrados")
+      record_activity("visualizacion de grafica de promedios vs delitos registrados")
           @dateStartToTime =Time.now
     @dateBegin = Complain.order("complains.created_at ASC").first.created_at
     @dateFinal =Complain.order("complains.created_at ASC").last.created_at
@@ -954,7 +1028,7 @@ end
  @average4=Complain.where( ' complains.created_at BETWEEN ? AND ? ', @date,@dateFinal).joins(:crime).count
 
 
-     @i=999999
+     @i=1
     until @i >= @totalDaysDB  do
       @average = Average.new
       @average.name = "delitos"
@@ -963,14 +1037,14 @@ end
       @average.average= Complain.joins("JOIN crimes ON crimes.id = complains.crime_id " ).where( ' complains.created_at BETWEEN ? AND ? ', @date,@dateFinal).count
 
       puts  @average.average
-      #@average.save!
+     # @average.save!
 
       if @i==1
       @average1 = Average.new
       @average1.name = "prob"
       @average1.created_at=@date
       @average1.average= 0
-      #@average1.save!
+    #  @average1.save!
     else
       @average2 = Average.new
       @average2.name = "prob"
@@ -979,7 +1053,7 @@ end
 
       @avg=@avg  /@i.to_f
       @average2.average=@avg.round(2) ;
-      #@average2.save!
+     # @average2.save!
       end
       @i +=1;
       @date= @date+1.day
@@ -988,7 +1062,7 @@ end
 
 
 end
-@size= Average.all.where( ' name = ? ', 'prob').count
+@size= Average.all.where( ' name = ? ', 'delitos').count
 puts @size
 puts "dsf"
     @pro1= Average.all.where( ' name = ? ', 'prob')
@@ -1047,24 +1121,48 @@ puts "msmdmkkkkmm"
         #end
   end
    def index4
-      #Complain.all.each do |comp|
-       # if comp.complainant==nil
-       # #  @complainant= Complainant.new
-        #    if  @complainant.name!=nil
-         #   @complainant.name=comp.complainantNameFromMigrateData
-          #  @complainant.last_name=comp.complainantNameFromMigrateData
-          #  @complainant.ci=000000
-          #else
-          #  @complainant.name= "no se reporto"
-         #   @complainant.last_name= "no se reporto"
-         #   @complainant.ci=000000
-         # end
-        #@complainant.complain_id=comp.id
-       # @complainant.save!
+=begin
+    ComplainsAuxiliar.where('id > ?', 40456).each do |comp|
+      if comp.unidadAsignada !=nil
+      @comp=comp.unidadAsignada.delete("\n")
+      @comp=@comp.gsub(/^A-Za-z0-9-,/, '').gsub('"', '')
+      @comp=@comp.strip
+       comp.update_attribute(:unidadAsignada, @comp)
+     end
+       end
+ =end
+=begin
 
-       # end
-     # end
 
+
+    Complain.where('zone isnull').each do |comp|
+    @aux=  Complainant.where(:complain_id =>comp.id).first
+    puts comp.id
+    puts "asdadd"
+    puts @aux
+    puts "dfsdf"
+    Complainant.find(@aux.id).destroy
+    end
+=end
+=begin
+      Complain.all.each do |comp|
+       if comp.complainant==nil
+       @complainant= Complainant.new
+          if  @complainant.name!=nil
+         @complainant.name=comp.complainantNameFromMigrateData
+        @complainant.last_name=comp.complainantNameFromMigrateData
+        @complainant.ci=000000
+      else
+        @complainant.name= "no se reporto"
+         @complainant.last_name= "no se reporto"
+        @complainant.ci=000000
+       end
+      @complainant.complain_id=comp.id
+       @complainant.save!
+
+       end
+      end
+=end
 =begin
 @aux = 5062
   PatrolUnit.all.order("id ASC").where("id >=?", @aux).each do |comp|
@@ -1128,7 +1226,7 @@ puts "msmdmkkkkmm"
         @complain = Complain.find(params[:id])
         @complainant = Complainant.where(:complain_id => @complain.id).first
 
-    if current_user.role==2 ||current_user.role==1
+    if current_user.role==1
       #  check_box_params[:auxCrime]= @complain.crie.code+ ' ' +@complain.crime.name
          if @complain.crime_id!=nil
            @auxCrime= @complain.crime.code + ' ' + @complain.crime.name
@@ -1199,6 +1297,7 @@ puts "msmdmkkkkmm"
                  @complain.save!
                  @complainant.complain_id= @complain.id
                  @complainant.save!
+                 record_average 
                  flash[:notice] = "Denuncia registrada exitosamente"
                  record_activity("Denuncia registrada exitosamente")
                  format.html { redirect_to @complain }

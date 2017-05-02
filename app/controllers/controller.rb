@@ -117,7 +117,7 @@ class LegalAgentsController < ApplicationController
   if user_signed_in?
     if current_user.role==1  || current_user.role == 2
       [ :edit, :index, :new, :show]
-    elsif current_user.role==1
+    elsif current_user.role==2
         [ :show]
     else
       redirect_to root_url

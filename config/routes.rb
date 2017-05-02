@@ -16,10 +16,12 @@ Rails.application.routes.draw do
     put '/complains'=>'complains#patrol_unit_asign'
     put '/complains?:id'=>'complains#case_report'
     get '/index_logs'=> 'complains#index_logs'
-     get '/report'=> 'complains#report'
-      get '/graph_report'=> 'complains#graph_report'
+    get '/report'=> 'complains#report'
+    get '/graph_report'=> 'complains#graph_report'
     get '/index_contravertions'=> 'complains#index_contravertions'
-
+    post "/push" => "push_notifications#create"
+    post "/subscribe" => "subscriptions#create"
+    get "/all_complains"=> "complains#all_complains"
   resources :patrol_units
     resources :reports, except: [:new,:index]
 
@@ -29,6 +31,7 @@ devise_scope :user do
   authenticated :user do
     root 'static_pages#home', as: :authenticated_root
   end
+  root 'static_pages#home'
 
   unauthenticated do
     root 'devise/sessions#new', as: :unauthenticated_root

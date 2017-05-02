@@ -12,7 +12,7 @@ class AnnouncementsController < ApplicationController
         redirect_to root_url
       end
     end
-  
+
     if params[:search]
       @announcements = Announcement.search(params[:search]).order("created_at DESC").paginate(:page => params[:page], :per_page => 10)
     else
@@ -123,7 +123,7 @@ class AnnouncementsController < ApplicationController
     if user_signed_in?
       if current_user.role == 1
         [ :edit, :index, :new]
-      elsif current_user.role == 5 || current_user.role == 2
+      elsif current_user.role == 5 || current_user.role == 1
         [:employeeAnnouncements]
       else
         redirect_to root_url
